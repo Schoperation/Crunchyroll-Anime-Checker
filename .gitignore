@@ -1,4 +1,8 @@
 pixlet
+crunchyrollanimestatus
 *.webp
 *.txt
+.vscode
 
+# Temp stuff
+temp_alphabetical.json

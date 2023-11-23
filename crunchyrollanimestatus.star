@@ -10,12 +10,38 @@ load("schema.star", "schema")
 load("http.star", "http")
 load("encoding/json.star", "json")
 load("encoding/csv.star", "csv")
+load("encoding/base64.star", "base64")
 
 def main(config):
-    lang = config.str("lang", "booooo")
-    anime = config.str("anime", "booooo")
+    lang_cfg = config.str("lang", "en-US")
+    anime_cfg = config.str("anime", "spy-x-family") # Heh
+    title_color_cfg = config.str("title_color", "#ffc266")
+    sub_id_color_cfg = config.str("sub_id_color", "#a6a6a6")
+    dub_id_color_cfg = config.str("dub_id_color", "#a6a6a6")
 
-    anime_atlas_url = https://raw.githubusercontent.com/Schoperation/Crunchyroll-Anime-Checker/master/anime_atlas_%s.json % lang
+    anime_atlas_url = "https://raw.githubusercontent.com/Schoperation/Crunchyroll-Anime-Checker/master/lists/anime_atlas_{}.json".format(lang_cfg)
+    resp = http.get(url = anime_atlas_url, headers = {"Accept": "application/json", "User-Agent": "Tidbyt - Crunchyroll Anime Status - Schoperation"}, ttl_seconds = 300)
+    if resp.status_code != 200:
+        print("Failed to load anime atlas with status %d", resp.status_code)
+        return render.Root(
+            child = render.WrappedText(
+                content = "Couldn't get anime :("
+            )
+        )
+
+    anime_atlas = json.decode(resp.body())["anime"]
+    anime = anime_atlas[anime_cfg]
+
+    image_cfg = config.str("anime_image", "poster_full")
+    anime_image = ""
+    if image_cfg == "sub_thumb":
+        anime_image = anime["sub"]["thumbnail"]
+    elif image_cfg == "dub_thumb":
+        anime_image = anime["dub"]["thumbnail"]
+    else:
+        anime_image = anime["poster"]
+
+    anime_image = base64.decode(anime_image)
 
     return render.Root(
         child = render.Column(
@@ -25,17 +51,17 @@ def main(config):
                     align = "center",
                     child = render.Text(
                         font = "CG-pixel-3x5-mono",
-                        color = "#ffc266",
-                        content = "Spy x Family",
+                        color = title_color_cfg,
+                        content = anime["name"],
                     ),
                 ),
                 render.Row(
                     children = [
-                        # render.Image( 
-                        #     width = 27, 
-                        #     height = 27,
-                        #     src = POSTER,
-                        # ),
+                        render.Image( 
+                            width = 27, 
+                            height = 27,
+                            src = anime_image,
+                        ),
                         render.Column(
                             children = [
                                 render.Marquee(
@@ -51,8 +77,8 @@ def main(config):
                                     align = "center",
                                     child = render.Text(
                                         font = "CG-pixel-3x5-mono",
-                                        color = "#a6a6a6",
-                                        content = "S:S2E1",
+                                        color = sub_id_color_cfg,
+                                        content = "S:S{s}E{e}".format(s=anime["sub"]["season"], e=anime["sub"]["episode"]),
                                     ),
                                 ),
                                 render.Marquee(
@@ -61,7 +87,7 @@ def main(config):
                                     offset_start = 10,
                                     child = render.Text(
                                         font = "CG-pixel-3x5-mono",
-                                        content = "FOLLOW MAMA AND PAPA",
+                                        content = anime["sub"]["title"],
                                     ),
                                 ),
                                 render.Marquee(
@@ -69,8 +95,8 @@ def main(config):
                                     align = "center",
                                     child = render.Text(
                                         font = "CG-pixel-3x5-mono",
-                                        color = "#a6a6a6",
-                                        content = "D:S99E999",
+                                        color = dub_id_color_cfg,
+                                        content = "D:S{s}E{e}".format(s=anime["dub"]["season"], e=anime["dub"]["episode"]),
                                     ),
                                 ),
                                 render.Marquee(
@@ -79,7 +105,7 @@ def main(config):
                                     offset_start = 10,
                                     child = render.Text(
                                         font = "CG-pixel-3x5-mono",
-                                        content = "I'm Luffy! The Man Who's Gonna Be King of the Pirates!",
+                                        content = anime["dub"]["title"],
                                     ),
                                 ),
                             ],
@@ -154,14 +180,14 @@ def get_schema():
         schema.Color(
             id = "sub_id_color",
             name = "Sub Identifier Color",
-            desc = "Color of the latest sub's identifier (S:S1E2)",
+            desc = "Color of the latest sub's identifier (S:S1E2).",
             icon = "brush",
             default = "#a6a6a6"
         ),
         schema.Color(
             id = "dub_id_color",
             name = "Dub Identifier Color",
-            desc = "Color of the latest dub's identifier (D:S1E2)",
+            desc = "Color of the latest dub's identifier (D:S1E2).",
             icon = "brush",
             default = "#a6a6a6"
         ),
