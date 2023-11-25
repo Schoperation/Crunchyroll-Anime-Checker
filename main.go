@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"schoperation/crunchyrollanimestatus/script"
+	"strings"
 )
 
 type arguments struct {
@@ -32,11 +33,23 @@ func main() {
 		return
 	}
 
+	cmds := initCmds()
+	cmd, ok := cmds[strings.ToLower(args.script)]
+	if !ok {
+		fmt.Println(fmt.Errorf("unknown cmd %s", args.script))
+		return
+	}
+
+	err = cmd.Run(client)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
 }
 
 func parseArgs() (arguments, error) {
 	if len(os.Args) != 7 {
-		return arguments{}, fmt.Errorf("Need 6 arguments, have %d", len(os.Args))
+		return arguments{}, fmt.Errorf("need 6 arguments, have %d", len(os.Args))
 	}
 
 	refinedArgs := arguments{}
@@ -56,4 +69,10 @@ func parseArgs() (arguments, error) {
 	}
 
 	return refinedArgs, nil
+}
+
+func initCmds() map[string]script.Command {
+	return map[string]script.Command{
+		script.NewRefreshAnimeCmd().Name(): script.NewRefreshAnimeCmd(),
+	}
 }
