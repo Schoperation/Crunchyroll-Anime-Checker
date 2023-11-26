@@ -20,26 +20,40 @@ def main(config):
     dub_id_color_cfg = config.str("dub_id_color", "#a6a6a6")
 
     anime_atlas_url = "https://raw.githubusercontent.com/Schoperation/Crunchyroll-Anime-Checker/master/lists/anime_atlas_{}.json".format(lang_cfg)
+    anime_posters_url = "https://raw.githubusercontent.com/Schoperation/Crunchyroll-Anime-Checker/master/lists/anime_posters.json"
+    anime_episode_thumbnails_url = "https://raw.githubusercontent.com/Schoperation/Crunchyroll-Anime-Checker/master/lists/anime_episode_thumbnails.json"
+    
+    # Get anime itself...
     resp = http.get(url = anime_atlas_url, headers = {"Accept": "application/json", "User-Agent": "Tidbyt - Crunchyroll Anime Status - Schoperation"}, ttl_seconds = 300)
     if resp.status_code != 200:
-        print("Failed to load anime atlas with status %d", resp.status_code)
-        return render.Root(
-            child = render.WrappedText(
-                content = "Couldn't get anime :("
-            )
-        )
+        return loading_error("anime atlas", resp.status_code, "Couldn't load anime :(")
 
     anime_atlas = json.decode(resp.body())["anime"]
     anime = anime_atlas[anime_cfg]
 
+    # Load necessary images...
     image_cfg = config.str("anime_image", "poster_full")
     anime_image = ""
-    if image_cfg == "sub_thumb":
-        anime_image = anime["sub"]["thumbnail"]
-    elif image_cfg == "dub_thumb":
-        anime_image = anime["dub"]["thumbnail"]
+    if image_cfg == "sub_thumb" or image_cfg == "dub_thumb":
+        image_resp = http.get(url = anime_episode_thumbnails_url, headers = {"Accept": "application/json", "User-Agent": "Tidbyt - Crunchyroll Anime Status - Schoperation"}, ttl_seconds = 300)
+        if image_resp.status_code != 200:
+            return loading_error("anime episode thumbnails", image_resp.status_code, "Couldn't load anime thumbnails :(")
+
+        anime_episode_thumbnails = json.decode(image_resp.body())["episode_thumbnails"][anime_cfg]
+
+        if image_cfg == "sub_thumb":
+            anime_image = anime_episode_thumbnails["{s}-{e}".format(s=anime["sub"]["season"], e=anime["sub"]["episode"])]["encoded"]
+        else:
+            anime_image = anime_episode_thumbnails["{s}-{e}".format(s=anime["dub"]["season"], e=anime["dub"]["episode"])]["encoded"]
     else:
-        anime_image = anime["poster"]
+        image_resp = http.get(url = anime_posters_url, headers = {"Accept": "application/json", "User-Agent": "Tidbyt - Crunchyroll Anime Status - Schoperation"}, ttl_seconds = 300)
+        if image_resp.status_code != 200:
+            return loading_error("anime posters", image_resp.status_code, "Couldn't load anime posters :(")
+
+        anime_posters = json.decode(image_resp.body())["posters"][anime_cfg]
+
+        # TODO allow wide ones too
+        anime_image = anime_posters["poster_tall_encoded"]
 
     anime_image = base64.decode(anime_image)
 
@@ -116,15 +130,25 @@ def main(config):
         ),
     )
 
-# Temporary while I don't have a csv up
-# TODO remove later
-CSV_STRING = """
-series_id,slug,name
-G4PH0WXVJ,spy-x-family,Spy x Family
-"""
+def loading_error(anime_list, status_code, message):
+    print("Failed to load %s with status %d", anime_list, status_code)
+    return render.Root(
+        child = render.WrappedText(
+            content = message
+        )
+    )
 
 def get_schema():
-    anime_csv = csv.read_all(source = CSV_STRING, skip = 1)
+    anime_sensei_list_url = "https://raw.githubusercontent.com/Schoperation/Crunchyroll-Anime-Checker/master/lists/anime_sensei_list.csv"
+    resp = http.get(url = anime_sensei_list_url, headers = {"Accept": "application/json", "User-Agent": "Tidbyt - Crunchyroll Anime Status - Schoperation"}, ttl_seconds = 300)
+    if resp.status_code != 200:
+        print("Failed to load anime sensei list with status %d", resp.status_code)
+        return schema.Schema(
+            version = "1",
+            fields = [],
+        )
+
+    anime_csv = csv.read_all(source = resp.body(), skip = 1, comma = "|")
     anime_options = [anime_to_schema_option(anime) for anime in anime_csv]
 
     config_fields = [

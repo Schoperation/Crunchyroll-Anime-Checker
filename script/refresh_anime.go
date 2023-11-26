@@ -39,7 +39,7 @@ func (cmd RefreshAnimeCmd) Run(client CrunchyrollClient) error {
 		newList[i] = []string{
 			series.Id,
 			series.SlugTitle,
-			fmt.Sprintf("\"%s\"", series.Title),
+			series.Title,
 		}
 	}
 
@@ -49,6 +49,7 @@ func (cmd RefreshAnimeCmd) Run(client CrunchyrollClient) error {
 	}
 
 	newListAsCsv := csv.NewWriter(newAnimeSenseiList)
+	newListAsCsv.Comma = '|'
 	newListAsCsv.Write([]string{"series_id", "slug_title", "title"})
 	newListAsCsv.WriteAll(newList)
 	newAnimeSenseiList.Close()
