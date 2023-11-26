@@ -48,8 +48,8 @@ func main() {
 }
 
 func parseArgs() (arguments, error) {
-	if len(os.Args) != 7 {
-		return arguments{}, fmt.Errorf("need 6 arguments, have %d", len(os.Args))
+	if len(os.Args) != 9 {
+		return arguments{}, fmt.Errorf("need 9 arguments, have %d", len(os.Args))
 	}
 
 	refinedArgs := arguments{}
@@ -73,6 +73,6 @@ func parseArgs() (arguments, error) {
 
 func initCmds() map[string]script.Command {
 	return map[string]script.Command{
-		script.NewRefreshAnimeCmd().Name(): script.NewRefreshAnimeCmd(),
+		"refresh-anime": script.NewRefreshAnimeCmd("refresh-anime"),
 	}
 }
