@@ -13,6 +13,9 @@ type Locale struct {
 }
 
 var locales = map[string]string{
+	"ja-jp": "ja-JP",
+	"ko-kr": "ko-KR",
+	"zh-cn": "zh-CN",
 	"en-us": "en-US",
 }
 
@@ -29,4 +32,24 @@ func NewLocale(locale string) (Locale, error) {
 
 func (l Locale) Name() string {
 	return l.name
+}
+
+// Specific constructors for original languages of anime (or media, since now we're going outside of Japan)
+
+func NewJapaneseLocale() Locale {
+	return Locale{
+		name: locales["ja-jp"],
+	}
+}
+
+func NewKoreanLocale() Locale {
+	return Locale{
+		name: locales["ko-kr"],
+	}
+}
+
+func NewChineseLocale() Locale {
+	return Locale{
+		name: locales["zh-cn"],
+	}
 }

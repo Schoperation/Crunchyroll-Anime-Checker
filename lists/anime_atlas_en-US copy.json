@@ -1,0 +1,19 @@
+{
+    "total_count": 1,
+    "anime": {
+        "spy-x-family": {
+            "name": "Spy x Family",
+            "last_updated": "2023-11-23T04:00:00Z",
+            "sub": {
+                "season": 2,
+                "episode": 32,
+                "title": "Who Is This Mission For?"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 30,
+                "title": "Plan to Cross the Border"
+            }
+        }
+    }
+}

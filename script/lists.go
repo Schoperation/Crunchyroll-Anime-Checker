@@ -29,12 +29,13 @@ type Episode struct {
 
 // anime_posters.json
 //
-// File to store posters; the images on the landing page of an anime series.
+// File to store posters; the images on the landing page of an anime series. Also has a default in case there's no poster for an anime,
 //
 // The map key for Posters is a slug title (e.g. spy-x-family).
 type AnimePosters struct {
-	TotalCount int               `json:"total_count"`
-	Posters    map[string]Poster `json:"posters"`
+	TotalCount           int               `json:"total_count"`
+	DefaultPosterEncoded string            `json:"default_poster_encoded"`
+	Posters              map[string]Poster `json:"posters"`
 }
 
 type Poster struct {
@@ -46,13 +47,14 @@ type Poster struct {
 
 // anime_episode_thumbnails.json
 //
-// File to store episode thumbnails.
+// File to store episode thumbnails. Includes a default one for episodes with no thumbnails.
 //
 // The first map key is a slug title (spy-x-family).
 // The second key is a combo of season and episode (e.g. 1-2 is season 1, episode 2).
 type AnimeEpisodeThumbnails struct {
-	TotalCount        int                                    `json:"total_count"`
-	EpisodeThumbnails map[string]map[string]EpisodeThumbnail `json:"episode_thumbnails"`
+	TotalCount              int                                    `json:"total_count"`
+	DefaultThumbnailEncoded string                                 `json:"default_thumbnail_encoded"`
+	EpisodeThumbnails       map[string]map[string]EpisodeThumbnail `json:"episode_thumbnails"`
 }
 
 type EpisodeThumbnail struct {

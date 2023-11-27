@@ -1,18 +1,5030 @@
 {
-    "total_count": 1,
+    "total_count": 23,
     "anime": {
-        "spy-x-family": {
-            "name": "Spy x Family",
-            "last_updated": "2023-11-23T04:00:00Z",
+        "07-ghost": {
+            "name": "07 Ghost",
+            "last_updated": "2023-11-27T03:44:13.350748352Z",
+            "sub": {
+                "season": 1,
+                "episode": 25,
+                "title": "The Heart Is Lead By The Truth On The Other Side..."
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "11eyes": {
+            "name": "11eyes",
+            "last_updated": "2023-11-27T03:44:16.789395452Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "The Dawn of Darkness ~ a sötét hajnal"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "16bit-sensation-another-layer": {
+            "name": "16bit Sensation: Another Layer",
+            "last_updated": "2023-11-27T03:44:20.006716898Z",
+            "sub": {
+                "season": 1,
+                "episode": 8,
+                "title": "Echo"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "18if": {
+            "name": "18if",
+            "last_updated": "2023-11-27T03:44:23.26364511Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Eve's Sigh"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Eve's Sigh"
+            }
+        },
+        "227-nanabun-no-nijyuuni": {
+            "name": "22/7 (nanabun no nijyuuni)",
+            "last_updated": "2023-11-27T03:44:29.883595107Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "8+3=?"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "243-seiin-high-school-boys-volleyball-team": {
+            "name": "2.43: Seiin High School Boys Volleyball Team",
+            "last_updated": "2023-11-27T03:44:26.633220038Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Runway"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Runway"
+            }
+        },
+        "86-eighty-six": {
+            "name": "86 EIGHTY-SIX",
+            "last_updated": "2023-11-27T03:44:33.139757939Z",
             "sub": {
                 "season": 2,
-                "episode": 32,
-                "title": "Who Is This Mission For?"
+                "episode": 23,
+                "title": "Handler One"
             },
             "dub": {
                 "season": 2,
-                "episode": 30,
-                "title": "Plan to Cross the Border"
+                "episode": 23,
+                "title": "Handler One"
+            }
+        },
+        "91-days": {
+            "name": "91 Days",
+            "last_updated": "2023-11-27T03:44:36.615531506Z",
+            "sub": {
+                "season": 2,
+                "episode": 13,
+                "title": "Shoal of Time"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 12,
+                "title": "Slipping Through the Dirty Sky"
+            }
+        },
+        "a-bridge-to-the-starry-skies---hoshizora-e-kakaru-hashi": {
+            "name": "A Bridge to the Starry Skies - Hoshizora e Kakaru Hashi",
+            "last_updated": "2023-11-27T03:44:44.011923041Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "A Starry Bridge in the Night Sky"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "a-centaurs-life": {
+            "name": "A Centaur's Life",
+            "last_updated": "2023-11-27T03:44:47.343650808Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "We Tried Making a Fantasy Story in RPG Style. | Fierce Fights! Arm Wrestling! How Will the Battle of the Heroines End?"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "We Tried Making a Fantasy Story in RPG Style. | Fierce Fights! Arm Wrestling! How Will the Battle of the Heroines End?"
+            }
+        },
+        "a-certain-magical-index": {
+            "name": "A Certain Magical Index",
+            "last_updated": "2023-11-27T03:44:50.753916039Z",
+            "sub": {
+                "season": 3,
+                "episode": 26,
+                "title": "Son of God"
+            },
+            "dub": {
+                "season": 3,
+                "episode": 26,
+                "title": "Son of God"
+            }
+        },
+        "a-certain-scientific-accelerator": {
+            "name": "A Certain Scientific Accelerator",
+            "last_updated": "2023-11-27T03:44:55.260018548Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Something to Protect"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Something to Protect"
+            }
+        },
+        "a-certain-scientific-railgun": {
+            "name": "A Certain Scientific Railgun",
+            "last_updated": "2023-11-27T03:45:00.429329031Z",
+            "sub": {
+                "season": 3,
+                "episode": 25,
+                "title": "My Dear Friends"
+            },
+            "dub": {
+                "season": 3,
+                "episode": 25,
+                "title": "My Dear Friends"
+            }
+        },
+        "a-couple-of-cuckoos": {
+            "name": "A Couple of Cuckoos",
+            "last_updated": "2023-11-27T03:45:04.366842314Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "All that matters is that you two are happy"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 24,
+                "title": "All that matters is that you two are happy"
+            }
+        },
+        "a-dark-rabbit-has-seven-lives": {
+            "name": "A Dark Rabbit has Seven Lives",
+            "last_updated": "2023-11-27T03:45:07.959253547Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Pale White Graduation"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "a-destructive-god-sits-next-to-me": {
+            "name": "A Destructive God Sits Next to Me",
+            "last_updated": "2023-11-27T03:45:11.426016127Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "secret room"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "a-galaxy-next-door": {
+            "name": "A Galaxy Next Door",
+            "last_updated": "2023-11-27T03:45:15.870242572Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Fireworks with the Princess"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Fireworks with the Princess"
+            }
+        },
+        "a-girl--her-guard-dog": {
+            "name": "A Girl \u0026 Her Guard Dog",
+            "last_updated": "2023-11-27T03:45:19.105872493Z",
+            "sub": {
+                "season": 1,
+                "episode": 9,
+                "title": "KNIVES AND ATTACKS"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "a-herbivorous-dragon-of-5000-years-gets-unfairly-villainized": {
+            "name": "A Herbivorous Dragon of 5,000 Years Gets Unfairly Villainized",
+            "last_updated": "2023-11-27T03:45:22.472080049Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "The Rescue"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "a-lull-in-the-sea-nagi-asu-nagi-no-asukara": {
+            "name": "A Lull in the Sea (Nagi-Asu: Nagi no Asukara)",
+            "last_updated": "2023-11-27T03:45:26.72196994Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 1,
+                "episode": 26,
+                "title": "The Color Of The Sea. The Color Of The Land. The Color Of The Wind. The Color Of The Heart. The Color Of You. ~Earth color of a calm~"
+            }
+        },
+        "a-place-further-than-the-universe": {
+            "name": "A Place Further Than the Universe",
+            "last_updated": "2023-11-27T03:45:30.943727355Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "We'll Go On Another Journey Someday"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "a-playthrough-of-a-certain-dudes-vrmmo-life": {
+            "name": "A Playthrough of a Certain Dude's VRMMO Life",
+            "last_updated": "2023-11-27T03:45:34.153655694Z",
+            "sub": {
+                "season": 1,
+                "episode": 8,
+                "title": "Earth Meets A Dragonian Girl"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "a-returners-magic-should-be-special": {
+            "name": "A Returner's Magic Should Be Special",
+            "last_updated": "2023-11-27T03:45:37.42624571Z",
+            "sub": {
+                "season": 1,
+                "episode": 8,
+                "title": "Crash"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 5,
+                "title": "Rapier"
+            }
+        },
+        "a-sisters-all-you-need": {
+            "name": "A Sister's All You Need.",
+            "last_updated": "2023-11-27T03:45:42.515715672Z",
+            "sub": {
+                "season": 2,
+                "episode": 12,
+                "title": "A Sister's All You Need?"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 12,
+                "title": "A Sister's All You Need?"
+            }
+        },
+        "a-talk-on-titan": {
+            "name": "A Talk on Titan",
+            "last_updated": "2023-11-27T03:45:45.905367157Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 1,
+                "episode": 5,
+                "title": "The One Titan Pairing! | Attack on Titan Ep 42"
+            }
+        },
+        "a3": {
+            "name": "A3!",
+            "last_updated": "2023-11-27T05:54:05.883880201Z",
+            "sub": {
+                "season": 2,
+                "episode": 24,
+                "title": "Once More, with Feeling"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 24,
+                "title": "Once More, with Feeling"
+            }
+        },
+        "abciee-working-diary": {
+            "name": "ABCiee Working Diary",
+            "last_updated": "2023-11-27T03:45:54.191159529Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Smiles and Tears, Ciee, at the Wrap Party!"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "absolute-duo": {
+            "name": "Absolute Duo",
+            "last_updated": "2023-11-27T03:45:58.702565695Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Absolute Duo"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Absolute Duo"
+            }
+        },
+        "acca-13-territory-inspection-dept": {
+            "name": "ACCA: 13-Territory Inspection Dept.",
+            "last_updated": "2023-11-27T03:46:04.006411353Z",
+            "sub": {
+                "season": 2,
+                "episode": 12,
+                "title": "Where the Bird Flies"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 12,
+                "title": "Where the Bird Flies"
+            }
+        },
+        "accel-world": {
+            "name": "Accel World",
+            "last_updated": "2023-11-27T03:46:08.417107575Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 2,
+                "episode": 24,
+                "title": "Reincarnation"
+            }
+        },
+        "ace-attorney": {
+            "name": "Ace Attorney",
+            "last_updated": "2023-11-27T03:46:11.667633039Z",
+            "sub": {
+                "season": 2,
+                "episode": 23,
+                "title": "Bridge to the Turnabout — Last Trial"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 23,
+                "title": "Bridge to the Turnabout — Last Trial"
+            }
+        },
+        "ace-of-the-diamond": {
+            "name": "Ace of the Diamond",
+            "last_updated": "2023-11-27T03:46:14.947747457Z",
+            "sub": {
+                "season": 3,
+                "episode": 52,
+                "title": "Ace of Diamond"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "active-raid": {
+            "name": "Active Raid",
+            "last_updated": "2023-11-27T03:46:19.614755563Z",
+            "sub": {
+                "season": 2,
+                "episode": 12,
+                "title": "Wonderful Days"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "actors-songs-connection": {
+            "name": "Actors: Songs Connection",
+            "last_updated": "2023-11-27T03:46:24.310681167Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "piacere"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "piacere"
+            }
+        },
+        "adachi-and-shimamura": {
+            "name": "Adachi and Shimamura",
+            "last_updated": "2023-11-27T03:46:27.995826059Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Friends and Love, Love and Cherry Blossoms"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Friends and Love, Love and Cherry Blossoms"
+            }
+        },
+        "aesthetica-of-a-rogue-hero": {
+            "name": "Aesthetica of a Rogue Hero",
+            "last_updated": "2023-11-27T03:46:31.588847442Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "The World is Watching You"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "The World is Watching You"
+            }
+        },
+        "africa-salaryman": {
+            "name": "Africa Salaryman",
+            "last_updated": "2023-11-27T03:46:35.810926815Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Africa Salaryman"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Africa Salaryman"
+            }
+        },
+        "afro-samurai": {
+            "name": "Afro Samurai",
+            "last_updated": "2023-11-27T03:46:39.244091549Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 1,
+                "episode": 5,
+                "title": "Justice"
+            }
+        },
+        "after-school-dice-club": {
+            "name": "After School Dice Club",
+            "last_updated": "2023-11-27T03:46:43.155988715Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "The Place We All Love"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "The Place We All Love"
+            }
+        },
+        "after-school-hanako-kun": {
+            "name": "After-school Hanako-kun",
+            "last_updated": "2023-11-27T03:46:46.390275608Z",
+            "sub": {
+                "season": 1,
+                "episode": 4,
+                "title": "Truth of the Mokke / Kamome Monster Nursery School"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 4,
+                "title": "Truth of the Mokke / Kamome Monster Nursery School"
+            }
+        },
+        "afterlost": {
+            "name": "AFTERLOST",
+            "last_updated": "2023-11-27T03:46:49.857311417Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Future"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Future"
+            }
+        },
+        "ah-my-buddha": {
+            "name": "Ah My Buddha!!",
+            "last_updated": "2023-11-27T03:46:54.161136751Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 1,
+                "episode": 26,
+                "title": "Don't Be Fooled!!"
+            }
+        },
+        "ah-my-goddess-flights-of-fancy": {
+            "name": "Ah! My Goddess: Flights of Fancy",
+            "last_updated": "2023-11-27T03:46:57.439846688Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "Ah! The Song of Love That Shakes the Heart!"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 24,
+                "title": "Ah! The Song of Love That Shakes the Heart!"
+            }
+        },
+        "aharen-san-wa-hakarenai": {
+            "name": "Aharen-san wa Hakarenai",
+            "last_updated": "2023-11-27T03:47:00.69432035Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "This Is a Duel, Huh?"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "This Is a Duel, Huh?"
+            }
+        },
+        "ahiru-no-sora": {
+            "name": "Ahiru no Sora",
+            "last_updated": "2023-11-27T03:47:05.174376849Z",
+            "sub": {
+                "season": 1,
+                "episode": 50,
+                "title": "Bridge"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "aho-girl": {
+            "name": "AHO-GIRL",
+            "last_updated": "2023-11-27T03:47:09.565111072Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Meeting... And! Aho Girl"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "ai-mai-mi": {
+            "name": "Ai-Mai-Mi",
+            "last_updated": "2023-11-27T03:47:17.565546165Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Untitled"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "ai-mai-mi-mousou-catastrophe": {
+            "name": "Ai-Mai-Mi Mousou Catastrophe",
+            "last_updated": "2023-11-27T03:47:24.201768144Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Untitled"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "ai-mai-mi-surgical-friends": {
+            "name": "Ai-Mai-Mi Surgical Friends",
+            "last_updated": "2023-11-27T03:47:31.424127344Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Dangerous Rock"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "ai-tenchi-muyo": {
+            "name": "Ai Tenchi Muyo!",
+            "last_updated": "2023-11-27T03:47:13.953275616Z",
+            "sub": {
+                "season": 1,
+                "episode": 50,
+                "title": "Once in a Lifetime"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 50,
+                "title": "Once in a Lifetime"
+            }
+        },
+        "air-gear": {
+            "name": "Air Gear",
+            "last_updated": "2023-11-27T03:47:37.817604723Z",
+            "sub": {
+                "season": 1,
+                "episode": 25,
+                "title": "Trick: 25"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 25,
+                "title": "Trick: 25"
+            }
+        },
+        "air-master": {
+            "name": "Air Master",
+            "last_updated": "2023-11-27T03:47:42.127087388Z",
+            "sub": {
+                "season": 2,
+                "episode": 27,
+                "title": "Final Episode Fly! Maki Aikawa"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "aiura": {
+            "name": "AIURA",
+            "last_updated": "2023-11-27T03:47:47.318001719Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "See You Tomorrow"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "akagi": {
+            "name": "Akagi",
+            "last_updated": "2023-11-27T03:47:52.01088349Z",
+            "sub": {
+                "season": 1,
+                "episode": 26,
+                "title": "Madness and Darkness and..."
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "akagi-drama": {
+            "name": "Akagi (Drama)",
+            "last_updated": "2023-11-27T03:47:56.840364269Z",
+            "sub": {
+                "season": 1,
+                "episode": 10,
+                "title": "Untitled"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "akashic-records-of-bastard-magic-instructor": {
+            "name": "Akashic Records of Bastard Magic Instructor",
+            "last_updated": "2023-11-27T03:48:01.3668478Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "The Place Found for Oneself"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "The Place Found for Oneself"
+            }
+        },
+        "akebis-sailor-uniform": {
+            "name": "Akebi's Sailor Uniform",
+            "last_updated": "2023-11-27T03:48:07.271014668Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "I'm Not Alone"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "I'm Not Alone"
+            }
+        },
+        "akibas-trip-the-animation": {
+            "name": "Akiba's Trip The Animation",
+            "last_updated": "2023-11-27T03:48:12.023922943Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "AKIBA'S LAST TRIP"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 13,
+                "title": "AKIBA'S LAST TRIP"
+            }
+        },
+        "akudama-drive": {
+            "name": "Akudama Drive",
+            "last_updated": "2023-11-27T03:48:15.916016303Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "AKUDAMA DRIVE"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "AKUDAMA DRIVE"
+            }
+        },
+        "alderamin-on-the-sky": {
+            "name": "Alderamin on the Sky",
+            "last_updated": "2023-11-27T03:48:20.217010282Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "In a Twilight Empire"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 13,
+                "title": "In a Twilight Empire"
+            }
+        },
+        "aldnoahzero": {
+            "name": "ALDNOAH.ZERO",
+            "last_updated": "2023-11-27T03:48:25.178175917Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "Inherit the Stars"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "alice--zoroku": {
+            "name": "Alice \u0026 Zoroku",
+            "last_updated": "2023-11-27T03:48:29.608872833Z",
+            "sub": {
+                "season": 2,
+                "episode": 12,
+                "title": "I'm Home"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 12,
+                "title": "I'm Home"
+            }
+        },
+        "all-out": {
+            "name": "ALL OUT!!",
+            "last_updated": "2023-11-27T03:48:33.594967264Z",
+            "sub": {
+                "season": 1,
+                "episode": 25,
+                "title": "All Out"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 25,
+                "title": "All Out"
+            }
+        },
+        "all-saints-street": {
+            "name": "All Saints Street",
+            "last_updated": "2023-11-27T03:48:37.586921894Z",
+            "sub": {
+                "season": 1,
+                "episode": 8,
+                "title": "The Scenery Before You When You're Lost / Good Nick, Bad Nick / Everyone is Sure to be Rewarded One Day / I was Reborn, and Now I'm a CEO? / Traffic Accident? Amnesia? Let's Shoot for the Top in Life? / How Can I Save You? My Angel…"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "am-i-actually-the-strongest": {
+            "name": "Am I Actually the Strongest?",
+            "last_updated": "2023-11-27T03:48:41.504085214Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Not a Bad Night"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Not a Bad Night"
+            }
+        },
+        "amaim-warrior-at-the-borderline": {
+            "name": "AMAIM Warrior at the Borderline",
+            "last_updated": "2023-11-27T03:48:46.220946904Z",
+            "sub": {
+                "season": 1,
+                "episode": 25,
+                "title": "Hokuriku Frontline (Part 2)"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 25,
+                "title": "Hokuriku Frontline (Part 2)"
+            }
+        },
+        "amanchu": {
+            "name": "Amanchu!",
+            "last_updated": "2023-11-27T03:48:50.119992593Z",
+            "sub": {
+                "season": 2,
+                "episode": 12,
+                "title": "The Story of Future Possibilities"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "amazing-stranger": {
+            "name": "AMAZING STRANGER",
+            "last_updated": "2023-11-27T03:48:54.60172841Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Let Me See Your Universe"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "ancient-girls-frame": {
+            "name": "Ancient Girl's Frame",
+            "last_updated": "2023-11-27T03:48:59.184033446Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Human's Decision"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "and-you-thought-there-is-never-a-girl-online": {
+            "name": "And you thought there is never a girl online?",
+            "last_updated": "2023-11-27T03:49:05.102902058Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "My net game wife is a girl online!"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "My net game wife is a girl online!"
+            }
+        },
+        "ange-vierge": {
+            "name": "Ange Vierge",
+            "last_updated": "2023-11-27T03:49:09.740756097Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Untitled"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "angel-beats": {
+            "name": "Angel Beats",
+            "last_updated": "2023-11-27T03:49:13.598693301Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Graduation"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "angel-cop": {
+            "name": "Angel Cop",
+            "last_updated": "2023-11-27T03:49:17.468719606Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 1,
+                "episode": 6,
+                "title": "Doomsday"
+            }
+        },
+        "angel-heart": {
+            "name": "Angel Heart",
+            "last_updated": "2023-11-27T03:49:22.038415724Z",
+            "sub": {
+                "season": 1,
+                "episode": 9,
+                "title": "Untitled"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "angels-3piece": {
+            "name": "Angel's 3Piece!",
+            "last_updated": "2023-11-27T03:49:26.72141403Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Can't Help but Love the Music"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "angels-of-death": {
+            "name": "Angels of Death",
+            "last_updated": "2023-11-27T03:49:30.598340551Z",
+            "sub": {
+                "season": 1,
+                "episode": 16,
+                "title": "Stop crying and smile"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 16,
+                "title": "Stop crying and smile"
+            }
+        },
+        "angolmois-record-of-mongol-invasion": {
+            "name": "Angolmois: Record of Mongol Invasion",
+            "last_updated": "2023-11-27T03:49:34.452274724Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "The Best You Can Do"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "anifile": {
+            "name": "Anifile",
+            "last_updated": "2023-11-27T04:19:03.485677544Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "anima-yell": {
+            "name": "Anima Yell!",
+            "last_updated": "2023-11-27T03:49:42.420385887Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "One for All, All for One"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "anime-academy": {
+            "name": "Anime Academy",
+            "last_updated": "2023-11-27T04:19:09.45147363Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 3,
+                "episode": 12,
+                "title": "Alternative Animation"
+            }
+        },
+        "anime-azurlane-slow-ahead": {
+            "name": "Anime AzurLane: Slow Ahead!",
+            "last_updated": "2023-11-27T03:49:47.672713886Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Friends Are Our Most Important Treasure"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "anime-crimes-division": {
+            "name": "Anime Crimes Division",
+            "last_updated": "2023-11-27T04:19:14.935955638Z",
+            "sub": {
+                "season": 2,
+                "episode": 6,
+                "title": "The Saddest Anime Death of All Time"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 6,
+                "title": "The Saddest Anime Death of All Time"
+            }
+        },
+        "anime-de-training-ex": {
+            "name": "Anime De Training! Ex",
+            "last_updated": "2023-11-27T04:19:20.754815986Z",
+            "sub": {
+                "season": 2,
+                "episode": 12,
+                "title": "Living Together! XX Is About to Begin"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "anime-gataris": {
+            "name": "Anime-Gataris",
+            "last_updated": "2023-11-27T03:49:52.594947207Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Minoa, Katharsis"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Minoa, Katharsis"
+            }
+        },
+        "anime-kapibarasan": {
+            "name": "Anime KAPIBARASAN",
+            "last_updated": "2023-11-27T04:19:28.414484591Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "Untitled"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "anime-recap": {
+            "name": "Anime Recap",
+            "last_updated": "2023-11-27T04:19:34.239309103Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 1,
+                "episode": 44,
+                "title": "HxH Movie, Resident Evil 2 Demo, Kingdom Hearts III \u0026 MORE! | Anime Recap"
+            }
+        },
+        "anisong-station": {
+            "name": "Anisong Station",
+            "last_updated": "2023-11-27T04:19:41.059774919Z",
+            "sub": {
+                "season": 1,
+                "episode": 93,
+                "title": "January 31st 2019"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "anne-happy": {
+            "name": "Anne-Happy",
+            "last_updated": "2023-11-27T04:19:46.924888433Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "A Happy Outdoor School"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "anohana-the-flower-we-saw-that-day": {
+            "name": "Anohana: The Flower We Saw That Day",
+            "last_updated": "2023-11-27T04:19:52.154365986Z",
+            "sub": {
+                "season": 1,
+                "episode": 11,
+                "title": "The Flower That Bloomed That Summer"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 11,
+                "title": "The Flower That Bloomed That Summer"
+            }
+        },
+        "another": {
+            "name": "Another",
+            "last_updated": "2023-11-27T04:19:57.382913212Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Stand by oneself"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "anti-magic-academy-the-35th-test-platoon": {
+            "name": "Anti-Magic Academy: The 35th Test Platoon",
+            "last_updated": "2023-11-27T04:20:02.93162439Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Supreme Wish"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "ao-chan-cant-study": {
+            "name": "Ao-chan Can't Study!",
+            "last_updated": "2023-11-27T04:20:08.178203052Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Ao-chan Can't Study"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "aoashi": {
+            "name": "Aoashi",
+            "last_updated": "2023-11-27T04:20:13.419589946Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "From Now"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 24,
+                "title": "From Now"
+            }
+        },
+        "aoi-sekai-no-chushin-de": {
+            "name": "Aoi Sekai no Chushin de",
+            "last_updated": "2023-11-27T04:20:18.90108559Z",
+            "sub": {
+                "season": 1,
+                "episode": 3,
+                "title": "Lost Star and Kid"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "aokana-four-rhythm-across-the-blue": {
+            "name": "AOKANA: Four Rhythm Across the Blue",
+            "last_updated": "2023-11-27T03:49:57.767152274Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Let's... Keep Flying!!"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Let's... Keep Flying!!"
+            }
+        },
+        "aooni-the-blue-monster": {
+            "name": "Aooni The Blue Monster",
+            "last_updated": "2023-11-27T04:20:26.424699078Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Trapped for 70 Years"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "appare-ranman": {
+            "name": "APPARE-RANMAN!",
+            "last_updated": "2023-11-27T03:50:02.47544567Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "OVER THE MOON"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 13,
+                "title": "OVER THE MOON"
+            }
+        },
+        "arakawa-under-the-bridge": {
+            "name": "Arakawa Under the Bridge",
+            "last_updated": "2023-11-27T05:54:11.013169815Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "arata-the-legend": {
+            "name": "Arata the Legend",
+            "last_updated": "2023-11-27T04:20:38.163215405Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "The Light of Creation"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "are-you-lost": {
+            "name": "Are You Lost?",
+            "last_updated": "2023-11-27T04:20:47.972202142Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "How to Replenish Water"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "aria-the-animation": {
+            "name": "ARIA The ANIMATION",
+            "last_updated": "2022-11-27T04:20:54.411814032Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "aria-the-scarlet-ammo": {
+            "name": "Aria the Scarlet Ammo",
+            "last_updated": "2023-11-27T04:21:00.090370181Z",
+            "sub": {
+                "season": 2,
+                "episode": 12,
+                "title": "A Pair of As"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 12,
+                "title": "A Pair of As"
+            }
+        },
+        "arifureta-from-commonplace-to-worlds-strongest": {
+            "name": "Arifureta: From Commonplace to World's Strongest",
+            "last_updated": "2023-11-27T04:21:05.337580337Z",
+            "sub": {
+                "season": 2,
+                "episode": 13,
+                "title": "ARIFURETA: From a Detour to the World's Strongest"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 13,
+                "title": "ARIFURETA: From a Detour to the World's Strongest"
+            }
+        },
+        "arknights": {
+            "name": "Arknights",
+            "last_updated": "2023-11-27T04:21:10.561178197Z",
+            "sub": {
+                "season": 2,
+                "episode": 16,
+                "title": "Untitled"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "armor-shop-for-ladies--gentlemen": {
+            "name": "Armor Shop for Ladies \u0026 Gentlemen",
+            "last_updated": "2023-11-27T04:21:17.93943339Z",
+            "sub": {
+                "season": 2,
+                "episode": 12,
+                "title": "The Armor That Leapt Through Time"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "arp-backstage-pass": {
+            "name": "ARP Backstage Pass",
+            "last_updated": "2023-11-27T04:21:24.920877932Z",
+            "sub": {
+                "season": 1,
+                "episode": 11,
+                "title": "Paradise"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "arpeggio-of-blue-steel": {
+            "name": "Arpeggio of Blue Steel",
+            "last_updated": "2023-11-27T04:21:30.904676986Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "The Power to Open a Path"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "arte": {
+            "name": "Arte",
+            "last_updated": "2023-11-27T04:21:36.900899551Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Apprentice"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Apprentice"
+            }
+        },
+        "as-miss-beelzebub-likes-it": {
+            "name": "As Miss Beelzebub Likes it.",
+            "last_updated": "2023-11-27T04:21:42.991390309Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Her Assistant Knows Not Her Highness's Heart. / The Name of That Feeling Is..."
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "ascendance-of-a-bookworm": {
+            "name": "Ascendance of a Bookworm",
+            "last_updated": "2023-11-27T04:21:48.249439566Z",
+            "sub": {
+                "season": 1,
+                "episode": 36,
+                "title": "Blessing"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 36,
+                "title": "Blessing"
+            }
+        },
+        "asobi-asobase---workshop-of-fun--": {
+            "name": "Asobi Asobase - workshop of fun -",
+            "last_updated": "2023-11-27T04:21:54.17089348Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Daniel | Bra Meeting | Fairy Tale Battle Royale | Paper Wars"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "assassination-classroom": {
+            "name": "Assassination Classroom",
+            "last_updated": "2023-11-27T04:21:59.409054634Z",
+            "sub": {
+                "season": 2,
+                "episode": 25,
+                "title": "Future Time"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 25,
+                "title": "Future Time"
+            }
+        },
+        "assassins-pride": {
+            "name": "ASSASSINS PRIDE",
+            "last_updated": "2023-11-27T04:22:04.798976252Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Pride of an Assassin-Instructor"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "assault-lily-bouquet": {
+            "name": "Assault Lily BOUQUET",
+            "last_updated": "2023-11-27T04:22:12.085470321Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Bouquet: Flower Language"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Bouquet: Flower Language"
+            }
+        },
+        "astarottes-toy": {
+            "name": "Astarotte's Toy",
+            "last_updated": "2023-11-27T04:22:18.363239412Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "An Asterisk Beyond the Sky"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "asteroid-in-love": {
+            "name": "Asteroid in Love",
+            "last_updated": "2023-11-27T04:22:24.516813099Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Connected Cosmos"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Connected Cosmos"
+            }
+        },
+        "astra-lost-in-space": {
+            "name": "ASTRA LOST IN SPACE",
+            "last_updated": "2023-11-27T04:22:32.480290165Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "FRIEND-SHIP"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "FRIEND-SHIP"
+            }
+        },
+        "atelier-ryza-ever-darkness--the-secret-hideout-the-animation": {
+            "name": "Atelier Ryza: Ever Darkness \u0026 the Secret Hideout The Animation",
+            "last_updated": "2023-11-27T04:22:38.368319648Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "The Changing Days"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "attack-on-titan": {
+            "name": "Attack on Titan",
+            "last_updated": "2023-11-27T04:22:44.241157026Z",
+            "sub": {
+                "season": 4,
+                "episode": 87,
+                "title": "The Dawn of Humanity"
+            },
+            "dub": {
+                "season": 4,
+                "episode": 87,
+                "title": "The Dawn of Humanity"
+            }
+        },
+        "attack-on-titan-junior-high": {
+            "name": "Attack on Titan: Junior High",
+            "last_updated": "2023-11-27T04:22:50.111386195Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Attack! Titan Junior High School"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Attack! Titan Junior High School"
+            }
+        },
+        "aware-meisaku-kun": {
+            "name": "Aware! Meisaku-kun",
+            "last_updated": "2023-11-27T04:22:57.652056181Z",
+            "sub": {
+                "season": 1,
+                "episode": 230,
+                "title": "Farewell to Another World! The Final Boss Battle!"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "ayaka": {
+            "name": "AYAKA",
+            "last_updated": "2023-11-27T04:23:03.588904936Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Don't Say Such Embarrassing Things"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Don't Say Such Embarrassing Things"
+            }
+        },
+        "ayakashi-triangle": {
+            "name": "Ayakashi Triangle",
+            "last_updated": "2023-11-27T04:23:09.470357462Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Kanade Suzu, the King of Ayakashi"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "azur-lane": {
+            "name": "AZUR LANE",
+            "last_updated": "2023-11-27T04:23:17.041826811Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "BLUE WATERS - May the Azure Lanes Bless You"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "BLUE WATERS - May the Azure Lanes Bless You"
+            }
+        },
+        "b-project": {
+            "name": "B-PROJECT",
+            "last_updated": "2023-11-27T04:23:23.117320944Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "back-arrow": {
+            "name": "BACK ARROW",
+            "last_updated": "2023-11-27T04:23:30.204600843Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "Do We Head for the Stars?"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 24,
+                "title": "Do We Head for the Stars?"
+            }
+        },
+        "backflip": {
+            "name": "Backflip!!",
+            "last_updated": "2023-11-27T04:23:37.266702407Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Tomorrow, Too!"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "baka--test---summon-the-beasts--": {
+            "name": "Baka \u0026 Test - Summon the Beasts -",
+            "last_updated": "2023-11-27T04:23:44.463944478Z",
+            "sub": {
+                "season": 2,
+                "episode": 13,
+                "title": "BAKA and TEST - Summon The Beasts!"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 13,
+                "title": "BAKA and TEST - Summon The Beasts!"
+            }
+        },
+        "bakemonogatari": {
+            "name": "Bakemonogatari",
+            "last_updated": "2023-11-27T04:23:51.449197144Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "bakumatsu": {
+            "name": "BAKUMATSU",
+            "last_updated": "2023-11-27T04:23:58.389739462Z",
+            "sub": {
+                "season": 2,
+                "episode": 12,
+                "title": "To a New Bakumatsu!"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "bamboo-blade": {
+            "name": "Bamboo Blade",
+            "last_updated": "2023-11-27T04:24:05.109330009Z",
+            "sub": {
+                "season": 1,
+                "episode": 26,
+                "title": "Since Then and From Here on Out"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 26,
+                "title": "Since Then and From Here on Out"
+            }
+        },
+        "bananya": {
+            "name": "Bananya",
+            "last_updated": "2023-11-27T04:24:12.735975018Z",
+            "sub": {
+                "season": 2,
+                "episode": 13,
+                "title": "Bananya and the Big Round World, Nya"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "bang-dream-its-mygo": {
+            "name": "BanG Dream! It's MyGO!!!!!",
+            "last_updated": "2023-11-27T04:24:18.538235799Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "The Only One I Can Trust Is Myself"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "bang-dream-movies": {
+            "name": "BanG Dream! Movies",
+            "last_updated": "2023-11-27T04:24:24.963652632Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "banished-from-the-heros-party-i-decided-to-live-a-quiet-life-in-the-countryside": {
+            "name": "Banished from the Hero's Party, I Decided to Live a Quiet Life in the Countryside",
+            "last_updated": "2023-11-27T04:24:30.888426134Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "The Guide"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 13,
+                "title": "The Guide"
+            }
+        },
+        "banpresto-world-figure-colosseum": {
+            "name": "Banpresto World Figure Colosseum",
+            "last_updated": "2023-11-27T04:24:37.119108936Z",
+            "sub": {
+                "season": 1,
+                "episode": 7,
+                "title": "BWFC 2017 Awards Ceremony"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "barakamon": {
+            "name": "Barakamon",
+            "last_updated": "2023-11-27T04:24:43.706144267Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Glad You're Back"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Glad You're Back"
+            }
+        },
+        "bartender": {
+            "name": "Bartender",
+            "last_updated": "2023-11-27T04:35:30.024712943Z",
+            "sub": {
+                "season": 1,
+                "episode": 11,
+                "title": "Water Of Life"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "basilisk": {
+            "name": "Basilisk",
+            "last_updated": "2023-11-27T04:35:37.24677259Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "Requiem"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 24,
+                "title": "Requiem"
+            }
+        },
+        "basilisk--the-ouka-ninja-scrolls": {
+            "name": "Basilisk : The Ouka Ninja Scrolls",
+            "last_updated": "2023-11-27T04:35:43.82765063Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "The Cherry Blossoms Bloom"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 24,
+                "title": "The Cherry Blossoms Bloom"
+            }
+        },
+        "bastions": {
+            "name": "BASTIONS",
+            "last_updated": "2023-11-27T04:35:49.416307067Z",
+            "sub": {
+                "season": 1,
+                "episode": 5,
+                "title": "Untitled"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "battle-athletes-victory-restart": {
+            "name": "Battle Athletes Victory ReSTART!",
+            "last_updated": "2023-11-27T04:35:54.910926176Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Over the Rainbow"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Over the Rainbow"
+            }
+        },
+        "battle-game-in-5-seconds": {
+            "name": "Battle Game in 5 Seconds",
+            "last_updated": "2023-11-27T04:36:00.343492243Z",
+            "sub": {
+                "season": 2,
+                "episode": 12,
+                "title": "The Final Ability"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 12,
+                "title": "The Final Ability"
+            }
+        },
+        "battle-girls---time-paradox": {
+            "name": "Battle Girls - Time Paradox",
+            "last_updated": "2023-11-27T04:36:06.660690147Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Sunlight Girls"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "bbkbrnk": {
+            "name": "BBK/BRNK",
+            "last_updated": "2023-11-27T04:36:12.444609021Z",
+            "sub": {
+                "season": 2,
+                "episode": 23,
+                "title": "The Gentle Giants of the Galaxy"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "beast-tamer": {
+            "name": "Beast Tamer",
+            "last_updated": "2023-11-27T04:36:17.724626435Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "A Home for All"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 13,
+                "title": "A Home for All"
+            }
+        },
+        "beelzebub": {
+            "name": "Beelzebub",
+            "last_updated": "2023-11-27T04:36:23.241035109Z",
+            "sub": {
+                "season": 1,
+                "episode": 60,
+                "title": "I Won't Say Goodbye"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "bem": {
+            "name": "BEM",
+            "last_updated": "2023-11-27T04:36:29.481041575Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Wishing to become human someday"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Wishing to become human someday"
+            }
+        },
+        "berserk": {
+            "name": "Berserk",
+            "last_updated": "2023-11-27T04:36:34.753378379Z",
+            "sub": {
+                "season": 2,
+                "episode": 24,
+                "title": "City of Humans"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 24,
+                "title": "City of Humans"
+            }
+        },
+        "berserk-of-gluttony": {
+            "name": "Berserk of Gluttony",
+            "last_updated": "2023-11-27T04:36:39.990825842Z",
+            "sub": {
+                "season": 1,
+                "episode": 9,
+                "title": "The Guardian Of Lust"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "berserk-the-golden-age-arc---memorial-edition": {
+            "name": "Berserk: The Golden Age Arc - Memorial Edition",
+            "last_updated": "2023-11-27T04:36:45.242339372Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Vow of Retaliation"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Vow of Retaliation"
+            }
+        },
+        "between-the-sky-and-sea": {
+            "name": "Between the Sky and Sea",
+            "last_updated": "2023-11-27T04:36:51.119612749Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Between the Sky and Sea"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "beyblade-metal-fusion": {
+            "name": "Beyblade: Metal Fusion",
+            "last_updated": "2023-11-27T04:36:56.571260384Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 4,
+                "episode": 12,
+                "title": "BLADER'S SPIRIT"
+            }
+        },
+        "big-order": {
+            "name": "BIG ORDER",
+            "last_updated": "2023-11-27T04:37:02.497650736Z",
+            "sub": {
+                "season": 1,
+                "episode": 10,
+                "title": "Order! Fight and Believe in Yourself!"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "big-windup": {
+            "name": "Big Windup!",
+            "last_updated": "2023-11-27T04:37:08.690597287Z",
+            "sub": {
+                "season": 1,
+                "episode": 26,
+                "title": "The Basics of Basics"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 26,
+                "title": "The Basics of Basics"
+            }
+        },
+        "bikini-warriors": {
+            "name": "Bikini Warriors",
+            "last_updated": "2023-11-27T04:37:13.969611227Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "No One Knows The End"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "No One Knows The End"
+            }
+        },
+        "birdie-wing--golf-girls-story-": {
+            "name": "BIRDIE WING -Golf Girls' Story-",
+            "last_updated": "2023-11-27T04:37:20.698308446Z",
+            "sub": {
+                "season": 1,
+                "episode": 25,
+                "title": "The Promise Revives"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "black-blood-brothers": {
+            "name": "Black Blood Brothers",
+            "last_updated": "2023-11-27T04:37:26.86320321Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "For the Eternal Pulse of Mine Bloodline, I Would Offer This Blood in Totality"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "For the Eternal Pulse of Mine Bloodline, I Would Offer This Blood in Totality"
+            }
+        },
+        "black-cat": {
+            "name": "Black Cat",
+            "last_updated": "2023-11-27T04:37:33.658279631Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "The Carefree Cat"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 24,
+                "title": "The Carefree Cat"
+            }
+        },
+        "black-clover": {
+            "name": "Black Clover",
+            "last_updated": "2023-11-27T04:37:39.253088321Z",
+            "sub": {
+                "season": 1,
+                "episode": 170,
+                "title": "The Faraway Future"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 170,
+                "title": "The Faraway Future"
+            }
+        },
+        "black-lagoon": {
+            "name": "Black Lagoon",
+            "last_updated": "2023-11-27T04:37:44.508224836Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "The Gunslingers"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 24,
+                "title": "The Gunslingers"
+            }
+        },
+        "black-rock-shooter": {
+            "name": "Black Rock Shooter",
+            "last_updated": "2023-11-27T04:37:49.986385698Z",
+            "sub": {
+                "season": 1,
+                "episode": 8,
+                "title": "Go Beyond This World"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 8,
+                "title": "Go Beyond This World"
+            }
+        },
+        "black-summoner": {
+            "name": "Black Summoner",
+            "last_updated": "2023-11-27T04:37:55.25041218Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Another Reincarnated"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Another Reincarnated"
+            }
+        },
+        "blade-and-soul": {
+            "name": "Blade and Soul",
+            "last_updated": "2023-11-27T04:38:00.792548931Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "God"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "blade-runner-black-lotus": {
+            "name": "Blade Runner: Black Lotus",
+            "last_updated": "2023-11-27T04:38:06.1434457Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Time to Die"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "bladedance-of-elementalers": {
+            "name": "Bladedance of Elementalers",
+            "last_updated": "2023-11-27T04:38:11.687247238Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Ren Ashbell"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "blassreiter": {
+            "name": "BLASSREITER",
+            "last_updated": "2023-11-27T04:38:18.151824916Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "Promised Land"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 24,
+                "title": "Promised Land"
+            }
+        },
+        "blast-of-tempest": {
+            "name": "Blast of Tempest",
+            "last_updated": "2023-11-27T04:38:23.386359582Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "To Each, Their Own Tale"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "blend-s": {
+            "name": "BLEND-S",
+            "last_updated": "2023-11-27T04:38:28.615525076Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "I Love You!"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "blood-blockade-battlefront": {
+            "name": "Blood Blockade Battlefront",
+            "last_updated": "2023-11-27T04:38:35.870240537Z",
+            "sub": {
+                "season": 2,
+                "episode": 12,
+                "title": "Spectral Eyes, Phantom Vision, Part 2"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 12,
+                "title": "Spectral Eyes, Phantom Vision, Part 2"
+            }
+        },
+        "bloodivores": {
+            "name": "Bloodivores",
+            "last_updated": "2023-11-27T04:38:42.788172403Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Counterattack"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "bludgeoning-angel-dokuro-chan": {
+            "name": "Bludgeoning Angel Dokuro-chan",
+            "last_updated": "2023-11-27T04:38:48.38332042Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 4,
+                "episode": 3,
+                "title": "Incidents Happen in a Secret Room! Dokuro-chan!, It's Valentine's Day Kiss! Dokuro-chan!"
+            }
+        },
+        "blue-exorcist": {
+            "name": "Blue Exorcist",
+            "last_updated": "2023-11-27T04:38:54.944074187Z",
+            "sub": {
+                "season": 2,
+                "episode": 12,
+                "title": "Candid and Open"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 12,
+                "title": "Candid and Open"
+            }
+        },
+        "blue-reflection-ray": {
+            "name": "Blue Reflection Ray",
+            "last_updated": "2023-11-27T04:39:04.281915458Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "Blue Reflection"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 24,
+                "title": "Blue Reflection"
+            }
+        },
+        "blue-seed": {
+            "name": "Blue Seed",
+            "last_updated": "2023-11-27T04:39:11.289229728Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 2,
+                "episode": 3,
+                "title": "The Six Beautiful Ladies’ Trip - Big Explosion of the Secret Hot Spring"
+            }
+        },
+        "blue-spring-ride": {
+            "name": "Blue Spring Ride",
+            "last_updated": "2023-11-27T04:39:18.235664111Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Page. 12"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "blue-submarine-no-6": {
+            "name": "Blue Submarine No. 6",
+            "last_updated": "2023-11-27T04:39:27.260116132Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 1,
+                "episode": 4,
+                "title": "Minasoko"
+            }
+        },
+        "bluelock": {
+            "name": "BLUELOCK",
+            "last_updated": "2023-11-27T04:39:33.235354909Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "The Time Has Come"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 24,
+                "title": "The Time Has Come"
+            }
+        },
+        "bocchi-the-rock": {
+            "name": "BOCCHI THE ROCK!",
+            "last_updated": "2023-11-27T04:39:39.068328238Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Morning Light Falls on You"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "bofuri-i-dont-want-to-get-hurt-so-ill-max-out-my-defense": {
+            "name": "BOFURI: I Don't Want to Get Hurt, so I'll Max Out My Defense.",
+            "last_updated": "2023-11-27T04:39:44.952897651Z",
+            "sub": {
+                "season": 2,
+                "episode": 12,
+                "title": "Maxing Defense and the Big Final Battle"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 12,
+                "title": "Maxing Defense and the Big Final Battle"
+            }
+        },
+        "boku-no-imoutowaosaka-okan": {
+            "name": "Boku-no-imoutowa\"Osaka-okan\"",
+            "last_updated": "2023-11-27T04:39:51.620341145Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Namika-han@Unmotivated"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "bokurano": {
+            "name": "Bokurano",
+            "last_updated": "2023-11-27T04:39:59.101514804Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "Tale"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "bonjoursweet-love-patisserie": {
+            "name": "BONJOUR♪Sweet Love Patisserie",
+            "last_updated": "2023-11-27T04:40:05.541196016Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "Lesson 24"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "bono-bono": {
+            "name": "BONO BONO",
+            "last_updated": "2023-11-27T04:40:14.655791784Z",
+            "sub": {
+                "season": 3,
+                "episode": 52,
+                "title": "Fenny Moves"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "boogiepop-and-others": {
+            "name": "Boogiepop and Others",
+            "last_updated": "2023-11-27T04:40:20.994093713Z",
+            "sub": {
+                "season": 1,
+                "episode": 18,
+                "title": "Overdrive: The King of Distortion 5"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 18,
+                "title": "Overdrive: The King of Distortion 5"
+            }
+        },
+        "boogiepop-phantom": {
+            "name": "Boogiepop Phantom",
+            "last_updated": "2023-11-27T04:40:26.70638683Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "boruto-naruto-next-generations": {
+            "name": "BORUTO: NARUTO NEXT GENERATIONS",
+            "last_updated": "2023-11-27T04:40:32.767538065Z",
+            "sub": {
+                "season": 1,
+                "episode": 293,
+                "title": "Farewell"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "bottom-tier-character-tomozaki": {
+            "name": "Bottom-Tier Character Tomozaki",
+            "last_updated": "2023-11-27T04:40:38.620561639Z",
+            "sub": {
+                "season": 1,
+                "episode": 14,
+                "title": "Most strange spell names have unknown origins"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 14,
+                "title": "Most strange spell names have unknown origins"
+            }
+        },
+        "brave-witches": {
+            "name": "Brave Witches",
+            "last_updated": "2023-11-27T04:40:45.232178278Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Shining with Light..."
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Shining with Light..."
+            }
+        },
+        "brothers-conflict": {
+            "name": "Brothers Conflict",
+            "last_updated": "2023-11-27T04:40:53.047356025Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Romance"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Romance"
+            }
+        },
+        "brynhildr-in-the-darkness": {
+            "name": "Brynhildr in the Darkness",
+            "last_updated": "2023-11-27T04:41:00.172531162Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Things to Protect"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "buddy-complex": {
+            "name": "Buddy Complex",
+            "last_updated": "2023-11-27T04:41:06.59340347Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Acception"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "buddy-daddies": {
+            "name": "Buddy Daddies",
+            "last_updated": "2023-11-27T04:41:12.410757542Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Daughter Daddies"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Daughter Daddies"
+            }
+        },
+        "build-divide--000000--code-black": {
+            "name": "BUILD-DIVIDE -#000000- CODE BLACK",
+            "last_updated": "2023-11-27T04:50:46.689889847Z",
+            "sub": {
+                "season": 2,
+                "episode": 24,
+                "title": "No One Knows When Spring Ends"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "bullbuster": {
+            "name": "BULLBUSTER",
+            "last_updated": "2023-11-27T04:50:57.720815523Z",
+            "sub": {
+                "season": 1,
+                "episode": 8,
+                "title": "Muto Roars! The Sorrows of a Man Left Behind by Time... And What Does Shiota Have Up Its Sleeve?"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "bungo-and-alchemist--gears-of-judgement-": {
+            "name": "Bungo and Alchemist -Gears of Judgement-",
+            "last_updated": "2023-11-27T04:51:11.172859429Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Gears (Part 2)"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Gears (Part 2)"
+            }
+        },
+        "bungo-stray-dogs": {
+            "name": "Bungo Stray Dogs",
+            "last_updated": "2023-11-27T04:51:21.421033455Z",
+            "sub": {
+                "season": 5,
+                "episode": 61,
+                "title": "Twilight Goodbye"
+            },
+            "dub": {
+                "season": 5,
+                "episode": 61,
+                "title": "Twilight Goodbye"
+            }
+        },
+        "bungo-stray-dogs-wan": {
+            "name": "Bungo Stray Dogs WAN!",
+            "last_updated": "2023-11-27T04:51:33.238071828Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Swap Theater / My Treasure / Nakajima Atsushi's Plan"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Swap Theater / My Treasure / Nakajima Atsushi's Plan"
+            }
+        },
+        "bureau-of-paranormal-investigation": {
+            "name": "Bureau of Paranormal Investigation",
+            "last_updated": "2023-11-27T04:51:43.900967205Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": ""
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "burn-the-witch": {
+            "name": "BURN THE WITCH",
+            "last_updated": "2023-11-27T04:51:54.31372084Z",
+            "sub": {
+                "season": 1,
+                "episode": 3,
+                "title": "If a lion could speak, we couldn't understand"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 3,
+                "title": "If a lion could speak, we couldn't understand"
+            }
+        },
+        "burning-kabaddi": {
+            "name": "Burning Kabaddi",
+            "last_updated": "2023-11-27T04:52:04.900069744Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "After Giving Every Last Drop"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "burst-angel": {
+            "name": "Burst Angel",
+            "last_updated": "2023-11-27T04:52:16.146675469Z",
+            "sub": {
+                "season": 1,
+                "episode": 25,
+                "title": "The Lightness and Darkness of Jo"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 25,
+                "title": "The Lightness and Darkness of Jo"
+            }
+        },
+        "butareba--the-story-of-a-man-turned-into-a-pig-": {
+            "name": "Butareba -The Story of a Man Turned into a Pig-",
+            "last_updated": "2023-11-27T04:52:26.37284248Z",
+            "sub": {
+                "season": 1,
+                "episode": 8,
+                "title": "Don't Laugh at Someone's Prayers"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "butlers-x-battlers": {
+            "name": "Butlers X Battlers",
+            "last_updated": "2023-11-27T04:52:37.270010215Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "A Thousand Years, a Hundred Years"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "by-the-grace-of-the-gods": {
+            "name": "By the Grace of the Gods",
+            "last_updated": "2023-11-27T04:52:47.549720464Z",
+            "sub": {
+                "season": 2,
+                "episode": 12,
+                "title": "Ryoma and the Town of Gimul"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 12,
+                "title": "Ryoma and the Town of Gimul"
+            }
+        },
+        "c3-anime": {
+            "name": "C3 Anime",
+            "last_updated": "2023-11-27T04:52:58.291635121Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Outdoor School Confusion"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "caligula": {
+            "name": "Caligula",
+            "last_updated": "2023-11-27T04:53:11.593972096Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Destroy your ideals and self, and return to hell and reality"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "call-to-cosplay": {
+            "name": "Call to Cosplay",
+            "last_updated": "2023-11-27T04:53:21.991824249Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 1,
+                "episode": 6,
+                "title": "Matthew x Ginger"
+            }
+        },
+        "campfire-cooking-in-another-world-with-my-absurd-skill": {
+            "name": "Campfire Cooking in Another World with My Absurd Skill",
+            "last_updated": "2023-11-27T04:53:32.300045773Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Adventures Are as Countless as Varieties of Food"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "campione": {
+            "name": "Campione!",
+            "last_updated": "2023-11-27T04:53:42.959403317Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Tale of the God-slayer"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "canvas-2-niji-iro-no-sketch": {
+            "name": "Canvas 2: Niji Iro no Sketch",
+            "last_updated": "2023-11-27T04:53:53.725589676Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "Rainbow Colored Finale"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "captain-harlock": {
+            "name": "Captain Harlock",
+            "last_updated": "2023-11-27T04:54:04.977926216Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "captain-harlock-arcadia-of-my-youth---endless-orbit-ssx": {
+            "name": "Captain Harlock: Arcadia of my Youth - Endless Orbit SSX",
+            "last_updated": "2023-11-27T04:54:15.833833823Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "captain-tsubasa-junior-youth-arc": {
+            "name": "Captain Tsubasa: Junior Youth Arc",
+            "last_updated": "2023-11-27T04:54:26.87788445Z",
+            "sub": {
+                "season": 1,
+                "episode": 9,
+                "title": "A Great Journey"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 4,
+                "title": "Starting Again from Zero"
+            }
+        },
+        "cardcaptor-sakura": {
+            "name": "Cardcaptor Sakura",
+            "last_updated": "2023-11-27T04:54:40.31187379Z",
+            "sub": {
+                "season": 1,
+                "episode": 70,
+                "title": "Sakura and Her True Feelings"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 70,
+                "title": "Sakura and Her True Feelings"
+            }
+        },
+        "cardcaptor-sakura-clear-card": {
+            "name": "Cardcaptor Sakura: Clear Card",
+            "last_updated": "2023-11-27T04:54:52.761407086Z",
+            "sub": {
+                "season": 1,
+                "episode": 22,
+                "title": "Sakura's Clear Cards"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 22,
+                "title": "Sakura's Clear Cards"
+            }
+        },
+        "cardfight-vanguard": {
+            "name": "CARDFIGHT!! VANGUARD",
+            "last_updated": "2023-11-27T04:55:04.054335634Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "cardfight-vanguard-asia-circuit-season-2": {
+            "name": "Cardfight!! Vanguard Asia Circuit (Season 2)",
+            "last_updated": "2023-11-27T04:55:16.293082411Z",
+            "sub": {
+                "season": 1,
+                "episode": 104,
+                "title": "Whereabouts of the Wind"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "cardfight-vanguard-g": {
+            "name": "Cardfight!! Vanguard G",
+            "last_updated": "2023-11-27T04:55:28.564955286Z",
+            "sub": {
+                "season": 5,
+                "episode": 24,
+                "title": "EXTRA TURN"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "cardfight-vanguard-legion-mate-season-4": {
+            "name": "Cardfight!! Vanguard Legion Mate (Season 4)",
+            "last_updated": "2023-11-27T04:55:40.019113672Z",
+            "sub": {
+                "season": 1,
+                "episode": 196,
+                "title": "The Vanguards"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "cardfight-vanguard-link-joker-season-3": {
+            "name": "Cardfight!! Vanguard Link Joker (Season 3)",
+            "last_updated": "2023-11-27T04:55:52.468578379Z",
+            "sub": {
+                "season": 1,
+                "episode": 163,
+                "title": "The Connected"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "cardfight-vanguard-overdress": {
+            "name": "CARDFIGHT!! VANGUARD overDress",
+            "last_updated": "2023-11-27T04:56:05.177370352Z",
+            "sub": {
+                "season": 3,
+                "episode": 13,
+                "title": "will+Dress"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 12,
+                "title": "An Alternate Future"
+            }
+        },
+        "case-closed-detective-conan": {
+            "name": "Case Closed (Detective Conan)",
+            "last_updated": "2023-11-27T05:54:16.529224528Z",
+            "sub": {
+                "season": 4,
+                "episode": 1104,
+                "title": "The True Culprit is On the Run"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "case-file-n221-kabukicho": {
+            "name": "Case file n221: Kabukicho",
+            "last_updated": "2023-11-27T04:56:27.512550938Z",
+            "sub": {
+                "season": 1,
+                "episode": 25,
+                "title": "Case file n221 : Kabukicho OVA"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 24,
+                "title": "See You in Kabukicho!"
+            }
+        },
+        "casshern-sins": {
+            "name": "Casshern Sins",
+            "last_updated": "2023-11-27T04:56:39.597740827Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "To the Wandering, Blooming Flowers"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 24,
+                "title": "To the Wandering, Blooming Flowers"
+            }
+        },
+        "cat-girl-nuku-nuku": {
+            "name": "Cat Girl Nuku Nuku",
+            "last_updated": "2023-11-27T05:54:21.857727006Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 12,
+                "episode": 12,
+                "title": "Goodbye, Nuku Nuku"
+            }
+        },
+        "cautious-hero-the-hero-is-overpowered-but-overly-cautious": {
+            "name": "Cautious Hero: The Hero is Overpowered but Overly Cautious",
+            "last_updated": "2023-11-27T05:54:27.287242055Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "The Hero Is Overpowered But Overly Cautious"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "The Hero Is Overpowered But Overly Cautious"
+            }
+        },
+        "cells-at-work": {
+            "name": "Cells at Work!",
+            "last_updated": "2023-11-27T05:54:32.70938651Z",
+            "sub": {
+                "season": 2,
+                "episode": 8,
+                "title": "Cancer Cell II (Part II)"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 8,
+                "title": "Cancer Cell II (Part II)"
+            }
+        },
+        "cells-at-work-code-black": {
+            "name": "Cells at Work! CODE BLACK",
+            "last_updated": "2023-11-27T05:54:38.502856394Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Cardiac Arrest, Revival, and a Change"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Cardiac Arrest, Revival, and a Change"
+            }
+        },
+        "cerberus": {
+            "name": "Cerberus",
+            "last_updated": "2023-11-27T05:54:43.870645573Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Dragon's Heart"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "ceres-celestial-legend": {
+            "name": "Ceres, Celestial Legend",
+            "last_updated": "2023-11-27T05:54:49.129826946Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 1,
+                "episode": 24,
+                "title": "Denouement"
+            }
+        },
+        "cestvs--the-roman-fighter-": {
+            "name": "CESTVS -The Roman Fighter-",
+            "last_updated": "2023-11-27T05:54:55.157357338Z",
+            "sub": {
+                "season": 1,
+                "episode": 11,
+                "title": "A New Battlefield"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "chaika-the-coffin-princess-": {
+            "name": "Chaika –The Coffin Princess-",
+            "last_updated": "2023-11-27T05:55:00.398305393Z",
+            "sub": {
+                "season": 2,
+                "episode": 10,
+                "title": "The Girl Who Carries the Gundo"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "chain-chronicle---the-light-of-haecceitas--": {
+            "name": "Chain Chronicle - The Light of Haecceitas -",
+            "last_updated": "2023-11-27T05:55:06.35729051Z",
+            "sub": {
+                "season": 2,
+                "episode": 12,
+                "title": "The Light of Haecceitas"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 12,
+                "title": "The Light of Haecceitas"
+            }
+        },
+        "chainsaw-man": {
+            "name": "Chainsaw Man",
+            "last_updated": "2023-11-27T05:55:11.595742574Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "KATANA VS. CHAINSAW"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "KATANA VS. CHAINSAW"
+            }
+        },
+        "chainsaw-man-festival": {
+            "name": "Chainsaw Man Festival",
+            "last_updated": "2023-11-27T05:55:16.825519626Z",
+            "sub": {
+                "season": 1,
+                "episode": 1,
+                "title": "Evening "
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "chance-pop-session": {
+            "name": "Chance Pop Session",
+            "last_updated": "2023-11-27T05:55:22.475372791Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "chaos-dragon": {
+            "name": "Chaos Dragon",
+            "last_updated": "2023-11-27T05:55:28.248527384Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "One Chance in a Million"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "One Chance in a Million"
+            }
+        },
+        "chaoschild": {
+            "name": "CHAOS;CHILD",
+            "last_updated": "2023-11-27T05:55:33.743635153Z",
+            "sub": {
+                "season": 1,
+                "episode": 14,
+                "title": "Silent Sky Part 2"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Serika Onoe"
+            }
+        },
+        "chaoshead": {
+            "name": "Chaos;HEAd",
+            "last_updated": "2023-11-27T05:55:39.74199809Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Mission"
+            }
+        },
+        "chargeman-ken": {
+            "name": "Chargeman Ken",
+            "last_updated": "2023-11-27T05:55:45.657844984Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "charger-girl-ju-den-chan": {
+            "name": "Charger Girl Ju-den Chan",
+            "last_updated": "2023-11-27T05:55:50.891607595Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Fight! One Shot!"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "charlotte": {
+            "name": "Charlotte",
+            "last_updated": "2023-11-27T05:55:56.771056637Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Memories to Come"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Memories to Come"
+            }
+        },
+        "cheating-craft": {
+            "name": "Cheating Craft",
+            "last_updated": "2023-11-27T05:56:02.804313409Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Post-Festival Sparklers"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "cherry-magic-thirty-years-of-virginity-can-make-you-a-wizard": {
+            "name": "CHERRY MAGIC! THIRTY YEARS OF VIRGINITY CAN MAKE YOU A WIZARD?!",
+            "last_updated": "2023-11-27T05:56:08.027089004Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": ""
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "chihayafuru": {
+            "name": "Chihayafuru",
+            "last_updated": "2023-11-27T05:56:20.233609941Z",
+            "sub": {
+                "season": 3,
+                "episode": 24,
+                "title": "When winds send waves crashing"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "chillin-in-my-30s-after-getting-fired-from-the-demon-kings-army": {
+            "name": "Chillin' in My 30s after Getting Fired from the Demon King's Army",
+            "last_updated": "2023-11-27T05:56:25.445344262Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Dariel Reaches Out His Hand."
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "chios-school-road": {
+            "name": "Chio's School Road",
+            "last_updated": "2023-11-27T05:56:31.4066136Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Just One Masterful Method / Yuki-chan Bares It All"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Just One Masterful Method / Yuki-chan Bares It All"
+            }
+        },
+        "chiruran-12": {
+            "name": "Chiruran 1/2",
+            "last_updated": "2023-11-27T05:56:38.109802799Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Break (Siesta)"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "chis-sweet-home---chis-new-address": {
+            "name": "Chi's Sweet Home - Chi's New Address",
+            "last_updated": "2023-11-27T05:56:14.142641333Z",
+            "sub": {
+                "season": 4,
+                "episode": 104,
+                "title": "Chi, Makes a Family."
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "chitose-get-you": {
+            "name": "Chitose Get You!",
+            "last_updated": "2023-11-27T05:56:44.00153555Z",
+            "sub": {
+                "season": 1,
+                "episode": 26,
+                "title": "Onii-chan, I Love You!"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "chobits": {
+            "name": "Chobits",
+            "last_updated": "2023-11-27T05:56:50.012062524Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "The Person Only For Chi"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 24,
+                "title": "The Person Only For Chi"
+            }
+        },
+        "chronicles-of-the-going-home-club": {
+            "name": "Chronicles of the Going Home Club",
+            "last_updated": "2023-11-27T05:56:55.413086781Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Record 37 - 57"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "chrono-crusade": {
+            "name": "Chrono Crusade",
+            "last_updated": "2023-11-27T05:57:01.759718623Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "Chrono"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 24,
+                "title": "Chrono"
+            }
+        },
+        "chronos-ruler": {
+            "name": "CHRONOS RULER",
+            "last_updated": "2023-11-27T05:57:08.025834831Z",
+            "sub": {
+                "season": 2,
+                "episode": 13,
+                "title": "Fantasy Future"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 13,
+                "title": "Fantasy Future"
+            }
+        },
+        "cinderella-chef": {
+            "name": "Cinderella Chef",
+            "last_updated": "2023-11-27T05:57:13.275486827Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Cinderella Chef"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "cinderella-nine": {
+            "name": "Cinderella Nine",
+            "last_updated": "2023-11-27T05:57:18.927285679Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "The Story Continues"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "citrus": {
+            "name": "citrus",
+            "last_updated": "2023-11-27T05:57:24.922333613Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "my love goes on and on"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "my love goes on and on"
+            }
+        },
+        "city-hunter": {
+            "name": "City Hunter",
+            "last_updated": "2023-11-27T05:57:30.764168481Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "classroom-for-heroes": {
+            "name": "CLASSROOM FOR HEROES",
+            "last_updated": "2023-11-27T05:57:37.127784985Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "The Sophie Series (Part 2)"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "classroom-of-the-elite": {
+            "name": "Classroom of the Elite",
+            "last_updated": "2023-11-27T05:57:44.775519876Z",
+            "sub": {
+                "season": 2,
+                "episode": 13,
+                "title": "The worst enemy you can meet will always be yourself."
+            },
+            "dub": {
+                "season": 2,
+                "episode": 13,
+                "title": "The worst enemy you can meet will always be yourself."
+            }
+        },
+        "claymore": {
+            "name": "Claymore",
+            "last_updated": "2023-11-27T05:57:50.633286558Z",
+            "sub": {
+                "season": 1,
+                "episode": 26,
+                "title": "To the Successors"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 26,
+                "title": "To the Successors"
+            }
+        },
+        "clean-freak-aoyama-kun": {
+            "name": "Clean Freak! Aoyama kun",
+            "last_updated": "2023-11-27T05:57:57.93442199Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "The Reason Behind Aoyama-kun's Choice"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "clif": {
+            "name": "CLIF",
+            "last_updated": "2023-11-27T05:58:05.761763067Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "clockwork-planet": {
+            "name": "Clockwork Planet",
+            "last_updated": "2023-11-27T05:58:13.900632877Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Steel Weight"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Steel Weight"
+            }
+        },
+        "code-geass": {
+            "name": "Code Geass",
+            "last_updated": "2023-11-27T05:58:19.718594202Z",
+            "sub": {
+                "season": 2,
+                "episode": 25,
+                "title": "Final Turn - Re;"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 25,
+                "title": "Final Turn - Re;"
+            }
+        },
+        "code-realize-guardian-of-rebirth": {
+            "name": "Code: Realize ~Guardian of Rebirth~",
+            "last_updated": "2023-11-27T05:58:27.509906929Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Set a thief to catch a thief"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Set a thief to catch a thief"
+            }
+        },
+        "codebreaker": {
+            "name": "Code:Breaker",
+            "last_updated": "2023-11-27T05:58:34.223943917Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "A Flower Blooming With God"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 13,
+                "title": "A Flower Blooming With God"
+            }
+        },
+        "combatants-will-be-dispatched": {
+            "name": "Combatants Will Be Dispatched!",
+            "last_updated": "2023-11-27T05:58:40.706583468Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Strong Partner and Smart Partner!"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Strong Partner and Smart Partner!"
+            }
+        },
+        "comic-girls": {
+            "name": "Comic Girls",
+            "last_updated": "2023-11-27T05:58:47.479777383Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Farewell, You Wonderful Manga Artists"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "comic-party-revolution": {
+            "name": "Comic Party Revolution",
+            "last_updated": "2023-11-27T05:58:54.329596378Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "As Time Goes By"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 13,
+                "title": "As Time Goes By"
+            }
+        },
+        "comical-psychosomatic-medicine": {
+            "name": "Comical Psychosomatic Medicine",
+            "last_updated": "2023-11-27T05:59:01.822223376Z",
+            "sub": {
+                "season": 1,
+                "episode": 20,
+                "title": "What Kind of Place Is a Mental Clinic?"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "conception": {
+            "name": "Conception",
+            "last_updated": "2023-11-27T05:59:07.828475804Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Give Birth to My Child!"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Give Birth to My Child!"
+            }
+        },
+        "concrete-revolutio": {
+            "name": "Concrete Revolutio",
+            "last_updated": "2023-11-27T05:59:14.47274868Z",
+            "sub": {
+                "season": 2,
+                "episode": 24,
+                "title": "Can You Still Sing"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 24,
+                "title": "Can You Still Sing"
+            }
+        },
+        "convenience-store-boy-friends": {
+            "name": "Convenience Store Boy Friends",
+            "last_updated": "2023-11-27T05:59:22.384061685Z",
+            "sub": {
+                "season": 2,
+                "episode": 12,
+                "title": "March"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 12,
+                "title": "March"
+            }
+        },
+        "cop-craft": {
+            "name": "Cop Craft",
+            "last_updated": "2023-11-27T05:59:29.831239226Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "TWO WORLDS, TWO JUSTICES"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "TWO WORLDS, TWO JUSTICES"
+            }
+        },
+        "copihan": {
+            "name": "Copihan",
+            "last_updated": "2023-11-27T05:59:36.182542246Z",
+            "sub": {
+                "season": 1,
+                "episode": 8,
+                "title": "Kumokiri OMOTA"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "corpse-princess-shikabane-hime": {
+            "name": "Corpse Princess: Shikabane Hime",
+            "last_updated": "2023-11-27T05:59:42.100940825Z",
+            "sub": {
+                "season": 1,
+                "episode": 26,
+                "title": "Even So, as a Person"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 26,
+                "title": "Even So, as a Person"
+            }
+        },
+        "cosplay-complex-ova": {
+            "name": "Cosplay Complex OVA",
+            "last_updated": "2023-11-27T05:59:47.784183833Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "cowboy-bebop": {
+            "name": "Cowboy Bebop",
+            "last_updated": "2023-11-27T05:59:53.594864645Z",
+            "sub": {
+                "season": 1,
+                "episode": 26,
+                "title": "The Real Folk Blues (part 2)"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 26,
+                "title": "The Real Folk Blues (part 2)"
+            }
+        },
+        "coyote-ragtime-show": {
+            "name": "Coyote Ragtime Show",
+            "last_updated": "2023-11-27T06:00:00.80879191Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Coyote"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Coyote"
+            }
+        },
+        "crest-of-the-stars": {
+            "name": "Crest of the Stars",
+            "last_updated": "2023-11-27T06:09:40.122330225Z",
+            "sub": {
+                "season": 8,
+                "episode": 10,
+                "title": "An Abriel's Tears"
+            },
+            "dub": {
+                "season": 8,
+                "episode": 10,
+                "title": "An Abriel's Tears"
+            }
+        },
+        "cromartie-high-school": {
+            "name": "Cromartie High School",
+            "last_updated": "2023-11-27T06:09:46.89161274Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 1,
+                "episode": 26,
+                "title": "Suda!! Cromartie Girls' High School | The Four Lords of Cromartie"
+            }
+        },
+        "crossing-time": {
+            "name": "Crossing Time",
+            "last_updated": "2023-11-27T06:09:53.44269152Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Their Youth Part 2"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "crunchycast": {
+            "name": "Crunchycast",
+            "last_updated": "2023-11-27T06:09:59.561254974Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "crunchyroll-collection": {
+            "name": "Crunchyroll Collection",
+            "last_updated": "2023-11-27T06:10:05.185573468Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "cue": {
+            "name": "CUE!",
+            "last_updated": "2023-11-27T06:10:11.489358024Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "The End of the Beginning"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "cute-high-earth-defense-club-love": {
+            "name": "Cute High Earth Defense Club LOVE!",
+            "last_updated": "2023-11-27T06:10:18.358613702Z",
+            "sub": {
+                "season": 3,
+                "episode": 1,
+                "title": "Untitled"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "cyber-city-oedo-808": {
+            "name": "Cyber City Oedo 808",
+            "last_updated": "2023-11-27T06:10:24.139233527Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 1,
+                "episode": 3,
+                "title": "Crimson Media"
+            }
+        },
+        "cyborg-009-the-cyborg-soldier": {
+            "name": "Cyborg 009: The Cyborg Soldier",
+            "last_updated": "2023-11-27T06:10:30.318931644Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 1,
+                "episode": 51,
+                "title": "God’s War III: The Birth of a New Universe"
+            }
+        },
+        "d-frag": {
+            "name": "D-Frag!",
+            "last_updated": "2023-11-27T06:10:36.385017123Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "At this Rate, You'll have Zero Friends for All Eternity!"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "At this Rate, You'll have Zero Friends for All Eternity!"
+            }
+        },
+        "d4dj-all-mix": {
+            "name": "D4DJ All Mix",
+            "last_updated": "2023-11-27T06:10:47.796018692Z",
+            "sub": {
+                "season": 2,
+                "episode": 12,
+                "title": "A Bright Future"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "d4dj-first-mix": {
+            "name": "D4DJ First Mix",
+            "last_updated": "2023-11-27T06:10:54.959544502Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Groovy Mix"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Groovy Mix"
+            }
+        },
+        "d_cide-traumerei-the-animation": {
+            "name": "D_CIDE TRAUMEREI THE ANIMATION",
+            "last_updated": "2023-11-27T06:11:00.816349966Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "The Light of Dawn"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "da-capo-iii": {
+            "name": "Da Capo III",
+            "last_updated": "2023-11-27T06:11:06.456165554Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Da Capo"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "dagashi-kashi": {
+            "name": "Dagashi Kashi",
+            "last_updated": "2023-11-27T06:11:12.594989962Z",
+            "sub": {
+                "season": 2,
+                "episode": 12,
+                "title": "I'm Back, Welcome Back, and..."
+            },
+            "dub": {
+                "season": 2,
+                "episode": 12,
+                "title": "I'm Back, Welcome Back, and..."
+            }
+        },
+        "dai-shogun---great-revolution": {
+            "name": "Dai-Shogun - Great Revolution",
+            "last_updated": "2023-11-27T06:11:18.238526137Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Break the Thunderclouds, Heavenly Thunder God Susanoo!"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "daily-lives-of-high-school-boys": {
+            "name": "Daily Lives of High School Boys",
+            "last_updated": "2023-11-27T06:11:23.448112145Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "High School Boys and... etc"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "dakaichi--im-being-harassed-by-the-sexiest-man-of-the-year-": {
+            "name": "DAKAICHI -I'm being harassed by the sexiest man of the year-",
+            "last_updated": "2023-11-27T06:11:29.172147999Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "fu-fu-fuuuun ♪"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "dallos": {
+            "name": "Dallos",
+            "last_updated": "2023-11-27T06:11:35.105051258Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "dance-dance-danseur": {
+            "name": "Dance Dance Danseur",
+            "last_updated": "2023-11-27T06:11:41.035658387Z",
+            "sub": {
+                "season": 1,
+                "episode": 11,
+                "title": "Oh, I Think I Love Classical Ballet"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "dance-in-the-vampire-bund": {
+            "name": "Dance in the Vampire Bund",
+            "last_updated": "2023-11-27T06:11:46.241344431Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Dance In The Vampire Bund"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Dance In The Vampire Bund"
+            }
+        },
+        "dance-with-devils": {
+            "name": "Dance with Devils",
+            "last_updated": "2023-11-27T06:11:51.930860606Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Opera Ball of Endings and Beginnings"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Opera Ball of Endings and Beginnings"
+            }
+        },
+        "dances-with-the-dragons": {
+            "name": "Dances with the Dragons",
+            "last_updated": "2023-11-27T06:11:57.951852901Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "And Yet, We..."
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "And Yet, We..."
+            }
+        },
+        "danchigai": {
+            "name": "Danchigai",
+            "last_updated": "2023-11-27T06:12:03.494124589Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Building Twelve: The Bond Between Haruki and His Sisters."
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "danganronpa-3-the-end-of-hopes-peak-high-school": {
+            "name": "Danganronpa 3: The End of Hope's Peak High School",
+            "last_updated": "2023-11-27T06:12:08.718343384Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "Hope Arc- The School of Hope and the Students of Despair"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 24,
+                "title": "Hope Arc- The School of Hope and the Students of Despair"
+            }
+        },
+        "danganronpa-the-animation": {
+            "name": "Danganronpa: The Animation",
+            "last_updated": "2023-11-27T06:12:14.431525817Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Goodbye, Despair High School"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Goodbye, Despair High School"
+            }
+        },
+        "darling-in-the-franxx": {
+            "name": "DARLING in the FRANXX",
+            "last_updated": "2023-11-27T06:12:19.815916901Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "Never Let Me Go"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 24,
+                "title": "Never Let Me Go"
+            }
+        },
+        "darwins-game": {
+            "name": "Darwin's Game",
+            "last_updated": "2023-11-27T06:12:25.376917971Z",
+            "sub": {
+                "season": 1,
+                "episode": 11,
+                "title": "Sunset Ravens"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "date-a-live": {
+            "name": "Date A Live",
+            "last_updated": "2023-11-27T06:12:30.993833634Z",
+            "sub": {
+                "season": 2,
+                "episode": 10,
+                "title": "Inversion"
+            },
+            "dub": {
+                "season": 4,
+                "episode": 12,
+                "title": "Cycle of Salvation"
+            }
+        },
+        "days": {
+            "name": "DAYS",
+            "last_updated": "2023-11-27T06:12:36.78803419Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "I Want to Play More Soccer With This Team"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "days-of-urashimasakatasen": {
+            "name": "Days of Urashimasakatasen",
+            "last_updated": "2023-11-27T06:12:43.421963587Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Untitled"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "dd-fist-of-the-north-star": {
+            "name": "DD Fist of the North Star",
+            "last_updated": "2023-11-27T06:12:50.43314465Z",
+            "sub": {
+                "season": 2,
+                "episode": 12,
+                "title": "The Ultimate Papier-mâché Plan / Papier-mâché, Be Eternal"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "dead-mount-death-play": {
+            "name": "Dead Mount Death Play",
+            "last_updated": "2023-11-27T06:12:55.684998078Z",
+            "sub": {
+                "season": 1,
+                "episode": 19,
+                "title": "The Friends"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 17,
+                "title": "The Matriarch"
+            }
+        },
+        "deadman-wonderland": {
+            "name": "Deadman Wonderland",
+            "last_updated": "2023-11-27T06:13:02.512911983Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "The Red Knife Wielder"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 13,
+                "title": "The Red Knife Wielder"
+            }
+        },
+        "deaimon-recipe-for-happiness": {
+            "name": "Deaimon: Recipe for Happiness",
+            "last_updated": "2023-11-27T06:13:08.944516783Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Red Sea Bream for a Spring Dawn"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "dears": {
+            "name": "DearS",
+            "last_updated": "2023-11-27T06:13:14.826823783Z",
+            "sub": {
+                "season": 2,
+                "episode": 13,
+                "title": "Furthermore It Was Hot"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 13,
+                "title": "Furthermore It Was Hot"
+            }
+        },
+        "death-march-to-the-parallel-world-rhapsody": {
+            "name": "Death March to the Parallel World Rhapsody",
+            "last_updated": "2023-11-27T06:13:20.671721123Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "A Trip to the Underworld That Started With a Death March"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "A Trip to the Underworld That Started With a Death March"
+            }
+        },
+        "death-parade": {
+            "name": "Death Parade",
+            "last_updated": "2023-11-27T06:13:26.782534438Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Suicide Tour"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Suicide Tour"
+            }
+        },
+        "deca-dence": {
+            "name": "DECA-DENCE",
+            "last_updated": "2023-11-27T06:13:33.784991607Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Decadence"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Decadence"
+            }
+        },
+        "deep-insanity-the-lost-child": {
+            "name": "Deep Insanity THE LOST CHILD",
+            "last_updated": "2023-11-27T06:13:41.333008227Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Resolution"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Resolution"
+            }
+        },
+        "delicious-party-pretty-cure": {
+            "name": "Delicious Party Pretty Cure",
+            "last_updated": "2023-11-27T06:13:47.38709338Z",
+            "sub": {
+                "season": 1,
+                "episode": 45,
+                "title": "Deliciousmile! Everyone, Get Together! Let's Eat!"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "demon-king-daimao": {
+            "name": "Demon King Daimao",
+            "last_updated": "2023-11-27T06:13:53.419074935Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "All Done?"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "demon-lord-retry": {
+            "name": "Demon Lord, Retry!",
+            "last_updated": "2023-11-27T06:14:00.331356359Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "White Angel and Demon Lord"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "White Angel and Demon Lord"
+            }
+        },
+        "demon-slayer-kimetsu-no-yaiba": {
+            "name": "Demon Slayer: Kimetsu no Yaiba",
+            "last_updated": "2023-11-27T06:14:06.174363383Z",
+            "sub": {
+                "season": 3,
+                "episode": 11,
+                "title": "A Connected Bond: Daybreak and First Light"
+            },
+            "dub": {
+                "season": 3,
+                "episode": 11,
+                "title": "A Connected Bond: Daybreak and First Light"
+            }
+        },
+        "demonbane": {
+            "name": "Demonbane",
+            "last_updated": "2023-11-27T06:14:13.311204531Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Strange Eons"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "denki-gai": {
+            "name": "DENKI-GAI",
+            "last_updated": "2023-11-27T06:14:19.477148875Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "The Hermit's Library / When the Cherry Blossoms Bloom /"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "desert-punk": {
+            "name": "Desert Punk",
+            "last_updated": "2023-11-27T06:14:27.308151129Z",
+            "sub": {
+                "season": 1,
+                "episode": 24,
+                "title": "The Demon Revealed"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 24,
+                "title": "The Demon Revealed"
+            }
+        },
+        "devil-may-cry": {
+            "name": "Devil May Cry",
+            "last_updated": "2023-11-27T06:14:33.102811986Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Stylish!"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Stylish!"
+            }
+        },
+        "dgray-man": {
+            "name": "D.Gray-man",
+            "last_updated": "2023-11-27T06:10:41.974463706Z",
+            "sub": {
+                "season": 6,
+                "episode": 103,
+                "title": "Echoes in the Long Morning"
+            },
+            "dub": {
+                "season": 6,
+                "episode": 103,
+                "title": "Echoes in the Long Morning"
+            }
+        },
+        "diary-of-our-days-at-the-breakwater": {
+            "name": "Diary of Our Days at the Breakwater",
+            "last_updated": "2023-11-27T06:14:39.727080112Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "From Now On..."
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "From Now On..."
+            }
+        },
+        "didnt-i-say-to-make-my-abilities-average-in-the-next-life": {
+            "name": "Didn't I say to make my abilities average in the next life",
+            "last_updated": "2023-11-27T06:14:45.746493684Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Didn't I Say The Crimson Vow Would Never Be Destroyed?!"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Didn't I Say The Crimson Vow Would Never Be Destroyed?!"
+            }
+        },
+        "dies-irae": {
+            "name": "Dies irae",
+            "last_updated": "2023-11-27T06:14:59.380383416Z",
+            "sub": {
+                "season": 2,
+                "episode": 17,
+                "title": "To the New World"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 17,
+                "title": "To the New World"
+            }
+        },
+        "digimon-adventure-2020": {
+            "name": "Digimon Adventure: (2020)",
+            "last_updated": "2023-11-27T06:31:13.733554732Z",
+            "sub": {
+                "season": 1,
+                "episode": 67,
+                "title": "THE END OF THE ADVENTURE"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "digimon-adventure-tri": {
+            "name": "Digimon Adventure tri",
+            "last_updated": "2023-11-27T06:15:05.384768521Z",
+            "sub": {
+                "season": 1,
+                "episode": 26,
+                "title": "Future Part 5"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "digimon-adventure-tri-films": {
+            "name": "Digimon Adventure tri. (Films)",
+            "last_updated": "2023-11-27T06:15:11.251245805Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "digimon-ghost-game": {
+            "name": "Digimon Ghost Game",
+            "last_updated": "2023-11-27T06:31:30.873364594Z",
+            "sub": {
+                "season": 1,
+                "episode": 67,
+                "title": "The Devourer of All"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "digimon-universe-app-monsters": {
+            "name": "Digimon Universe App Monsters",
+            "last_updated": "2023-11-27T06:31:46.184960115Z",
+            "sub": {
+                "season": 1,
+                "episode": 52,
+                "title": "Our Singularity"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "digimon-xros-wars---the-young-hunters-who-leapt-through-time": {
+            "name": "Digimon Xros Wars - The Young Hunters Who Leapt Through Time",
+            "last_updated": "2023-11-27T06:32:02.277327837Z",
+            "sub": {
+                "season": 2,
+                "episode": 79,
+                "title": "Get Fired Up, Tagiru! The Digimon Hunt for All the Glory!"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "dimension-high-school": {
+            "name": "Dimension High School",
+            "last_updated": "2023-11-27T06:32:18.311618818Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Tutoring a Decade Later"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "dimension-w": {
+            "name": "Dimension W",
+            "last_updated": "2023-11-27T06:32:34.264669124Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "The Future Reached"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "The Future Reached"
+            }
+        },
+        "dirty-pair": {
+            "name": "Dirty Pair",
+            "last_updated": "2023-11-27T06:32:50.711707735Z",
+            "sub": {
+                "season": 1,
+                "episode": 26,
+                "title": "R-Really?! For Beautiful Women, \"Cannon\" is the Keyword to Escape"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "disgaea": {
+            "name": "Disgaea",
+            "last_updated": "2023-11-27T06:33:06.633440399Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Love... After the Fighting's Over"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Love... After the Fighting's Over"
+            }
+        },
+        "divine-gate": {
+            "name": "Divine Gate",
+            "last_updated": "2023-11-27T06:33:22.585692624Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Beyond the Gate"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Beyond the Gate"
+            }
+        },
+        "dna2": {
+            "name": "DNA^2",
+            "last_updated": "2023-11-27T06:33:38.346819145Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 1,
+                "episode": 15,
+                "title": "I'll Never Forget You"
+            }
+        },
+        "do-it-yourself": {
+            "name": "Do It Yourself!!",
+            "last_updated": "2023-11-27T06:33:54.75339319Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "\"DIY\" Means Friendship, Always and Forever!"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "do-you-love-your-mom-and-her-two-hit-multi-target-attacks": {
+            "name": "Do You Love Your Mom and Her Two-Hit Multi-Target Attacks?",
+            "last_updated": "2023-11-27T06:34:09.97437549Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "Do You Love Your Mom on the Shore?"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "dog--scissors": {
+            "name": "Dog \u0026 Scissors",
+            "last_updated": "2023-11-27T06:34:25.458039832Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Dogs and Scissors Require Good Handling"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Dogs and Scissors Require Good Handling"
+            }
+        },
+        "dogezai-tried-asking-while-kowtowing": {
+            "name": "\u003cDOGEZA\u003eI Tried Asking While Kowtowing.",
+            "last_updated": "2023-11-27T04:18:51.693975201Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "She Made Herself My Sister"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "domestic-girlfriend": {
+            "name": "Domestic Girlfriend",
+            "last_updated": "2023-11-27T06:34:41.497368842Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "I’m Sorry, I Love You."
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "dont-call-us-a-junk-game": {
+            "name": "Don't Call Us A JUNK GAME!",
+            "last_updated": "2023-11-27T06:34:58.999676076Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "I Won't Let You Call Us a Junk Anime!"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "dont-hurt-me-my-healer": {
+            "name": "Don't Hurt Me, My Healer!",
+            "last_updated": "2023-11-27T06:35:15.787760146Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "We've reached the final episode at last..."
+            },
+            "dub": {
+                "season": 1,
+                "episode": 12,
+                "title": "We've reached the final episode at last..."
+            }
+        },
+        "dont-toy-with-me-miss-nagatoro": {
+            "name": "DON'T TOY WITH ME, MISS NAGATORO",
+            "last_updated": "2023-11-27T06:35:31.609867688Z",
+            "sub": {
+                "season": 2,
+                "episode": 12,
+                "title": "Wanna Do Something to Make It Not a Dry Run?"
+            },
+            "dub": {
+                "season": 2,
+                "episode": 12,
+                "title": "Wanna Do Something to Make It Not a Dry Run?"
+            }
+        },
+        "donten-laughing-under-the-clouds---gaiden": {
+            "name": "Donten: Laughing Under The Clouds - Gaiden",
+            "last_updated": "2023-11-27T06:35:47.891306599Z",
+            "sub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "donyatsu": {
+            "name": "Donyatsu",
+            "last_updated": "2023-11-27T06:36:04.714346399Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Playing Hero"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "double-decker-doug--kirill": {
+            "name": "DOUBLE DECKER! DOUG \u0026 KIRILL",
+            "last_updated": "2023-11-27T06:36:20.756121283Z",
+            "sub": {
+                "season": 1,
+                "episode": 13,
+                "title": "And Then There Were None"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 13,
+                "title": "And Then There Were None"
+            }
+        },
+        "dr-ramune--mysterious-disease-specialist-": {
+            "name": "Dr. Ramune -Mysterious Disease Specialist-",
+            "last_updated": "2023-11-27T06:36:38.507564867Z",
+            "sub": {
+                "season": 1,
+                "episode": 12,
+                "title": "Dr. Ramune -Mysterious Disease Specialist-"
+            },
+            "dub": {
+                "season": 0,
+                "episode": 0,
+                "title": ""
+            }
+        },
+        "dr-stone": {
+            "name": "Dr. STONE",
+            "last_updated": "2023-11-27T06:36:54.365733338Z",
+            "sub": {
+                "season": 3,
+                "episode": 18,
+                "title": "Flicker of Doom"
+            },
+            "dub": {
+                "season": 3,
+                "episode": 18,
+                "title": "Flicker of Doom"
+            }
+        },
+        "dragon-ball": {
+            "name": "Dragon Ball",
+            "last_updated": "2023-11-27T06:37:11.142460255Z",
+            "sub": {
+                "season": 1,
+                "episode": 153,
+                "title": "The End, The Beginning"
+            },
+            "dub": {
+                "season": 1,
+                "episode": 153,
+                "title": "The End, The Beginning"
             }
         }
     }

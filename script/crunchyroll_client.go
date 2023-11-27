@@ -103,7 +103,9 @@ func (client *CrunchyrollClient) Login() error {
 }
 
 func (client *CrunchyrollClient) Get(path string, responseStruct any) error {
-	return client.GetWithQueryParams(path, responseStruct, nil)
+	return client.GetWithQueryParams(path, responseStruct, map[string]string{
+		"locale": client.locale.Name(),
+	})
 }
 
 func (client *CrunchyrollClient) GetWithQueryParams(path string, responseStruct any, queryParams map[string]string) error {
@@ -117,9 +119,6 @@ func (client *CrunchyrollClient) GetWithQueryParams(path string, responseStruct 
 	request.Header.Set("User-Agent", "Crunchyroll/3.41.1 Android/1.0 okhttp/4.11.0")
 
 	values := url.Values{}
-	values.Set("locale", client.locale.Name())
-	values.Set("preferred_audio_language", client.locale.Name())
-
 	for key, value := range queryParams {
 		values.Set(key, value)
 	}
@@ -127,7 +126,7 @@ func (client *CrunchyrollClient) GetWithQueryParams(path string, responseStruct 
 	request.URL.RawQuery = values.Encode()
 
 	// Re-login if we believe the token is expired about now.
-	if time.Since(client.lastLogin).Seconds() > math.Abs(float64(client.expiresIn)-20) {
+	if time.Since(client.lastLogin).Seconds() > math.Abs(float64(client.expiresIn)-100) {
 		err = client.Login()
 		if err != nil {
 			return err

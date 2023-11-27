@@ -26,9 +26,13 @@ def main(config):
     # Get anime itself...
     resp = http.get(url = anime_atlas_url, headers = {"Accept": "application/json", "User-Agent": "Tidbyt - Crunchyroll Anime Status - Schoperation"}, ttl_seconds = 300)
     if resp.status_code != 200:
-        return loading_error("anime atlas", resp.status_code, "Couldn't load anime :(")
+        return loading_error("anime atlas", resp.status_code, "Couldn't load anime master file :(")
 
     anime_atlas = json.decode(resp.body())["anime"]
+
+    if anime_cfg not in anime_atlas:
+        return loading_error("anime atlas", 1, "Anime not in master file :(")
+
     anime = anime_atlas[anime_cfg]
 
     # Load necessary images...
@@ -37,23 +41,28 @@ def main(config):
     if image_cfg == "sub_thumb" or image_cfg == "dub_thumb":
         image_resp = http.get(url = anime_episode_thumbnails_url, headers = {"Accept": "application/json", "User-Agent": "Tidbyt - Crunchyroll Anime Status - Schoperation"}, ttl_seconds = 300)
         if image_resp.status_code != 200:
-            return loading_error("anime episode thumbnails", image_resp.status_code, "Couldn't load anime thumbnails :(")
+            return loading_error("anime episode thumbnails", image_resp.status_code, "Couldn't load anime thumbnail file :(")
 
-        anime_episode_thumbnails = json.decode(image_resp.body())["episode_thumbnails"][anime_cfg]
+        anime_episode_thumbnails = json.decode(image_resp.body())["episode_thumbnails"]
 
-        if image_cfg == "sub_thumb":
-            anime_image = anime_episode_thumbnails["{s}-{e}".format(s=anime["sub"]["season"], e=anime["sub"]["episode"])]["encoded"]
+        if anime_cfg not in anime_episode_thumbnails:
+            anime_image = json.decode(image_resp.body())["default_thumbnail_encoded"]
+        elif image_cfg == "sub_thumb":
+            anime_image = anime_episode_thumbnails[anime_cfg]["{s}-{e}".format(s=anime["sub"]["season"], e=anime["sub"]["episode"])]["encoded"]
         else:
-            anime_image = anime_episode_thumbnails["{s}-{e}".format(s=anime["dub"]["season"], e=anime["dub"]["episode"])]["encoded"]
+            anime_image = anime_episode_thumbnails[anime_cfg]["{s}-{e}".format(s=anime["dub"]["season"], e=anime["dub"]["episode"])]["encoded"]
     else:
         image_resp = http.get(url = anime_posters_url, headers = {"Accept": "application/json", "User-Agent": "Tidbyt - Crunchyroll Anime Status - Schoperation"}, ttl_seconds = 300)
         if image_resp.status_code != 200:
-            return loading_error("anime posters", image_resp.status_code, "Couldn't load anime posters :(")
+            return loading_error("anime posters", image_resp.status_code, "Couldn't load anime poster file :(")
 
-        anime_posters = json.decode(image_resp.body())["posters"][anime_cfg]
+        anime_posters = json.decode(image_resp.body())["posters"]
 
-        # TODO allow wide ones too
-        anime_image = anime_posters["poster_tall_encoded"]
+        if anime_cfg not in anime_posters:
+            anime_image = json.decode(image_resp.body())["default_poster_encoded"]
+        else:
+            # TODO allow wide ones too
+            anime_image = anime_posters[anime_cfg]["poster_tall_encoded"]
 
     anime_image = base64.decode(anime_image)
 
