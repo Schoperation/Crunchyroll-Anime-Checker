@@ -125,6 +125,7 @@ func (cmd RefreshAnimeCmd) refreshAnimeAtlas(client CrunchyrollClient, allAnime 
 	emptyAnime := []string{}
 	for _, series := range allAnime.Data {
 		if !cmd.shouldAddSeries(series) {
+			delete(animeAtlas.Anime, series.SlugTitle)
 			continue
 		}
 
@@ -154,7 +155,7 @@ func (cmd RefreshAnimeCmd) refreshAnimeAtlas(client CrunchyrollClient, allAnime 
 		totalCount++
 
 		// Avoid rate limiting
-		time.Sleep(15 * time.Second)
+		time.Sleep(5 * time.Second)
 	}
 
 	animeAtlas.TotalCount = totalCount
@@ -170,7 +171,7 @@ func (cmd RefreshAnimeCmd) refreshAnimeAtlas(client CrunchyrollClient, allAnime 
 		return err
 	}
 
-	newBytes, err := json.Marshal(animeAtlas)
+	newBytes, err := json.MarshalIndent(animeAtlas, "", "    ")
 	if err != nil {
 		return err
 	}
@@ -326,6 +327,16 @@ func (cmd RefreshAnimeCmd) shouldAddSeries(series series) bool {
 	// Sometimes Crunchyroll marks a movie as a series. Lovely...
 	// Usually they're one season with one episode.
 	if series.SeriesMetaData.SeasonCount == 1 && series.SeriesMetaData.EpisodeCount == 1 {
+		return false
+	}
+
+	// Or... the slug ends in -movies
+	if strings.HasSuffix(series.SlugTitle, "-movies") || strings.HasSuffix(series.SlugTitle, "-movie") {
+		return false
+	}
+
+	// Try not to include OVAs; since they're basically one-time
+	if strings.HasSuffix(series.SlugTitle, "-ova") {
 		return false
 	}
 

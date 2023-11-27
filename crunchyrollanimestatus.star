@@ -14,7 +14,7 @@ load("encoding/base64.star", "base64")
 
 def main(config):
     lang_cfg = config.str("lang", "en-US")
-    anime_cfg = config.str("anime", "spy-x-family") # Heh
+    anime_cfg = config.str("anime", "bocchi-the-rock") # Heh
     title_color_cfg = config.str("title_color", "#ffc266")
     sub_id_color_cfg = config.str("sub_id_color", "#a6a6a6")
     dub_id_color_cfg = config.str("dub_id_color", "#a6a6a6")
