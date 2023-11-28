@@ -1,10 +1,13 @@
 package script
 
 import (
+	"crypto/sha256"
+	"encoding/base64"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 	"strconv"
 	"strings"
@@ -53,13 +56,24 @@ func (cmd RefreshAnimeCmd) Run(client CrunchyrollClient) error {
 	}
 
 	fmt.Printf("Took %s\n", time.Since(startTime).String())
-	fmt.Printf("Refreshing %s Atlas...\n", client.locale.Name())
+	fmt.Printf("Refreshing Posters...\n")
 	startTime = time.Now()
 
-	err = cmd.refreshAnimeAtlas(client, allAnime)
+	err = cmd.refreshAnimePosters(client, allAnime)
 	if err != nil {
 		return err
 	}
+
+	/*
+		fmt.Printf("Took %s\n", time.Since(startTime).String())
+		fmt.Printf("Refreshing %s Atlas...\n", client.locale.Name())
+		startTime = time.Now()
+
+		err = cmd.refreshAnimeAtlas(client, allAnime)
+		if err != nil {
+			return err
+		}
+	*/
 
 	fmt.Printf("Took %s\n", time.Since(startTime).String())
 
@@ -315,7 +329,154 @@ func (cmd RefreshAnimeCmd) fetchAnime(client CrunchyrollClient, series series, l
 }
 
 func (cmd RefreshAnimeCmd) refreshAnimePosters(client CrunchyrollClient, allAnime allAnimeResponse) error {
+	animePostersFile, err := os.Open(fmt.Sprintf("%s/anime_posters.json", client.listsPath))
+	if err != nil {
+		return err
+	}
+
+	defer animePostersFile.Close()
+
+	bytes, err := io.ReadAll(animePostersFile)
+	if err != nil {
+		return err
+	}
+
+	var animePosters AnimePosters
+	err = json.Unmarshal(bytes, &animePosters)
+	if err != nil {
+		return err
+	}
+
+	totalCount := 0
+	isDirty := false
+	for _, series := range allAnime.Data {
+		fmt.Println(series.Id, series.SlugTitle)
+		if !cmd.shouldAddSeries(series) {
+			delete(animePosters.Posters, series.SlugTitle)
+			continue
+		}
+
+		tallPoster := image{}
+		for _, poster := range series.Images.PosterTall[0] {
+			if poster.Width == 60 && poster.Height == 90 {
+				tallPoster = poster
+				break
+			}
+		}
+
+		widePoster := image{}
+		for _, poster := range series.Images.PosterWide[0] {
+			if poster.Width == 320 && poster.Height == 180 {
+				widePoster = poster
+				break
+			}
+		}
+
+		if tallPoster.Source == "" && widePoster.Source == "" {
+			continue
+		}
+
+		if savedPosters, ok := animePosters.Posters[series.SlugTitle]; ok {
+			tallHash := sha256.Sum256([]byte(tallPoster.Source))
+			if savedPosters.PosterTallHash != fmt.Sprintf("%x", tallHash) {
+				encodedPoster, err := cmd.getEncodedPicture(tallPoster.Source)
+				if err != nil {
+					return err
+				}
+
+				savedPosters.PosterTallHash = fmt.Sprintf("%x", tallHash)
+				savedPosters.PosterTallEncoded = encodedPoster
+				isDirty = true
+			}
+
+			wideHash := sha256.Sum256([]byte(widePoster.Source))
+			if savedPosters.PosterWideHash != fmt.Sprintf("%x", wideHash) {
+				encodedPoster, err := cmd.getEncodedPicture(widePoster.Source)
+				if err != nil {
+					return err
+				}
+
+				savedPosters.PosterWideHash = fmt.Sprintf("%x", wideHash)
+				savedPosters.PosterWideEncoded = encodedPoster
+				isDirty = true
+			}
+
+			animePosters.Posters[series.SlugTitle] = savedPosters
+
+		} else {
+			tallHash := sha256.Sum256([]byte(tallPoster.Source))
+			wideHash := sha256.Sum256([]byte(widePoster.Source))
+
+			encodedTallPoster, err := cmd.getEncodedPicture(tallPoster.Source)
+			if err != nil {
+				return err
+			}
+
+			encodedWidePoster, err := cmd.getEncodedPicture(widePoster.Source)
+			if err != nil {
+				return err
+			}
+
+			savedPosters := Poster{
+				PosterTallHash:    fmt.Sprintf("%x", tallHash),
+				PosterTallEncoded: encodedTallPoster,
+				PosterWideHash:    fmt.Sprintf("%x", wideHash),
+				PosterWideEncoded: encodedWidePoster,
+			}
+			isDirty = true
+			animePosters.Posters[series.SlugTitle] = savedPosters
+		}
+
+		totalCount++
+	}
+
+	animePosters.TotalCount = totalCount
+
+	if !isDirty {
+		return nil
+	}
+
+	newPostersFile, err := os.Create(fmt.Sprintf("%s/anime_posters_new.json", client.listsPath))
+	if err != nil {
+		return err
+	}
+
+	newBytes, err := json.MarshalIndent(animePosters, "", "    ")
+	if err != nil {
+		return err
+	}
+
+	_, err = newPostersFile.Write(newBytes)
+	if err != nil {
+		return err
+	}
+
+	err = os.Rename(fmt.Sprintf("%s/anime_posters_new.json", client.listsPath), fmt.Sprintf("%s/anime_posters.json", client.listsPath))
+	if err != nil {
+		return err
+	}
+
 	return nil
+}
+
+func (cmd RefreshAnimeCmd) getEncodedPicture(url string) (string, error) {
+	response, err := http.Get(url)
+	if err != nil {
+		return "", err
+	}
+
+	if response.StatusCode != http.StatusOK && response.StatusCode != http.StatusNotModified {
+		return "", fmt.Errorf("got bad response when retrieving image: %d", response.StatusCode)
+	}
+
+	defer response.Body.Close()
+
+	bytes, err := io.ReadAll(response.Body)
+	if err != nil {
+		return "", err
+	}
+
+	return base64.StdEncoding.EncodeToString(bytes), nil
 }
 
 func (cmd RefreshAnimeCmd) refreshAnimeEpisodeThumbnails(client CrunchyrollClient, allAnime allAnimeResponse) error {

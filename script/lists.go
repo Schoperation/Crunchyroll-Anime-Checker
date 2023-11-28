@@ -38,10 +38,14 @@ type AnimePosters struct {
 	Posters              map[string]Poster `json:"posters"`
 }
 
+// Poster in AnimePosters struct.
+//
+// The hash is used to identify and compare with a response from Crunchyroll, to see if we need to update it.
+// Encoded is the image base64 encoded as a jpeg, to be used in the Tidbyt.
 type Poster struct {
-	PosterTallURL     string `json:"poster_tall_url"`
+	PosterTallHash    string `json:"poster_tall_hash"`
 	PosterTallEncoded string `json:"poster_tall_encoded"`
-	PosterWideURL     string `json:"poster_wide_url"`
+	PosterWideHash    string `json:"poster_wide_hash"`
 	PosterWideEncoded string `json:"poster_wide_encoded"`
 }
 
@@ -57,7 +61,11 @@ type AnimeEpisodeThumbnails struct {
 	EpisodeThumbnails       map[string]map[string]EpisodeThumbnail `json:"episode_thumbnails"`
 }
 
+// Thumbnail used in AnimeEpisodeThumbnails.
+//
+// The hash is used to identify and compare with a response from Crunchyroll, to see if we need to update it.
+// Encoded is the image base64 encoded as a jpeg, to be used in the Tidbyt.
 type EpisodeThumbnail struct {
-	URL     string `json:"url"`
+	Hash    string `json:"hash"`
 	Encoded string `json:"encoded"`
 }
