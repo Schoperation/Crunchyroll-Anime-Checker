@@ -1,13 +1,15 @@
-package script
+package crunchyroll
 
 import (
 	"fmt"
 	"strings"
 )
 
-// Locale represents a language supported by Crunchyroll and this project.
-// Used in various calls to ensure we get the correct data for a particular language.
-// TODO Need to support more than English.
+/*
+Locale represents a language supported by Crunchyroll and this project.
+Used in various calls to ensure we get the correct data for a particular language.
+TODO Need to support more than English.
+*/
 type Locale struct {
 	name string
 }
