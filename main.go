@@ -21,6 +21,12 @@ func main() {
 		return
 	}
 
+	/*
+			db, _ := sql.Open("", "")
+		dialect := goqu.Dialect("postgres")
+		db2 := dialect.DB(db)
+	*/
+
 	locale, err := script.NewLocale(args.locale)
 	if err != nil {
 		fmt.Println(err.Error())

@@ -1,0 +1,320 @@
+package restapi
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"net/url"
+	"os"
+	"schoperation/crunchyrollanimestatus/domain/crunchyroll"
+	"time"
+)
+
+// CrunchyrollClient represents a client capable of sending HTTP requests to Crunchyroll.
+type CrunchyrollClient struct {
+	credFilePath string
+	accessToken  string
+	lastLogin    time.Time
+}
+
+type crunchyrollCreds struct {
+	Username     string `json:"username"`
+	Password     string `json:"password"`
+	BasicAuthKey string `json:"basic_auth_key"`
+}
+
+func NewCrunchyrollClient(credFilePath string) CrunchyrollClient {
+	return CrunchyrollClient{
+		credFilePath: credFilePath,
+		accessToken:  "",
+		lastLogin:    time.Time{},
+	}
+}
+
+func (client *CrunchyrollClient) Login() error {
+	creds, err := client.openCredFile()
+	if err != nil {
+		return err
+	}
+
+	formValues := url.Values{}
+	formValues.Set("username", creds.Username)
+	formValues.Set("password", creds.Password)
+	formValues.Set("grant_type", "password")
+	formValues.Set("scope", "offline_access")
+
+	request, err := http.NewRequest(http.MethodPost, "https://beta-api.crunchyroll.com/auth/v1/token", bytes.NewBufferString(formValues.Encode()))
+	if err != nil {
+		return err
+	}
+
+	request.Header.Set("Authorization", fmt.Sprintf("Basic %s", creds.BasicAuthKey))
+	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	request.Header.Set("User-Agent", "Crunchyroll/3.41.1 Android/1.0 okhttp/4.11.0")
+
+	response, err := http.DefaultClient.Do(request)
+	if err != nil {
+		return err
+	}
+
+	if response.StatusCode >= http.StatusBadRequest {
+		if response.StatusCode == http.StatusNotAcceptable {
+			return fmt.Errorf("could not get new token; being rate limited")
+		} else {
+			return fmt.Errorf("could not get new token; error code %d", response.StatusCode)
+		}
+	}
+
+	var responseStruct struct {
+		AccessToken  string `json:"access_token"`
+		RefreshToken string `json:"refresh_token"`
+		ExpiresIn    int    `json:"expires_in"`
+		TokenType    string `json:"token_type"`
+		Scope        string `json:"scope"`
+		Country      string `json:"country"`
+		AccountId    string `json:"account_id"`
+		ProfileId    string `json:"profile_id"`
+	}
+
+	defer response.Body.Close()
+	body, err := io.ReadAll(response.Body)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(body, &responseStruct)
+	if err != nil {
+		return err
+	}
+
+	client.accessToken = responseStruct.AccessToken
+	client.lastLogin = time.Now()
+	return nil
+}
+
+func (client *CrunchyrollClient) GetAllAnime(locale string) ([]crunchyroll.AnimeDto, error) {
+	type image struct {
+		Width  int    `json:"width"`
+		Height int    `json:"height"`
+		Type   string `json:"type"`
+		Source string `json:"source"`
+	}
+
+	// For some reason it's a 2D array. But all entries use the first index of the first array...
+	type images struct {
+		PosterTall [][]image `json:"poster_tall"`
+		PosterWide [][]image `json:"poster_wide"`
+	}
+
+	type seriesMetaData struct {
+		SeasonCount  int `json:"season_count"`
+		EpisodeCount int `json:"episode_count"`
+	}
+
+	type series struct {
+		Id             string         `json:"id"` // series ID (G--------)
+		SlugTitle      string         `json:"slug_title"`
+		Title          string         `json:"title"`
+		LastPublic     time.Time      `json:"last_public"`
+		Images         images         `json:"images"`
+		SeriesMetaData seriesMetaData `json:"series_metadata"`
+	}
+
+	type allAnimeResponse struct {
+		Total int      `json:"total"`
+		Data  []series `json:"data"`
+	}
+
+	var allAnime allAnimeResponse
+	err := client.get("content/v2/discover/browse", &allAnime, map[string]string{
+		"start":                    "0",
+		"n":                        "2000",
+		"type":                     "series",
+		"sort_by":                  "alphabetical",
+		"ratings":                  "true",
+		"locale":                   locale,
+		"preferred_audio_language": locale,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	dtos := make([]crunchyroll.AnimeDto, len(allAnime.Data))
+	for i, anime := range allAnime.Data {
+		var tallPosters []crunchyroll.ImageDto
+		if len(anime.Images.PosterTall) > 0 {
+			tallPosters = make([]crunchyroll.ImageDto, len(anime.Images.PosterTall[0]))
+			for j, image := range anime.Images.PosterTall[0] {
+				tallPosters[j] = crunchyroll.ImageDto{
+					Width:     image.Width,
+					Height:    image.Height,
+					ImageType: image.Type,
+					Source:    image.Source,
+				}
+			}
+		}
+
+		var widePosters []crunchyroll.ImageDto
+		if len(anime.Images.PosterWide) > 0 {
+			tallPosters = make([]crunchyroll.ImageDto, len(anime.Images.PosterWide[0]))
+			for k, image := range anime.Images.PosterWide[0] {
+				widePosters[k] = crunchyroll.ImageDto{
+					Width:     image.Width,
+					Height:    image.Height,
+					ImageType: image.Type,
+					Source:    image.Source,
+				}
+			}
+		}
+
+		dtos[i] = crunchyroll.AnimeDto{
+			SeriesId:     anime.Id,
+			SlugTitle:    anime.SlugTitle,
+			Title:        anime.Title,
+			LastUpdated:  anime.LastPublic,
+			SeasonCount:  anime.SeriesMetaData.SeasonCount,
+			EpisodeCount: anime.SeriesMetaData.EpisodeCount,
+			TallPosters:  tallPosters,
+			WidePosters:  widePosters,
+		}
+	}
+
+	return dtos, nil
+}
+
+func (client *CrunchyrollClient) GetAllSeasonsBySeriesId(locale, seriesId string) error {
+	// An array of "versions", or just different seasons in different locales.
+	// Returned in the response for getting an anime's list of seasons.
+	type version struct {
+		AudioLocale string `json:"audio_locale"`
+		GUID        string `json:"guid"`     // season ID (G--------)
+		Original    bool   `json:"original"` // Usually identifies the Japanese version
+		Variant     string `json:"variant"`
+	}
+
+	type season struct {
+		Id              string    `json:"id"`
+		Identifier      string    `json:"identifier"`
+		SeasonNumber    int       `json:"season_number"`
+		AudioLocales    []string  `json:"audio_locales"`
+		SubtitleLocales []string  `json:"subtitle_locales"`
+		Versions        []version `json:"versions"`
+	}
+
+	type seasonsResponse struct {
+		Total int      `json:"total"`
+		Data  []season `json:"data"`
+	}
+
+	return nil
+}
+
+func (client *CrunchyrollClient) GetAllEpisodesBySeasonId(locale, seasonId string) error {
+	// An array of "versions", or just different seasons in different locales.
+	// Returned in the response for getting an anime's list of seasons.
+	type version struct {
+		AudioLocale string `json:"audio_locale"`
+		GUID        string `json:"guid"`     // season ID (G--------)
+		Original    bool   `json:"original"` // Usually identifies the Japanese version
+		Variant     string `json:"variant"`
+	}
+
+	type seasonEpisode struct {
+		Number          int       `json:"episode_number"`
+		Title           string    `json:"title"`
+		SubtitleLocales []string  `json:"subtitle_locales"`
+		Versions        []version `json:"versions"`
+	}
+
+	type seasonEpisodesResponse struct {
+		Total int             `json:"total"`
+		Data  []seasonEpisode `json:"data"`
+	}
+
+	return nil
+}
+
+func (client *CrunchyrollClient) get(path string, responseStruct any, queryParams map[string]string) error {
+	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://beta-api.crunchyroll.com/%s", path), nil)
+	if err != nil {
+		return err
+	}
+
+	request.Header.Set("Authorization", fmt.Sprintf("Bearer %s", client.accessToken))
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("User-Agent", "Crunchyroll/3.41.1 Android/1.0 okhttp/4.11.0")
+
+	values := url.Values{}
+	for key, value := range queryParams {
+		values.Set(key, value)
+	}
+
+	request.URL.RawQuery = values.Encode()
+
+	// Re-login if we believe the token is expired about now.
+	if time.Since(client.lastLogin).Seconds() > 120 {
+		err = client.Login()
+		if err != nil {
+			return err
+		}
+	}
+
+	backOffSchedule := []time.Duration{
+		1 * time.Second,
+		5 * time.Second,
+		10 * time.Second,
+	}
+
+	var response *http.Response
+	for _, backoff := range backOffSchedule {
+		response, err = http.DefaultClient.Do(request)
+		if err != nil {
+			return err
+		}
+
+		if response.StatusCode == http.StatusOK {
+			break
+		} else if response.StatusCode == http.StatusGatewayTimeout || response.StatusCode == http.StatusServiceUnavailable || response.StatusCode == http.StatusRequestTimeout {
+			time.Sleep(backoff)
+			continue
+		} else {
+			return fmt.Errorf("failed to get response from crunchyroll; status code %d", response.StatusCode)
+		}
+	}
+
+	defer response.Body.Close()
+	body, err := io.ReadAll(response.Body)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(body, responseStruct)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (client *CrunchyrollClient) openCredFile() (crunchyrollCreds, error) {
+	file, err := os.Open(client.credFilePath)
+	if err != nil {
+		return crunchyrollCreds{}, err
+	}
+
+	defer file.Close()
+	bytes, err := io.ReadAll(file)
+	if err != nil {
+		return crunchyrollCreds{}, err
+	}
+
+	var creds crunchyrollCreds
+	err = json.Unmarshal(bytes, &creds)
+	if err != nil {
+		return crunchyrollCreds{}, err
+	}
+
+	return creds, nil
+}

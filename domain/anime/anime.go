@@ -7,7 +7,6 @@ type AnimeDto struct {
 	SlugTitle   string
 	SeriesId    string
 	LastUpdated time.Time
-	LatestSub
 }
 
 type Anime struct {
