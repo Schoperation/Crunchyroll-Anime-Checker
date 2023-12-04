@@ -1,4 +1,4 @@
-package restapi
+package rest
 
 import (
 	"bytes"
@@ -17,6 +17,7 @@ type CrunchyrollClient struct {
 	credFilePath string
 	accessToken  string
 	lastLogin    time.Time
+	cache        crunchyrollCache
 }
 
 type crunchyrollCreds struct {
@@ -29,8 +30,30 @@ func NewCrunchyrollClient(credFilePath string) CrunchyrollClient {
 	return CrunchyrollClient{
 		credFilePath: credFilePath,
 		accessToken:  "",
-		lastLogin:    time.Time{},
+		lastLogin:    time.Now().Add(time.Hour * -1),
+		cache:        newCrunchyrollCache(),
 	}
+}
+
+func (client *CrunchyrollClient) openCredFile() (crunchyrollCreds, error) {
+	file, err := os.Open(client.credFilePath)
+	if err != nil {
+		return crunchyrollCreds{}, err
+	}
+
+	defer file.Close()
+	bytes, err := io.ReadAll(file)
+	if err != nil {
+		return crunchyrollCreds{}, err
+	}
+
+	var creds crunchyrollCreds
+	err = json.Unmarshal(bytes, &creds)
+	if err != nil {
+		return crunchyrollCreds{}, err
+	}
+
+	return creds, nil
 }
 
 func (client *CrunchyrollClient) Login() error {
@@ -95,50 +118,22 @@ func (client *CrunchyrollClient) Login() error {
 }
 
 func (client *CrunchyrollClient) GetAllAnime(locale string) ([]crunchyroll.AnimeDto, error) {
-	type image struct {
-		Width  int    `json:"width"`
-		Height int    `json:"height"`
-		Type   string `json:"type"`
-		Source string `json:"source"`
-	}
-
-	// For some reason it's a 2D array. But all entries use the first index of the first array...
-	type images struct {
-		PosterTall [][]image `json:"poster_tall"`
-		PosterWide [][]image `json:"poster_wide"`
-	}
-
-	type seriesMetaData struct {
-		SeasonCount  int `json:"season_count"`
-		EpisodeCount int `json:"episode_count"`
-	}
-
-	type series struct {
-		Id             string         `json:"id"` // series ID (G--------)
-		SlugTitle      string         `json:"slug_title"`
-		Title          string         `json:"title"`
-		LastPublic     time.Time      `json:"last_public"`
-		Images         images         `json:"images"`
-		SeriesMetaData seriesMetaData `json:"series_metadata"`
-	}
-
-	type allAnimeResponse struct {
-		Total int      `json:"total"`
-		Data  []series `json:"data"`
-	}
-
 	var allAnime allAnimeResponse
-	err := client.get("content/v2/discover/browse", &allAnime, map[string]string{
-		"start":                    "0",
-		"n":                        "2000",
-		"type":                     "series",
-		"sort_by":                  "alphabetical",
-		"ratings":                  "true",
-		"locale":                   locale,
-		"preferred_audio_language": locale,
-	})
-	if err != nil {
-		return nil, err
+	if cachedAllAnime, ok := client.cache.GetAllAnimeResponse(); ok {
+		allAnime = cachedAllAnime
+	} else {
+		err := client.get("content/v2/discover/browse", &allAnime, map[string]string{
+			"start":                    "0",
+			"n":                        "2000",
+			"type":                     "series",
+			"sort_by":                  "alphabetical",
+			"ratings":                  "true",
+			"locale":                   locale,
+			"preferred_audio_language": locale,
+		})
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	dtos := make([]crunchyroll.AnimeDto, len(allAnime.Data))
@@ -158,7 +153,7 @@ func (client *CrunchyrollClient) GetAllAnime(locale string) ([]crunchyroll.Anime
 
 		var widePosters []crunchyroll.ImageDto
 		if len(anime.Images.PosterWide) > 0 {
-			tallPosters = make([]crunchyroll.ImageDto, len(anime.Images.PosterWide[0]))
+			widePosters = make([]crunchyroll.ImageDto, len(anime.Images.PosterWide[0]))
 			for k, image := range anime.Images.PosterWide[0] {
 				widePosters[k] = crunchyroll.ImageDto{
 					Width:     image.Width,
@@ -181,58 +176,15 @@ func (client *CrunchyrollClient) GetAllAnime(locale string) ([]crunchyroll.Anime
 		}
 	}
 
+	client.cache.SaveAllAnimeResponse(allAnime)
 	return dtos, nil
 }
 
 func (client *CrunchyrollClient) GetAllSeasonsBySeriesId(locale, seriesId string) error {
-	// An array of "versions", or just different seasons in different locales.
-	// Returned in the response for getting an anime's list of seasons.
-	type version struct {
-		AudioLocale string `json:"audio_locale"`
-		GUID        string `json:"guid"`     // season ID (G--------)
-		Original    bool   `json:"original"` // Usually identifies the Japanese version
-		Variant     string `json:"variant"`
-	}
-
-	type season struct {
-		Id              string    `json:"id"`
-		Identifier      string    `json:"identifier"`
-		SeasonNumber    int       `json:"season_number"`
-		AudioLocales    []string  `json:"audio_locales"`
-		SubtitleLocales []string  `json:"subtitle_locales"`
-		Versions        []version `json:"versions"`
-	}
-
-	type seasonsResponse struct {
-		Total int      `json:"total"`
-		Data  []season `json:"data"`
-	}
-
 	return nil
 }
 
 func (client *CrunchyrollClient) GetAllEpisodesBySeasonId(locale, seasonId string) error {
-	// An array of "versions", or just different seasons in different locales.
-	// Returned in the response for getting an anime's list of seasons.
-	type version struct {
-		AudioLocale string `json:"audio_locale"`
-		GUID        string `json:"guid"`     // season ID (G--------)
-		Original    bool   `json:"original"` // Usually identifies the Japanese version
-		Variant     string `json:"variant"`
-	}
-
-	type seasonEpisode struct {
-		Number          int       `json:"episode_number"`
-		Title           string    `json:"title"`
-		SubtitleLocales []string  `json:"subtitle_locales"`
-		Versions        []version `json:"versions"`
-	}
-
-	type seasonEpisodesResponse struct {
-		Total int             `json:"total"`
-		Data  []seasonEpisode `json:"data"`
-	}
-
 	return nil
 }
 
@@ -240,6 +192,14 @@ func (client *CrunchyrollClient) get(path string, responseStruct any, queryParam
 	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("https://beta-api.crunchyroll.com/%s", path), nil)
 	if err != nil {
 		return err
+	}
+
+	// Re-login if we believe the token is expired about now.
+	if time.Since(client.lastLogin).Seconds() > 180 {
+		err = client.Login()
+		if err != nil {
+			return err
+		}
 	}
 
 	request.Header.Set("Authorization", fmt.Sprintf("Bearer %s", client.accessToken))
@@ -252,14 +212,6 @@ func (client *CrunchyrollClient) get(path string, responseStruct any, queryParam
 	}
 
 	request.URL.RawQuery = values.Encode()
-
-	// Re-login if we believe the token is expired about now.
-	if time.Since(client.lastLogin).Seconds() > 120 {
-		err = client.Login()
-		if err != nil {
-			return err
-		}
-	}
 
 	backOffSchedule := []time.Duration{
 		1 * time.Second,
@@ -296,25 +248,4 @@ func (client *CrunchyrollClient) get(path string, responseStruct any, queryParam
 	}
 
 	return nil
-}
-
-func (client *CrunchyrollClient) openCredFile() (crunchyrollCreds, error) {
-	file, err := os.Open(client.credFilePath)
-	if err != nil {
-		return crunchyrollCreds{}, err
-	}
-
-	defer file.Close()
-	bytes, err := io.ReadAll(file)
-	if err != nil {
-		return crunchyrollCreds{}, err
-	}
-
-	var creds crunchyrollCreds
-	err = json.Unmarshal(bytes, &creds)
-	if err != nil {
-		return crunchyrollCreds{}, err
-	}
-
-	return creds, nil
 }

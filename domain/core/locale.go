@@ -1,4 +1,4 @@
-package crunchyroll
+package core
 
 import (
 	"fmt"
@@ -34,6 +34,12 @@ func NewLocale(locale string) (Locale, error) {
 
 func (l Locale) Name() string {
 	return l.name
+}
+
+func NewEnglishLocale() Locale {
+	return Locale{
+		name: locales["en-US"],
+	}
 }
 
 // Specific constructors for original languages of anime (or media, since now we're going outside of Japan)

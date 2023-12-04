@@ -1,23 +1,26 @@
 package crunchyroll
 
-import "schoperation/crunchyrollanimestatus/domain/crunchyroll"
+import (
+	"schoperation/crunchyrollanimestatus/domain/core"
+	"schoperation/crunchyrollanimestatus/domain/crunchyroll"
+)
 
-type getAllAnimeClient interface {
+type crunchyrollClient interface {
 	GetAllAnime(locale string) ([]crunchyroll.AnimeDto, error)
 }
 
 type AnimeTranslator struct {
-	getAllAnimeClient getAllAnimeClient
+	crunchyrollClient crunchyrollClient
 }
 
-func NewAnimeTranslator(getAllAnimeClient getAllAnimeClient) AnimeTranslator {
+func NewAnimeTranslator(crunchyrollClient crunchyrollClient) AnimeTranslator {
 	return AnimeTranslator{
-		getAllAnimeClient: getAllAnimeClient,
+		crunchyrollClient: crunchyrollClient,
 	}
 }
 
-func (translator AnimeTranslator) GetAllAnime(locale crunchyroll.Locale) ([]crunchyroll.Anime, error) {
-	dtos, err := translator.getAllAnimeClient.GetAllAnime(locale.Name())
+func (translator AnimeTranslator) GetAllAnime(locale core.Locale) ([]crunchyroll.Anime, error) {
+	dtos, err := translator.crunchyrollClient.GetAllAnime(locale.Name())
 	if err != nil {
 		return nil, err
 	}

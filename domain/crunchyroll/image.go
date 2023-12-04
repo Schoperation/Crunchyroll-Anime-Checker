@@ -22,3 +22,7 @@ func ReformImage(dto ImageDto) Image {
 		source:    dto.Source,
 	}
 }
+
+func (image Image) Source() string {
+	return image.source
+}

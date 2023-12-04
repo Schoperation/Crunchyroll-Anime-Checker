@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"schoperation/crunchyrollanimestatus/domain/core"
 	"time"
 )
 
@@ -18,7 +19,7 @@ type CrunchyrollClient struct {
 	listsPath    string
 	accessToken  string
 	expiresIn    int
-	locale       Locale
+	locale       core.Locale
 	lastLogin    time.Time
 }
 
@@ -29,7 +30,7 @@ type credsFromFile struct {
 	BasicAuthKey string `json:"basic_auth_key"`
 }
 
-func NewCrunchyrollClient(credFilePath string, listsPath string, locale Locale) (CrunchyrollClient, error) {
+func NewCrunchyrollClient(credFilePath string, listsPath string, locale core.Locale) (CrunchyrollClient, error) {
 	client := CrunchyrollClient{
 		credFilePath: credFilePath,
 		listsPath:    listsPath,

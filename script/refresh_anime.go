@@ -9,6 +9,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"schoperation/crunchyrollanimestatus/domain/core"
 	"strconv"
 	"strings"
 	"time"
@@ -203,14 +204,14 @@ func (cmd RefreshAnimeCmd) refreshAnimeAtlas(client CrunchyrollClient, allAnime 
 	return nil
 }
 
-func (cmd RefreshAnimeCmd) fetchAnime(client CrunchyrollClient, series series, locale Locale) (Anime, error) {
+func (cmd RefreshAnimeCmd) fetchAnime(client CrunchyrollClient, series series, locale core.Locale) (Anime, error) {
 	var animeSeasons seasonsResponse
 	fmt.Println(series.Id, series.SlugTitle)
 	err := client.GetWithQueryParams(fmt.Sprintf("content/v2/cms/series/%s/seasons", series.Id), &animeSeasons, map[string]string{
 		// To ensure we get the full list of available subtitle locales, set the audio language to Japanese.
 		// This even works for Korean and Chinese works... for the most part. If Japanese isn't applicable, it'll default to the original locale.
 		// There can be, say, a Chinese work dubbed to Japanese (A Herbivorous Dragon...), but that one still has the same subtitle locales. And that's the only exception I've found so far...
-		"preferred_audio_language": NewJapaneseLocale().Name(),
+		"preferred_audio_language": "ja-JP",
 		"locale":                   client.locale.Name(),
 	})
 	if err != nil {

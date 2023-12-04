@@ -1,17 +1,23 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
-	"schoperation/crunchyrollanimestatus/script"
+	"schoperation/crunchyrollanimestatus/command"
+	"schoperation/crunchyrollanimestatus/infrastructure/postgres"
+	"schoperation/crunchyrollanimestatus/infrastructure/rest"
+	anime_translator "schoperation/crunchyrollanimestatus/translator/anime"
+	crunchyroll_translator "schoperation/crunchyrollanimestatus/translator/crunchyroll"
 	"strings"
+
+	"github.com/jackc/pgx/v5"
 )
 
 type arguments struct {
 	credFilePath string
 	listsPath    string
-	locale       string
-	script       string
+	cmd          string
 }
 
 func main() {
@@ -21,41 +27,43 @@ func main() {
 		return
 	}
 
-	/*
-			db, _ := sql.Open("", "")
-		dialect := goqu.Dialect("postgres")
-		db2 := dialect.DB(db)
-	*/
-
-	locale, err := script.NewLocale(args.locale)
-	if err != nil {
-		fmt.Println(err.Error())
-		return
+	cmds := map[string]bool{
+		"refresh-anime": true,
 	}
-
-	client, err := script.NewCrunchyrollClient(args.credFilePath, args.listsPath, locale)
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-
-	cmds := initCmds()
-	cmd, ok := cmds[strings.ToLower(args.script)]
+	_, ok := cmds[args.cmd]
 	if !ok {
-		fmt.Println(fmt.Errorf("unknown cmd %s", args.script))
+		fmt.Println(fmt.Errorf("unknown cmd %s", args.cmd))
 		return
 	}
 
-	err = cmd.Run(client)
+	db, err := pgx.Connect(context.Background(), fmt.Sprintf(""))
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		return
 	}
+
+	crunchyrollClient := rest.NewCrunchyrollClient(args.credFilePath)
+
+	animeDao := postgres.NewAnimeDao(db)
+
+	animeTranslator := anime_translator.NewAnimeTranslator(animeDao)
+	crunchyrollAnimeTranslator := crunchyroll_translator.NewAnimeTranslator(&crunchyrollClient)
+
+	refreshAnimeCommand := command.NewRefreshAnimeCommand(crunchyrollAnimeTranslator, animeTranslator)
+
+	output, err := refreshAnimeCommand.Run(command.RefreshAnimeCommandInput{})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println("new anime: ", output.NewAnimeCount)
+	fmt.Println("updated anime: ", output.UpdatedAnimeCount)
 }
 
 func parseArgs() (arguments, error) {
-	if len(os.Args) != 9 {
-		return arguments{}, fmt.Errorf("need 9 arguments, have %d", len(os.Args))
+	if len(os.Args) != 7 {
+		return arguments{}, fmt.Errorf("need 6 arguments, have %d", len(os.Args)-1)
 	}
 
 	refinedArgs := arguments{}
@@ -65,20 +73,12 @@ func parseArgs() (arguments, error) {
 			refinedArgs.credFilePath = os.Args[i+1]
 		case "-l":
 			refinedArgs.listsPath = os.Args[i+1]
-		case "-lo":
-			refinedArgs.locale = os.Args[i+1]
-		case "-s":
-			refinedArgs.script = os.Args[i+1]
+		case "-cmd":
+			refinedArgs.cmd = strings.ToLower(os.Args[i+1])
 		default:
 			continue
 		}
 	}
 
 	return refinedArgs, nil
-}
-
-func initCmds() map[string]script.Command {
-	return map[string]script.Command{
-		"refresh-anime": script.NewRefreshAnimeCmd("refresh-anime"),
-	}
 }

@@ -84,3 +84,27 @@ func shouldAddAnime(dto AnimeDto) bool {
 
 	return true
 }
+
+func (anime Anime) SeriesId() string {
+	return anime.seriesId
+}
+
+func (anime Anime) SlugTitle() string {
+	return anime.slugTitle
+}
+
+func (anime Anime) Title() string {
+	return anime.title
+}
+
+func (anime Anime) LastUpdated() time.Time {
+	return anime.lastUpdated
+}
+
+func (anime Anime) TallPoster() Image {
+	return anime.tallPoster
+}
+
+func (anime Anime) WidePoster() Image {
+	return anime.widePoster
+}

@@ -1,4 +1,4 @@
-package crunchyroll
+package core
 
 import (
 	"errors"
