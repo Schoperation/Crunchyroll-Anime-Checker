@@ -26,7 +26,7 @@ type minimalAnimeModel struct {
 }
 
 type animeModel struct {
-	AnimeId          int       `db:"anime_id" goqu:"skipinsert"`
+	AnimeId          int       `db:"anime_id" goqu:"skipinsert,skipupdate"`
 	SeriesId         string    `db:"series_id"`
 	SlugTitle        string    `db:"slug_title"`
 	Title            string    `db:"title"`
@@ -35,7 +35,12 @@ type animeModel struct {
 }
 
 func (dao AnimeDao) GetAllMinimal() ([]anime.MinimalAnimeDto, error) {
-	sql, args, err := goqu.Select(&minimalAnimeModel{}).From("anime").WithDialect("postgres").Prepared(true).ToSQL()
+	sql, args, err := goqu.
+		Select(&minimalAnimeModel{}).
+		From("anime").
+		WithDialect("postgres").
+		Prepared(true).
+		ToSQL()
 	if err != nil {
 		return nil, sqlBuilderError("anime", err)
 	}
@@ -63,7 +68,43 @@ func (dao AnimeDao) GetAllMinimal() ([]anime.MinimalAnimeDto, error) {
 }
 
 func (dao AnimeDao) InsertAll(dtos []anime.AnimeDto) error {
-	sql, args, err := goqu.Insert("anime").Rows(dao.dtosToModels(dtos)).WithDialect("postgres").Prepared(false).ToSQL()
+	if len(dtos) == 0 {
+		return nil
+	}
+
+	models := make([]animeModel, len(dtos))
+	for i, dto := range dtos {
+		models[i] = dao.animeDtoToModel(dto)
+	}
+
+	sql, args, err := goqu.
+		Insert("anime").
+		Rows(models).
+		WithDialect("postgres").
+		Prepared(false).
+		ToSQL()
+	if err != nil {
+		return sqlBuilderError("anime", err)
+	}
+
+	_, err = dao.db.Exec(context.Background(), sql, args...)
+	if err != nil {
+		return couldNotUpdateError("anime", err)
+	}
+
+	return nil
+}
+
+func (dao AnimeDao) Update(dto anime.AnimeDto) error {
+	sql, args, err := goqu.
+		Update("anime").
+		Set(dao.animeDtoToModel(dto)).
+		Where(
+			goqu.C("anime_id").Eq(dto.AnimeId),
+		).
+		WithDialect("postgres").
+		Prepared(false).
+		ToSQL()
 	if err != nil {
 		return sqlBuilderError("anime", err)
 	}
@@ -76,18 +117,13 @@ func (dao AnimeDao) InsertAll(dtos []anime.AnimeDto) error {
 	return nil
 }
 
-func (dao AnimeDao) dtosToModels(dtos []anime.AnimeDto) []animeModel {
-	models := make([]animeModel, len(dtos))
-	for i, dto := range dtos {
-		models[i] = animeModel{
-			AnimeId:          dto.AnimeId,
-			SeriesId:         dto.SeriesId,
-			SlugTitle:        dto.SlugTitle,
-			Title:            dto.Title,
-			LastUpdated:      dto.LastUpdated,
-			SeasonIdentifier: dto.SeasonIdentifier,
-		}
+func (dao AnimeDao) animeDtoToModel(dto anime.AnimeDto) animeModel {
+	return animeModel{
+		AnimeId:          dto.AnimeId,
+		SeriesId:         dto.SeriesId,
+		SlugTitle:        dto.SlugTitle,
+		Title:            dto.Title,
+		LastUpdated:      dto.LastUpdated,
+		SeasonIdentifier: dto.SeasonIdentifier,
 	}
-
-	return models
 }

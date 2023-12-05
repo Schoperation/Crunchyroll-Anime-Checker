@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"schoperation/crunchyrollanimestatus/command"
 	"schoperation/crunchyrollanimestatus/infrastructure/postgres"
@@ -15,9 +17,10 @@ import (
 )
 
 type arguments struct {
-	credFilePath string
-	listsPath    string
-	cmd          string
+	dbCredFilePath string
+	credFilePath   string
+	listsPath      string
+	cmd            string
 }
 
 func main() {
@@ -36,11 +39,13 @@ func main() {
 		return
 	}
 
-	db, err := pgx.Connect(context.Background(), fmt.Sprintf(""))
+	db, err := openDb(args.dbCredFilePath)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
+
+	defer db.Close(context.Background())
 
 	crunchyrollClient := rest.NewCrunchyrollClient(args.credFilePath)
 
@@ -62,13 +67,15 @@ func main() {
 }
 
 func parseArgs() (arguments, error) {
-	if len(os.Args) != 7 {
-		return arguments{}, fmt.Errorf("need 6 arguments, have %d", len(os.Args)-1)
+	if len(os.Args) != 9 {
+		return arguments{}, fmt.Errorf("need 8 arguments, have %d", len(os.Args)-1)
 	}
 
 	refinedArgs := arguments{}
 	for i, arg := range os.Args {
 		switch arg {
+		case "-db":
+			refinedArgs.dbCredFilePath = os.Args[i+1]
 		case "-c":
 			refinedArgs.credFilePath = os.Args[i+1]
 		case "-l":
@@ -81,4 +88,37 @@ func parseArgs() (arguments, error) {
 	}
 
 	return refinedArgs, nil
+}
+
+func openDb(dbCredFilePath string) (*pgx.Conn, error) {
+	file, err := os.Open(dbCredFilePath)
+	if err != nil {
+		return nil, err
+	}
+
+	defer file.Close()
+	bytes, err := io.ReadAll(file)
+	if err != nil {
+		return nil, err
+	}
+
+	var creds struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+		Host     string `json:"host"`
+		Port     int    `json:"port"`
+		Database string `json:"database"`
+	}
+
+	err = json.Unmarshal(bytes, &creds)
+	if err != nil {
+		return nil, err
+	}
+
+	db, err := pgx.Connect(context.Background(), fmt.Sprintf("postgres://%s:%s@%s:%d/%s", creds.Username, creds.Password, creds.Host, creds.Port, creds.Database))
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
 }
