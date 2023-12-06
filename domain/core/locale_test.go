@@ -28,17 +28,17 @@ func TestNewLocale(t *testing.T) {
 		{
 			name:           "valid_locale_in_lowercase_returns_success",
 			input:          "en-us",
-			expectedOutput: Locale{name: "en-US"},
+			expectedOutput: Locale{id: 4, name: "en-US"},
 		},
 		{
 			name:           "valid_locale_in_uppercase_returns_success",
 			input:          "JA-JP",
-			expectedOutput: Locale{name: "ja-JP"},
+			expectedOutput: Locale{id: 1, name: "ja-JP"},
 		},
 		{
 			name:           "valid_locale_in_mixed_case_returns_success",
 			input:          "ko-KR",
-			expectedOutput: Locale{name: "ko-KR"},
+			expectedOutput: Locale{id: 2, name: "ko-KR"},
 		},
 	}
 

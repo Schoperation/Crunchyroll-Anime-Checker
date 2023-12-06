@@ -22,13 +22,21 @@ type Anime struct {
 	title            string
 	lastUpdated      time.Time
 	seasonIdentifier string
-	/*
-		latestSub   Episode
-		latestDub   Episode
-	*/
+	posterTall       Image
+	posterWide       Image
+	latestSub        Episode
+	latestDub        Episode
 }
 
-func NewAnime(dto AnimeDto) (Anime, error) {
+func NewAnime(
+	dto AnimeDto,
+	posterTallDto ImageDto,
+	posterWide ImageDto,
+	latestSubDto EpisodeDto,
+	latestSubTitleDtos []TitleDto,
+	latestDubDto EpisodeDto,
+	latestDubTitleDtos []TitleDto,
+) (Anime, error) {
 	if strings.Trim(dto.SeriesId, " ") == "" {
 		return Anime{}, fmt.Errorf("series ID cannot be blank")
 	}

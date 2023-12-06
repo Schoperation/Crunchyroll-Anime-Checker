@@ -11,10 +11,18 @@ Used in various calls to ensure we get the correct data for a particular languag
 TODO Need to support more than English.
 */
 type Locale struct {
+	id   int
 	name string
 }
 
-var locales = map[string]string{
+var localeIds = map[string]int{
+	"ja-jp": 1,
+	"ko-kr": 2,
+	"zh-cn": 3,
+	"en-us": 4,
+}
+
+var localeNames = map[string]string{
 	"ja-jp": "ja-JP",
 	"ko-kr": "ko-KR",
 	"zh-cn": "zh-CN",
@@ -22,14 +30,26 @@ var locales = map[string]string{
 }
 
 func NewLocale(locale string) (Locale, error) {
-	localeName, ok := locales[strings.ToLower(locale)]
+	localeName, ok := localeNames[strings.ToLower(locale)]
 	if !ok {
 		return Locale{}, fmt.Errorf("could not parse locale %s", locale)
 	}
 
 	return Locale{
+		id:   localeIds[strings.ToLower(locale)],
 		name: localeName,
 	}, nil
+}
+
+func ReformLocale(locale string) Locale {
+	return Locale{
+		id:   localeIds[strings.ToLower(locale)],
+		name: localeNames[strings.ToLower(locale)],
+	}
+}
+
+func (l Locale) Id() int {
+	return l.id
 }
 
 func (l Locale) Name() string {
@@ -38,26 +58,14 @@ func (l Locale) Name() string {
 
 func NewEnglishLocale() Locale {
 	return Locale{
-		name: locales["en-US"],
+		id:   localeIds["en-us"],
+		name: localeNames["en-us"],
 	}
 }
-
-// Specific constructors for original languages of anime (or media, since now we're going outside of Japan)
 
 func NewJapaneseLocale() Locale {
 	return Locale{
-		name: locales["ja-jp"],
-	}
-}
-
-func NewKoreanLocale() Locale {
-	return Locale{
-		name: locales["ko-kr"],
-	}
-}
-
-func NewChineseLocale() Locale {
-	return Locale{
-		name: locales["zh-cn"],
+		id:   localeIds["ja-jp"],
+		name: localeNames["ja-jp"],
 	}
 }
