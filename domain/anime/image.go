@@ -7,21 +7,44 @@ import (
 )
 
 type ImageDto struct {
-	ImageType int
-	Url       string
-	Encoded   string
+	AnimeId       int
+	ImageType     int
+	SeasonNumber  int
+	EpisodeNumber int
+	Url           string
+	Encoded       string
 }
 
 type Image struct {
-	imageType ImageType
-	url       string
-	encoded   string
+	animeId       int
+	imageType     ImageType
+	seasonNumber  int
+	episodeNumber int
+	url           string
+	encoded       string
 }
 
 func NewImage(dto ImageDto) (Image, error) {
+	if dto.AnimeId <= 0 {
+		return Image{}, fmt.Errorf("anime id must be greater than 0")
+	}
+
 	imageType, err := NewImageTypeFromNumber(dto.ImageType)
 	if err != nil {
 		return Image{}, err
+	}
+
+	if imageType.IsThumbnail() {
+		if dto.SeasonNumber <= 0 {
+			return Image{}, fmt.Errorf("season number must be greater than 0")
+		}
+
+		if dto.EpisodeNumber <= 0 {
+			return Image{}, fmt.Errorf("episode number must be greater than 0")
+		}
+	} else {
+		dto.SeasonNumber = 0
+		dto.EpisodeNumber = 0
 	}
 
 	if _, err := url.ParseRequestURI(dto.Url); err != nil {
@@ -33,18 +56,28 @@ func NewImage(dto ImageDto) (Image, error) {
 	}
 
 	return Image{
-		imageType: imageType,
-		url:       dto.Url,
-		encoded:   dto.Encoded,
+		animeId:       dto.AnimeId,
+		imageType:     imageType,
+		seasonNumber:  dto.SeasonNumber,
+		episodeNumber: dto.EpisodeNumber,
+		url:           dto.Url,
+		encoded:       dto.Encoded,
 	}, nil
 }
 
 func ReformImage(dto ImageDto) Image {
 	return Image{
-		imageType: ReformImageTypeFromNumber(dto.ImageType),
-		url:       dto.Url,
-		encoded:   dto.Encoded,
+		animeId:       dto.AnimeId,
+		imageType:     ReformImageTypeFromNumber(dto.ImageType),
+		seasonNumber:  dto.SeasonNumber,
+		episodeNumber: dto.EpisodeNumber,
+		url:           dto.Url,
+		encoded:       dto.Encoded,
 	}
+}
+
+func (image Image) AnimeId() int {
+	return image.animeId
 }
 
 func (image Image) ImageType() ImageType {

@@ -89,7 +89,7 @@ func (dao AnimeDao) InsertAll(dtos []anime.AnimeDto) error {
 
 	_, err = dao.db.Exec(context.Background(), sql, args...)
 	if err != nil {
-		return couldNotUpdateError("anime", err)
+		return couldNotCreateError("anime", err)
 	}
 
 	return nil
@@ -111,7 +111,7 @@ func (dao AnimeDao) Update(dto anime.AnimeDto) error {
 
 	_, err = dao.db.Exec(context.Background(), sql, args...)
 	if err != nil {
-		return couldNotCreateError("anime", err)
+		return couldNotUpdateError("anime", err)
 	}
 
 	return nil

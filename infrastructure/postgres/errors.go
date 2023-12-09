@@ -17,3 +17,7 @@ func couldNotCreateError(subject string, err error) error {
 func couldNotUpdateError(subject string, err error) error {
 	return fmt.Errorf("could not update %s: %v", subject, err)
 }
+
+func couldNotDeleteError(subject string, err error) error {
+	return fmt.Errorf("could not delete %s: %v", subject, err)
+}
