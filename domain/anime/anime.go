@@ -32,9 +32,9 @@ func NewAnime(
 	dto AnimeDto,
 	posterTallDto ImageDto,
 	posterWide ImageDto,
-	latestSubDto EpisodeDto,
+	latestSubDto NewEpisodeArgs,
 	latestSubTitleDtos []TitleDto,
-	latestDubDto EpisodeDto,
+	latestDubDto NewEpisodeArgs,
 	latestDubTitleDtos []TitleDto,
 ) (Anime, error) {
 	if strings.Trim(dto.SeriesId, " ") == "" {

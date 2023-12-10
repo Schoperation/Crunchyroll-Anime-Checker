@@ -86,7 +86,7 @@ func (dao PosterDao) InsertAll(dtos []anime.ImageDto) error {
 
 	_, err = dao.db.Exec(context.Background(), sql, args...)
 	if err != nil {
-		return couldNotUpdateError("poster", err)
+		return couldNotCreateError("poster", err)
 	}
 
 	return nil
@@ -109,7 +109,7 @@ func (dao PosterDao) Update(dto anime.ImageDto) error {
 
 	_, err = dao.db.Exec(context.Background(), sql, args...)
 	if err != nil {
-		return couldNotCreateError("poster", err)
+		return couldNotUpdateError("poster", err)
 	}
 
 	return nil

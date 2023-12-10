@@ -6,16 +6,24 @@ import (
 
 type animeDao interface {
 	GetAllMinimal() ([]anime.MinimalAnimeDto, error)
+	GetAllByAnimeIds(animeIds []int) ([]anime.AnimeDto, error)
 	InsertAll(dtos []anime.AnimeDto) error
+	Update(dto anime.AnimeDto) error
+}
+
+type animeFactory interface {
+	Reform(dto anime.AnimeDto) (anime.Anime, error)
 }
 
 type AnimeTranslator struct {
-	animeDao animeDao
+	animeDao     animeDao
+	animeFactory animeFactory
 }
 
-func NewAnimeTranslator(animeDao animeDao) AnimeTranslator {
+func NewAnimeTranslator(animeDao animeDao, animeFactory animeFactory) AnimeTranslator {
 	return AnimeTranslator{
-		animeDao: animeDao,
+		animeDao:     animeDao,
+		animeFactory: animeFactory,
 	}
 }
 
@@ -31,6 +39,28 @@ func (translator AnimeTranslator) GetAllMinimal() (map[string]anime.MinimalAnime
 	}
 
 	return minimalAnime, nil
+}
+
+func (translator AnimeTranslator) GetAllByAnimeIds(animeIds []anime.AnimeId) ([]anime.Anime, error) {
+	ids := make([]int, len(animeIds))
+	for i, animeId := range animeIds {
+		ids[i] = animeId.Int()
+	}
+
+	dtos, err := translator.animeDao.GetAllByAnimeIds(ids)
+	if err != nil {
+		return nil, err
+	}
+
+	anime := make([]anime.Anime, len(dtos))
+	for i, dto := range dtos {
+		anime[i], err = translator.animeFactory.Reform(dto)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return anime, nil
 }
 
 func (translator AnimeTranslator) SaveAll(newAnime []anime.Anime, updatedAnime []anime.Anime) error {

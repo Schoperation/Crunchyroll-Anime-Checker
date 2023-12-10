@@ -11,34 +11,19 @@ import (
 func TestNewLocale(t *testing.T) {
 	testCases := []struct {
 		name           string
-		input          string
+		input          int
 		expectedOutput Locale
 		expectedError  error
 	}{
 		{
 			name:          "invalid_locale_returns_error",
-			input:         "asdfghkjdfsajhgfdkjhfghasdk",
-			expectedError: fmt.Errorf("could not parse locale %s", "asdfghkjdfsajhgfdkjhfghasdk"),
+			input:         0,
+			expectedError: fmt.Errorf("could not parse locale id %d", 0),
 		},
 		{
-			name:          "locale_with_underscore_returns_error",
-			input:         "en_US",
-			expectedError: fmt.Errorf("could not parse locale %s", "en_US"),
-		},
-		{
-			name:           "valid_locale_in_lowercase_returns_success",
-			input:          "en-us",
+			name:           "valid_locale_returns_success",
+			input:          4,
 			expectedOutput: Locale{id: 4, name: "en-US"},
-		},
-		{
-			name:           "valid_locale_in_uppercase_returns_success",
-			input:          "JA-JP",
-			expectedOutput: Locale{id: 1, name: "ja-JP"},
-		},
-		{
-			name:           "valid_locale_in_mixed_case_returns_success",
-			input:          "ko-KR",
-			expectedOutput: Locale{id: 2, name: "ko-KR"},
 		},
 	}
 

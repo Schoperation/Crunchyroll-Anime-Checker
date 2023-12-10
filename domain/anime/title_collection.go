@@ -7,8 +7,8 @@ import (
 )
 
 type TitleDto struct {
-	Locale string
-	Title  string
+	LocaleId int
+	Title    string
 }
 
 // TitleCollection is a collection of titles mapped to respective locales.
@@ -39,14 +39,14 @@ func ReformTitleCollection(dtos []TitleDto) TitleCollection {
 	}
 
 	for _, dto := range dtos {
-		newCollection.col[core.ReformLocale(dto.Locale)] = dto.Title
+		newCollection.col[core.ReformLocale(dto.LocaleId)] = dto.Title
 	}
 
 	return newCollection
 }
 
 func (collection *TitleCollection) Add(dto TitleDto) error {
-	locale, err := core.NewLocale(dto.Locale)
+	locale, err := core.NewLocale(dto.LocaleId)
 	if err != nil {
 		return err
 	}

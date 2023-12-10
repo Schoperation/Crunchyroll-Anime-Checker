@@ -2,7 +2,6 @@ package core
 
 import (
 	"fmt"
-	"strings"
 )
 
 /*
@@ -15,36 +14,29 @@ type Locale struct {
 	name string
 }
 
-var localeIds = map[string]int{
-	"ja-jp": 1,
-	"ko-kr": 2,
-	"zh-cn": 3,
-	"en-us": 4,
+var locales = map[int]string{
+	1: "ja-JP",
+	2: "ko-KR",
+	3: "zh-CN",
+	4: "en-US",
 }
 
-var localeNames = map[string]string{
-	"ja-jp": "ja-JP",
-	"ko-kr": "ko-KR",
-	"zh-cn": "zh-CN",
-	"en-us": "en-US",
-}
-
-func NewLocale(locale string) (Locale, error) {
-	localeName, ok := localeNames[strings.ToLower(locale)]
+func NewLocale(localeId int) (Locale, error) {
+	localeName, ok := locales[localeId]
 	if !ok {
-		return Locale{}, fmt.Errorf("could not parse locale %s", locale)
+		return Locale{}, fmt.Errorf("could not parse locale id %d", localeId)
 	}
 
 	return Locale{
-		id:   localeIds[strings.ToLower(locale)],
+		id:   localeId,
 		name: localeName,
 	}, nil
 }
 
-func ReformLocale(locale string) Locale {
+func ReformLocale(localeId int) Locale {
 	return Locale{
-		id:   localeIds[strings.ToLower(locale)],
-		name: localeNames[strings.ToLower(locale)],
+		id:   localeId,
+		name: locales[localeId],
 	}
 }
 
@@ -57,15 +49,9 @@ func (l Locale) Name() string {
 }
 
 func NewEnglishLocale() Locale {
-	return Locale{
-		id:   localeIds["en-us"],
-		name: localeNames["en-us"],
-	}
+	return ReformLocale(4)
 }
 
 func NewJapaneseLocale() Locale {
-	return Locale{
-		id:   localeIds["ja-jp"],
-		name: localeNames["ja-jp"],
-	}
+	return ReformLocale(1)
 }

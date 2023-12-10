@@ -4,62 +4,58 @@ import (
 	"fmt"
 )
 
-type EpisodeDto struct {
-	Number           int
-	SeasonNumber     int
-	ThumbnailUrl     string
-	ThumbnailEncoded string
+type NewEpisodeArgs struct {
+	AnimeId      AnimeId
+	Number       int
+	SeasonNumber int
+	Thumbnail    Image
+	Titles       []TitleDto
 }
 
+// Episode represents a single episode that may be the latest sub/dub for multiple locales.
 type Episode struct {
+	animeId      AnimeId
 	number       int
 	seasonNumber int
 	thumbnail    Image
 	titles       TitleCollection
 }
 
-func NewEpisode(dto EpisodeDto, titleDtos []TitleDto) (Episode, error) {
-	if dto.Number <= 0 {
+func NewEpisode(args NewEpisodeArgs) (Episode, error) {
+	if args.Number <= 0 {
 		return Episode{}, fmt.Errorf("episode number must be greater than 0")
 	}
 
-	if dto.SeasonNumber <= 0 {
+	if args.SeasonNumber <= 0 {
 		return Episode{}, fmt.Errorf("season number must be greater than 0")
 	}
 
-	image, err := NewImage(ImageDto{
-		ImageType: ImageTypeThumbnail.Int(),
-		Url:       dto.ThumbnailUrl,
-		Encoded:   dto.ThumbnailEncoded,
-	})
-	if err != nil {
-		return Episode{}, err
-	}
-
-	titles, err := NewTitleCollection(titleDtos)
+	titles, err := NewTitleCollection(args.Titles)
 	if err != nil {
 		return Episode{}, err
 	}
 
 	return Episode{
-		number:       dto.Number,
-		seasonNumber: dto.SeasonNumber,
-		thumbnail:    image,
+		animeId:      args.AnimeId,
+		number:       args.Number,
+		seasonNumber: args.SeasonNumber,
+		thumbnail:    args.Thumbnail,
 		titles:       titles,
 	}, nil
 }
 
-func ReformEpisode(dto EpisodeDto, titleDtos []TitleDto) Episode {
+func ReformEpisode(args NewEpisodeArgs) Episode {
 	return Episode{
-		number:       dto.Number,
-		seasonNumber: dto.SeasonNumber,
-		thumbnail: ReformImage(ImageDto{
-			ImageType: ImageTypeThumbnail.Int(),
-			Url:       dto.ThumbnailUrl,
-			Encoded:   dto.ThumbnailEncoded,
-		}),
-		titles: ReformTitleCollection(titleDtos),
+		animeId:      args.AnimeId,
+		number:       args.Number,
+		seasonNumber: args.SeasonNumber,
+		thumbnail:    args.Thumbnail,
+		titles:       ReformTitleCollection(args.Titles),
 	}
+}
+
+func (e Episode) AnimeId() AnimeId {
+	return e.animeId
 }
 
 func (e Episode) Number() int {

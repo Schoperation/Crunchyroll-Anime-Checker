@@ -67,6 +67,49 @@ func (dao AnimeDao) GetAllMinimal() ([]anime.MinimalAnimeDto, error) {
 	return dtos, nil
 }
 
+func (dao AnimeDao) GetAllByAnimeIds(animeIds []int) ([]anime.AnimeDto, error) {
+	if len(animeIds) == 0 {
+		return nil, nil
+	}
+
+	sql, args, err := goqu.
+		Select(&animeModel{}).
+		From("anime").
+		Where(
+			goqu.C("anime_id").In(animeIds),
+		).
+		WithDialect("postgres").
+		Prepared(true).
+		ToSQL()
+	if err != nil {
+		return nil, sqlBuilderError("anime", err)
+	}
+
+	rows, err := dao.db.Query(context.Background(), sql, args...)
+	if err != nil {
+		return nil, couldNotRetrieveError("anime", err)
+	}
+
+	models, err := pgx.CollectRows(rows, pgx.RowToStructByName[animeModel])
+	if err != nil {
+		return nil, couldNotRetrieveError("anime", err)
+	}
+
+	dtos := make([]anime.AnimeDto, len(models))
+	for i, model := range models {
+		dtos[i] = anime.AnimeDto{
+			AnimeId:          model.AnimeId,
+			SeriesId:         model.SeriesId,
+			SlugTitle:        model.SlugTitle,
+			Title:            model.Title,
+			LastUpdated:      model.LastUpdated,
+			SeasonIdentifier: model.SeasonIdentifier,
+		}
+	}
+
+	return dtos, nil
+}
+
 func (dao AnimeDao) InsertAll(dtos []anime.AnimeDto) error {
 	if len(dtos) == 0 {
 		return nil

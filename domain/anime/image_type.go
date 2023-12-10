@@ -37,5 +37,5 @@ func (imageType ImageType) Name() string {
 }
 
 func (imageType ImageType) IsThumbnail() bool {
-	return imageType.Name() == "thumbnail"
+	return imageType == ImageTypeThumbnail
 }
