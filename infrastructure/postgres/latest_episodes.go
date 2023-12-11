@@ -3,7 +3,6 @@ package postgres
 import (
 	"context"
 	"schoperation/crunchyrollanimestatus/domain/anime"
-	"time"
 
 	"github.com/doug-martin/goqu/v9"
 	"github.com/jackc/pgx/v5"
@@ -20,15 +19,14 @@ func NewLatestEpisodesDao(db *pgx.Conn) LatestEpisodesDao {
 }
 
 type latestEpisodesModel struct {
-	AnimeId          int       `db:"anime_id" goqu:"skipupdate"`
-	LocaleId         int       `db:"locale_id"`
-	LastUpdated      time.Time `db:"last_updated"`
-	LatestSubSeason  int       `db:"latest_sub_season"`
-	LatestSubEpisode int       `db:"latest_sub_episode"`
-	LatestSubTitle   string    `db:"latest_sub_title"`
-	LatestDubSeason  int       `db:"latest_dub_season"`
-	LatestDubEpisode int       `db:"latest_dub_episode"`
-	LatestDubTitle   string    `db:"latest_dub_title"`
+	AnimeId          int    `db:"anime_id" goqu:"skipupdate"`
+	LocaleId         int    `db:"locale_id"`
+	LatestSubSeason  int    `db:"latest_sub_season"`
+	LatestSubEpisode int    `db:"latest_sub_episode"`
+	LatestSubTitle   string `db:"latest_sub_title"`
+	LatestDubSeason  int    `db:"latest_dub_season"`
+	LatestDubEpisode int    `db:"latest_dub_episode"`
+	LatestDubTitle   string `db:"latest_dub_title"`
 }
 
 func (dao LatestEpisodesDao) GetAllByAnimeId(animeId int) ([]anime.LatestEpisodesDto, error) {
@@ -60,7 +58,6 @@ func (dao LatestEpisodesDao) GetAllByAnimeId(animeId int) ([]anime.LatestEpisode
 		dtos[i] = anime.LatestEpisodesDto{
 			AnimeId:          model.AnimeId,
 			LocaleId:         model.LocaleId,
-			LastUpdated:      model.LastUpdated,
 			LatestSubSeason:  model.LatestSubSeason,
 			LatestSubEpisode: model.LatestSubEpisode,
 			LatestSubTitle:   model.LatestSubTitle,

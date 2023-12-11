@@ -45,6 +45,6 @@ func (ep MinimalEpisode) Title() string {
 	return ep.title
 }
 
-func (ep MinimalEpisode) IsZero() bool {
+func (ep MinimalEpisode) IsBlank() bool {
 	return ep.season == 0 && ep.number == 0 && ep.title == ""
 }

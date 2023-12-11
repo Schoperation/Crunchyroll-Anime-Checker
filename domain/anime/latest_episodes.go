@@ -1,14 +1,13 @@
 package anime
 
 import (
+	"fmt"
 	"schoperation/crunchyrollanimestatus/domain/core"
-	"time"
 )
 
 type LatestEpisodesDto struct {
 	AnimeId          int
 	LocaleId         int
-	LastUpdated      time.Time
 	LatestSubSeason  int
 	LatestSubEpisode int
 	LatestSubTitle   string
@@ -19,11 +18,10 @@ type LatestEpisodesDto struct {
 
 // LatestEpisodes holds the latest sub and dub episodes for a specified anime and locale.
 type LatestEpisodes struct {
-	animeId     AnimeId
-	locale      core.Locale
-	lastUpdated time.Time
-	latestSub   MinimalEpisode
-	latestDub   MinimalEpisode
+	animeId   AnimeId
+	locale    core.Locale
+	latestSub MinimalEpisode
+	latestDub MinimalEpisode
 }
 
 func NewLatestEpisodes(dto LatestEpisodesDto) (LatestEpisodes, error) {
@@ -47,22 +45,24 @@ func NewLatestEpisodes(dto LatestEpisodesDto) (LatestEpisodes, error) {
 		return LatestEpisodes{}, err
 	}
 
+	if latestSub.IsBlank() && latestDub.IsBlank() {
+		return LatestEpisodes{}, fmt.Errorf("must have at least a sub or dub for locale %s, anime ID %d", locale.Name(), animeId.Int())
+	}
+
 	return LatestEpisodes{
-		animeId:     animeId,
-		locale:      locale,
-		lastUpdated: time.Now().UTC(),
-		latestSub:   latestSub,
-		latestDub:   latestDub,
+		animeId:   animeId,
+		locale:    locale,
+		latestSub: latestSub,
+		latestDub: latestDub,
 	}, nil
 }
 
 func ReformLatestEpisodes(dto LatestEpisodesDto) LatestEpisodes {
 	return LatestEpisodes{
-		animeId:     ReformAnimeId(dto.AnimeId),
-		locale:      core.ReformLocale(dto.LocaleId),
-		lastUpdated: dto.LastUpdated,
-		latestSub:   ReformMinimalEpisode(dto.LatestSubSeason, dto.LatestSubEpisode, dto.LatestSubTitle),
-		latestDub:   ReformMinimalEpisode(dto.LatestDubSeason, dto.LatestDubEpisode, dto.LatestDubTitle),
+		animeId:   ReformAnimeId(dto.AnimeId),
+		locale:    core.ReformLocale(dto.LocaleId),
+		latestSub: ReformMinimalEpisode(dto.LatestSubSeason, dto.LatestSubEpisode, dto.LatestSubTitle),
+		latestDub: ReformMinimalEpisode(dto.LatestDubSeason, dto.LatestDubEpisode, dto.LatestDubTitle),
 	}
 }
 
