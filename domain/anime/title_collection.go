@@ -52,14 +52,18 @@ func (collection *TitleCollection) Add(dto TitleDto) error {
 	}
 
 	if strings.Trim(dto.Title, " ") == "" {
-		return fmt.Errorf("title must not be blank")
+		return fmt.Errorf("title must not be blank in title collection")
 	}
 
 	collection.col[locale] = dto.Title
 	return nil
 }
 
-func (collection *TitleCollection) Title(locale core.Locale) (string, bool) {
+func (collection TitleCollection) Title(locale core.Locale) string {
 	title, ok := collection.col[locale]
-	return title, ok
+	if !ok {
+		return ""
+	}
+
+	return title
 }

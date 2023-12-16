@@ -46,7 +46,7 @@ func NewLatestEpisodes(dto LatestEpisodesDto) (LatestEpisodes, error) {
 	}
 
 	if latestSub.IsBlank() && latestDub.IsBlank() {
-		return LatestEpisodes{}, fmt.Errorf("must have at least a sub or dub for locale %s, anime ID %d", locale.Name(), animeId.Int())
+		return LatestEpisodes{}, fmt.Errorf("latest episodes must have at least a sub or dub for locale %s, anime ID %d", locale.Name(), animeId.Int())
 	}
 
 	return LatestEpisodes{

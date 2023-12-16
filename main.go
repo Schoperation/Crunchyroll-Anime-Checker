@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"schoperation/crunchyrollanimestatus/command"
+	"schoperation/crunchyrollanimestatus/factory"
 	"schoperation/crunchyrollanimestatus/infrastructure/postgres"
 	"schoperation/crunchyrollanimestatus/infrastructure/rest"
 	anime_translator "schoperation/crunchyrollanimestatus/translator/anime"
@@ -47,12 +48,21 @@ func main() {
 
 	defer db.Close(context.Background())
 
+	animeDao := postgres.NewAnimeDao(db)
+	latestEpisodesDao := postgres.NewLatestEpisodesDao(db)
+	posterDao := postgres.NewPosterDao(db)
+	thumbnailDao := postgres.NewThumbnailDao(db)
+
 	crunchyrollClient := rest.NewCrunchyrollClient(args.credFilePath)
 
-	animeDao := postgres.NewAnimeDao(db)
+	latestEpisodesTranslator := anime_translator.NewLatestEpisodesTranslator(latestEpisodesDao)
+	posterTranslator := anime_translator.NewPosterTranslator(posterDao)
+	thumbnailTranslator := anime_translator.NewThumbnailTranslator(thumbnailDao)
 
-	animeTranslator := anime_translator.NewAnimeTranslator(animeDao)
 	crunchyrollAnimeTranslator := crunchyroll_translator.NewAnimeTranslator(&crunchyrollClient)
+
+	animeFactory := factory.NewAnimeFactory(posterTranslator, latestEpisodesTranslator, thumbnailTranslator)
+	animeTranslator := anime_translator.NewAnimeTranslator(animeDao, animeFactory)
 
 	refreshAnimeCommand := command.NewRefreshAnimeCommand(crunchyrollAnimeTranslator, animeTranslator)
 

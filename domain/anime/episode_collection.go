@@ -15,32 +15,32 @@ type EpisodeCollection struct {
 	episodes   map[string]Episode
 }
 
-func NewEpisodeCollection(latestEpisodes map[core.Locale]LatestEpisodes, thumbnails map[string]Image) (EpisodeCollection, error) {
+func NewEpisodeCollection(latestEpisodes []LatestEpisodes, thumbnails map[string]Image) (EpisodeCollection, error) {
 	episodeCollection := EpisodeCollection{
 		latestSubs: map[core.Locale]string{},
 		latestDubs: map[core.Locale]string{},
 		episodes:   map[string]Episode{},
 	}
 
-	for locale, latestEpsForLocale := range latestEpisodes {
+	for _, latestEpsForLocale := range latestEpisodes {
 		episodeCollection.animeId = latestEpsForLocale.animeId
 
 		thumbnail, exists := thumbnails[fmt.Sprintf("%d-%d", latestEpsForLocale.latestSub.Season(), latestEpsForLocale.latestSub.Number())]
 		if !exists {
-			return EpisodeCollection{}, fmt.Errorf("no thumbnail found for sub: S%dE%d", latestEpsForLocale.latestSub.Season(), latestEpsForLocale.latestSub.Number())
+			return EpisodeCollection{}, fmt.Errorf("epcol: no thumbnail found for sub: S%dE%d", latestEpsForLocale.latestSub.Season(), latestEpsForLocale.latestSub.Number())
 		}
 
-		err := episodeCollection.AddSubForLocale(locale, latestEpsForLocale.latestSub, thumbnail)
+		err := episodeCollection.AddSubForLocale(latestEpsForLocale.Locale(), latestEpsForLocale.latestSub, thumbnail)
 		if err != nil {
 			return EpisodeCollection{}, nil
 		}
 
 		thumbnail, exists = thumbnails[fmt.Sprintf("%d-%d", latestEpsForLocale.latestDub.Season(), latestEpsForLocale.latestDub.Number())]
 		if !exists {
-			return EpisodeCollection{}, fmt.Errorf("no thumbnail found for dub: S%dE%d", latestEpsForLocale.latestDub.Season(), latestEpsForLocale.latestDub.Number())
+			return EpisodeCollection{}, fmt.Errorf("epcol: no thumbnail found for dub: S%dE%d", latestEpsForLocale.latestDub.Season(), latestEpsForLocale.latestDub.Number())
 		}
 
-		err = episodeCollection.AddDubForLocale(locale, latestEpsForLocale.latestDub, thumbnail)
+		err = episodeCollection.AddDubForLocale(latestEpsForLocale.Locale(), latestEpsForLocale.latestDub, thumbnail)
 		if err != nil {
 			return EpisodeCollection{}, nil
 		}
@@ -49,10 +49,58 @@ func NewEpisodeCollection(latestEpisodes map[core.Locale]LatestEpisodes, thumbna
 	return episodeCollection, nil
 }
 
+func ReformEpisodeCollection(latestEpisodes []LatestEpisodes, thumbnails map[string]Image) EpisodeCollection {
+	episodeCollection := EpisodeCollection{
+		latestSubs: map[core.Locale]string{},
+		latestDubs: map[core.Locale]string{},
+		episodes:   map[string]Episode{},
+	}
+
+	for _, latestEpsForLocale := range latestEpisodes {
+		episodeCollection.animeId = latestEpsForLocale.animeId
+
+		thumbnail := thumbnails[fmt.Sprintf("%d-%d", latestEpsForLocale.latestSub.Season(), latestEpsForLocale.latestSub.Number())]
+		_ = episodeCollection.AddSubForLocale(latestEpsForLocale.Locale(), latestEpsForLocale.latestSub, thumbnail)
+
+		thumbnail = thumbnails[fmt.Sprintf("%d-%d", latestEpsForLocale.latestDub.Season(), latestEpsForLocale.latestDub.Number())]
+		_ = episodeCollection.AddDubForLocale(latestEpsForLocale.Locale(), latestEpsForLocale.latestDub, thumbnail)
+	}
+
+	return episodeCollection
+}
+
 func (epcol *EpisodeCollection) GetLatestEpisodesForLocale(locale core.Locale) LatestEpisodes {
+	latestSubSeason := 0
+	latestSubEpisode := 0
+	latestSubTitle := ""
+
+	if latestSub, ok := epcol.latestSubs[locale]; ok {
+		episode := epcol.episodes[latestSub]
+		latestSubSeason = episode.Season()
+		latestSubEpisode = episode.Number()
+		latestSubTitle = episode.Titles().Title(locale)
+	}
+
+	latestDubSeason := 0
+	latestDubEpisode := 0
+	latestDubTitle := ""
+
+	if latestDub, ok := epcol.latestDubs[locale]; ok {
+		episode := epcol.episodes[latestDub]
+		latestDubSeason = episode.Season()
+		latestDubEpisode = episode.Number()
+		latestDubTitle = episode.Titles().Title(locale)
+	}
+
 	return ReformLatestEpisodes(LatestEpisodesDto{
-		AnimeId:  epcol.animeId.Int(),
-		LocaleId: locale.Id(),
+		AnimeId:          epcol.animeId.Int(),
+		LocaleId:         locale.Id(),
+		LatestSubSeason:  latestSubSeason,
+		LatestSubEpisode: latestSubEpisode,
+		LatestSubTitle:   latestSubTitle,
+		LatestDubSeason:  latestDubSeason,
+		LatestDubEpisode: latestDubEpisode,
+		LatestDubTitle:   latestDubTitle,
 	})
 }
 

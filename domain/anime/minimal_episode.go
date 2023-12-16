@@ -11,11 +11,11 @@ type MinimalEpisode struct {
 
 func NewMinimalEpisode(season, number int, title string) (MinimalEpisode, error) {
 	if season < 0 {
-		return MinimalEpisode{}, fmt.Errorf("season must be 0 or above")
+		return MinimalEpisode{}, fmt.Errorf("minimal episode season must be 0 or above")
 	}
 
 	if number < 0 {
-		return MinimalEpisode{}, fmt.Errorf("episode snumber must be 0 or above")
+		return MinimalEpisode{}, fmt.Errorf("minimal episode number must be 0 or above")
 	}
 
 	return MinimalEpisode{

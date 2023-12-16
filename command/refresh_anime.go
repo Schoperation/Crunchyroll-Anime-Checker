@@ -4,7 +4,6 @@ import (
 	"schoperation/crunchyrollanimestatus/domain/anime"
 	"schoperation/crunchyrollanimestatus/domain/core"
 	"schoperation/crunchyrollanimestatus/domain/crunchyroll"
-	"time"
 )
 
 type RefreshAnimeCommandInput struct {
@@ -22,6 +21,10 @@ type crunchyrollAnimeTranslator interface {
 type localAnimeTranslator interface {
 	GetAllMinimal() (map[string]anime.MinimalAnime, error)
 	SaveAll(newAnime []anime.Anime, updatedAnime []anime.Anime) error
+}
+
+type animeFactory interface {
+	Reform(dto anime.AnimeDto) (anime.Anime, error)
 }
 
 type RefreshAnimeCommand struct {
@@ -53,40 +56,19 @@ func (cmd RefreshAnimeCommand) Run(input RefreshAnimeCommandInput) (RefreshAnime
 	var newCrAnimes []crunchyroll.Anime
 	var updatedCrAnimes []crunchyroll.Anime
 	for _, anime := range crAnime {
-		if _, exists := localMinimalAnime[anime.SeriesId()]; !exists {
+		savedAnime, exists := localMinimalAnime[anime.SeriesId()]
+		if !exists {
 			newCrAnimes = append(newCrAnimes, anime)
 			continue
 		}
 
-		savedAnime := localMinimalAnime[anime.SeriesId()]
 		if savedAnime.LastUpdated().Before(anime.LastUpdated()) {
 			updatedCrAnimes = append(updatedCrAnimes, anime)
-			continue
 		}
 	}
 
 	if len(newCrAnimes) == 0 && len(updatedCrAnimes) == 0 {
 		return RefreshAnimeCommandOutput{}, nil
-	}
-
-	newAnime := make([]anime.Anime, len(newCrAnimes))
-	for i, newCrAnime := range newCrAnimes {
-		newAnime[i], err = anime.NewAnime(anime.AnimeDto{
-			AnimeId:          0,
-			SeriesId:         newCrAnime.SeriesId(),
-			SlugTitle:        newCrAnime.SlugTitle(),
-			Title:            newCrAnime.Title(),
-			LastUpdated:      time.Time{},
-			SeasonIdentifier: "S#",
-		})
-		if err != nil {
-			return RefreshAnimeCommandOutput{}, err
-		}
-	}
-
-	err = cmd.localAnimeTranslator.SaveAll(newAnime, nil)
-	if err != nil {
-		return RefreshAnimeCommandOutput{}, err
 	}
 
 	return RefreshAnimeCommandOutput{

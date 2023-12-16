@@ -2,7 +2,6 @@ package factory
 
 import (
 	"schoperation/crunchyrollanimestatus/domain/anime"
-	"schoperation/crunchyrollanimestatus/domain/core"
 )
 
 type posterTranslator interface {
@@ -10,7 +9,7 @@ type posterTranslator interface {
 }
 
 type latestEpisodesTranslator interface {
-	GetAllByAnimeId(animeId anime.AnimeId) (map[core.Locale]anime.LatestEpisodes, error)
+	GetAllByAnimeId(animeId anime.AnimeId) ([]anime.LatestEpisodes, error)
 }
 
 type thumbnailTranslator interface {
@@ -35,6 +34,10 @@ func NewAnimeFactory(
 	}
 }
 
+func (factory AnimeFactory) Create(dto anime.AnimeDto) (anime.Anime, error) {
+	return anime.Anime{}, nil
+}
+
 func (factory AnimeFactory) Reform(dto anime.AnimeDto) (anime.Anime, error) {
 	animeId := anime.ReformAnimeId(dto.AnimeId)
 
@@ -53,4 +56,7 @@ func (factory AnimeFactory) Reform(dto anime.AnimeDto) (anime.Anime, error) {
 		return anime.Anime{}, err
 	}
 
+	episodes := anime.ReformEpisodeCollection(latestEpisodes, thumbnails)
+
+	return anime.ReformAnime(dto, posters, episodes), nil
 }

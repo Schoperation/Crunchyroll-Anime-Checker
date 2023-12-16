@@ -26,7 +26,7 @@ type Image struct {
 
 func NewImage(dto ImageDto) (Image, error) {
 	if dto.AnimeId <= 0 {
-		return Image{}, fmt.Errorf("anime id must be greater than 0")
+		return Image{}, fmt.Errorf("image anime id must be greater than 0")
 	}
 
 	imageType, err := NewImageTypeFromNumber(dto.ImageType)
@@ -36,11 +36,11 @@ func NewImage(dto ImageDto) (Image, error) {
 
 	if imageType.IsThumbnail() {
 		if dto.SeasonNumber <= 0 {
-			return Image{}, fmt.Errorf("season number must be greater than 0")
+			return Image{}, fmt.Errorf("image season number must be greater than 0")
 		}
 
 		if dto.EpisodeNumber <= 0 {
-			return Image{}, fmt.Errorf("episode number must be greater than 0")
+			return Image{}, fmt.Errorf("image episode number must be greater than 0")
 		}
 	} else {
 		dto.SeasonNumber = 0
@@ -48,11 +48,11 @@ func NewImage(dto ImageDto) (Image, error) {
 	}
 
 	if _, err := url.ParseRequestURI(dto.Url); err != nil {
-		return Image{}, fmt.Errorf("invalid URL for image: %v", err)
+		return Image{}, fmt.Errorf("image invalid URL for image: %v", err)
 	}
 
 	if strings.Trim(dto.Encoded, " ") == "" {
-		return Image{}, fmt.Errorf("encoded image must not be blank")
+		return Image{}, fmt.Errorf("image encoded image must not be blank")
 	}
 
 	return Image{

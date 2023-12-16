@@ -2,7 +2,6 @@ package anime
 
 import (
 	"schoperation/crunchyrollanimestatus/domain/anime"
-	"schoperation/crunchyrollanimestatus/domain/core"
 )
 
 type latestEpisodesDao interface {
@@ -19,17 +18,16 @@ func NewLatestEpisodesTranslator(latestEpisodesDao latestEpisodesDao) LatestEpis
 	}
 }
 
-func (translator LatestEpisodesTranslator) GetAllByAnimeId(animeId anime.AnimeId) (map[core.Locale]anime.LatestEpisodes, error) {
+func (translator LatestEpisodesTranslator) GetAllByAnimeId(animeId anime.AnimeId) ([]anime.LatestEpisodes, error) {
 	dtos, err := translator.latestEpisodesDao.GetAllByAnimeId(animeId.Int())
 	if err != nil {
 		return nil, err
 	}
 
-	latestEpisodesMap := make(map[core.Locale]anime.LatestEpisodes, len(dtos))
-	for _, dto := range dtos {
-		latestEpisodes := anime.ReformLatestEpisodes(dto)
-		latestEpisodesMap[latestEpisodes.Locale()] = latestEpisodes
+	latestEpisodes := make([]anime.LatestEpisodes, len(dtos))
+	for i, dto := range dtos {
+		latestEpisodes[i] = anime.ReformLatestEpisodes(dto)
 	}
 
-	return latestEpisodesMap, nil
+	return latestEpisodes, nil
 }
