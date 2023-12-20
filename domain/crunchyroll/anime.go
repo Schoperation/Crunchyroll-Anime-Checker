@@ -9,6 +9,7 @@ type AnimeDto struct {
 	SeriesId     string
 	SlugTitle    string
 	Title        string
+	New          bool
 	LastUpdated  time.Time
 	SeasonCount  int
 	EpisodeCount int
@@ -20,6 +21,7 @@ type Anime struct {
 	seriesId    string
 	slugTitle   string
 	title       string
+	isNew       bool
 	lastUpdated time.Time
 	tallPoster  Image
 	widePoster  Image
@@ -68,7 +70,8 @@ func ReformAnimeCollection(dtos []AnimeDto) []Anime {
 func shouldAddAnime(dto AnimeDto) bool {
 	// Sometimes Crunchyroll marks a movie as a series. Lovely...
 	// Usually they're one season with one episode.
-	if dto.SeasonCount == 1 && dto.EpisodeCount == 1 {
+	// Of course, this could also be a new show...
+	if dto.SeasonCount == 1 && dto.EpisodeCount == 1 && !dto.New {
 		return false
 	}
 

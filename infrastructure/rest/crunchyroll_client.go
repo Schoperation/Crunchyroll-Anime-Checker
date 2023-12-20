@@ -168,6 +168,7 @@ func (client *CrunchyrollClient) GetAllAnime(locale string) ([]crunchyroll.Anime
 			SeriesId:     anime.Id,
 			SlugTitle:    anime.SlugTitle,
 			Title:        anime.Title,
+			New:          anime.New,
 			LastUpdated:  anime.LastPublic,
 			SeasonCount:  anime.SeriesMetaData.SeasonCount,
 			EpisodeCount: anime.SeriesMetaData.EpisodeCount,
@@ -180,8 +181,38 @@ func (client *CrunchyrollClient) GetAllAnime(locale string) ([]crunchyroll.Anime
 	return dtos, nil
 }
 
-func (client *CrunchyrollClient) GetAllSeasonsBySeriesId(locale, seriesId string) error {
-	return nil
+func (client *CrunchyrollClient) GetAllSeasonsBySeriesId(locale, seriesId string) ([]crunchyroll.SeasonDto, error) {
+	// Use Japanese as the preferred audio language, so we can get the full lists of subs and dubs.
+	var seasonsResponse seasonsResponse
+	err := client.get(fmt.Sprintf("content/v2/cms/series/%s/seasons", seriesId), &seasonsResponse, map[string]string{
+		"locale":                   locale,
+		"preferred_audio_language": "ja-JP",
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	seasons := make([]crunchyroll.SeasonDto, len(seasonsResponse.Data))
+	for i, season := range seasonsResponse.Data {
+		dubs := make([]crunchyroll.DubDto, len(season.Versions))
+		for j, version := range season.Versions {
+			dubs[j] = crunchyroll.DubDto{
+				AudioLocale: version.AudioLocale,
+				GUID:        version.GUID,
+				Original:    version.Original,
+			}
+		}
+
+		seasons[i] = crunchyroll.SeasonDto{
+			Id:              season.Id,
+			Number:          season.SeasonNumber,
+			Identifier:      season.Identifier,
+			SubtitleLocales: season.SubtitleLocales,
+			Dubs:            dubs,
+		}
+	}
+
+	return seasons, nil
 }
 
 func (client *CrunchyrollClient) GetAllEpisodesBySeasonId(locale, seasonId string) error {

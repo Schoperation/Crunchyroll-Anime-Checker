@@ -5,22 +5,22 @@ import (
 	"schoperation/crunchyrollanimestatus/domain/crunchyroll"
 )
 
-type crunchyrollClient interface {
+type crunchyrollAnimeClient interface {
 	GetAllAnime(locale string) ([]crunchyroll.AnimeDto, error)
 }
 
 type AnimeTranslator struct {
-	crunchyrollClient crunchyrollClient
+	crunchyrollAnimeClient crunchyrollAnimeClient
 }
 
-func NewAnimeTranslator(crunchyrollClient crunchyrollClient) AnimeTranslator {
+func NewAnimeTranslator(crunchyrollAnimeClient crunchyrollAnimeClient) AnimeTranslator {
 	return AnimeTranslator{
-		crunchyrollClient: crunchyrollClient,
+		crunchyrollAnimeClient: crunchyrollAnimeClient,
 	}
 }
 
 func (translator AnimeTranslator) GetAllAnime(locale core.Locale) ([]crunchyroll.Anime, error) {
-	dtos, err := translator.crunchyrollClient.GetAllAnime(locale.Name())
+	dtos, err := translator.crunchyrollAnimeClient.GetAllAnime(locale.Name())
 	if err != nil {
 		return nil, err
 	}

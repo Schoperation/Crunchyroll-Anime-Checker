@@ -14,6 +14,7 @@ type series struct {
 	Id             string         `json:"id"` // series ID (G--------)
 	SlugTitle      string         `json:"slug_title"`
 	Title          string         `json:"title"`
+	New            bool           `json:"new"`
 	LastPublic     time.Time      `json:"last_public"`
 	Images         images         `json:"images"`
 	SeriesMetaData seriesMetaData `json:"series_metadata"`

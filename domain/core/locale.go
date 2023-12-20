@@ -2,6 +2,7 @@ package core
 
 import (
 	"fmt"
+	"strings"
 )
 
 /*
@@ -31,6 +32,19 @@ func NewLocale(localeId int) (Locale, error) {
 		id:   localeId,
 		name: localeName,
 	}, nil
+}
+
+func NewLocaleByString(localeString string) (Locale, error) {
+	for i, name := range locales {
+		if strings.EqualFold(name, localeString) {
+			return Locale{
+				id:   i,
+				name: name,
+			}, nil
+		}
+	}
+
+	return Locale{}, fmt.Errorf("could not parse locale %s", localeString)
 }
 
 func ReformLocale(localeId int) Locale {
