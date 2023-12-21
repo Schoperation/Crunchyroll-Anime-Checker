@@ -19,7 +19,7 @@ func NewPosterDao(db *pgx.Conn) PosterDao {
 }
 
 type posterModel struct {
-	AnimeId     int    `db:"anime_id"`
+	AnimeId     int    `db:"anime_id" goqu:"skipinsert,skipupdate"`
 	ImageTypeId int    `db:"image_type_id"`
 	Url         string `db:"url"`
 	Encoded     string `db:"encoded"`
@@ -77,6 +77,7 @@ func (dao PosterDao) InsertAll(dtos []anime.ImageDto) error {
 	sql, args, err := goqu.
 		Insert("poster").
 		Rows(models).
+		OnConflict(goqu.DoNothing()).
 		WithDialect("postgres").
 		Prepared(false).
 		ToSQL()

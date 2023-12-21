@@ -9,20 +9,20 @@ type MinimalAnimeDto struct {
 }
 
 type MinimalAnime struct {
-	animeId     int
+	animeId     AnimeId
 	seriesId    string
 	lastUpdated time.Time
 }
 
 func ReformMinimalAnime(dto MinimalAnimeDto) MinimalAnime {
 	return MinimalAnime{
-		animeId:     dto.AnimeId,
+		animeId:     ReformAnimeId(dto.AnimeId),
 		seriesId:    dto.SeriesId,
 		lastUpdated: dto.LastUpdated,
 	}
 }
 
-func (anime MinimalAnime) AnimeId() int {
+func (anime MinimalAnime) AnimeId() AnimeId {
 	return anime.animeId
 }
 

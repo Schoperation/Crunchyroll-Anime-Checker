@@ -95,6 +95,10 @@ func (dao AnimeDao) GetAllByAnimeIds(animeIds []int) ([]anime.AnimeDto, error) {
 		return nil, couldNotRetrieveError("anime", err)
 	}
 
+	if len(animeIds) != len(models) {
+		return nil, couldNotRetrieveAllError("anime", len(animeIds), len(models))
+	}
+
 	dtos := make([]anime.AnimeDto, len(models))
 	for i, model := range models {
 		dtos[i] = anime.AnimeDto{

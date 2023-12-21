@@ -20,11 +20,7 @@ type crunchyrollAnimeTranslator interface {
 
 type localAnimeTranslator interface {
 	GetAllMinimal() (map[string]anime.MinimalAnime, error)
-	SaveAll(newAnime []anime.Anime, updatedAnime []anime.Anime) error
-}
-
-type animeFactory interface {
-	Reform(dto anime.AnimeDto) (anime.Anime, error)
+	GetAllByAnimeIds(animeIds []anime.AnimeId) ([]anime.Anime, error)
 }
 
 type RefreshAnimeCommand struct {
@@ -55,6 +51,7 @@ func (cmd RefreshAnimeCommand) Run(input RefreshAnimeCommandInput) (RefreshAnime
 
 	var newCrAnimes []crunchyroll.Anime
 	var updatedCrAnimes []crunchyroll.Anime
+	var animeIds []anime.AnimeId
 	for _, anime := range crAnime {
 		savedAnime, exists := localMinimalAnime[anime.SeriesId()]
 		if !exists {
@@ -64,12 +61,15 @@ func (cmd RefreshAnimeCommand) Run(input RefreshAnimeCommandInput) (RefreshAnime
 
 		if savedAnime.LastUpdated().Before(anime.LastUpdated()) {
 			updatedCrAnimes = append(updatedCrAnimes, anime)
+			animeIds = append(animeIds, savedAnime.AnimeId())
 		}
 	}
 
 	if len(newCrAnimes) == 0 && len(updatedCrAnimes) == 0 {
 		return RefreshAnimeCommandOutput{}, nil
 	}
+
+	animeToBeUpdated, err := 
 
 	return RefreshAnimeCommandOutput{
 		NewAnimeCount:     len(newCrAnimes),
