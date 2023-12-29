@@ -21,7 +21,6 @@ type Anime struct {
 	seriesId    string
 	slugTitle   string
 	title       string
-	isNew       bool
 	lastUpdated time.Time
 	tallPoster  Image
 	widePoster  Image

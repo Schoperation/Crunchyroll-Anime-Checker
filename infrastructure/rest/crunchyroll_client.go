@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"schoperation/crunchyrollanimestatus/domain/core"
 	"schoperation/crunchyrollanimestatus/domain/crunchyroll"
 	"time"
 )
@@ -181,12 +182,12 @@ func (client *CrunchyrollClient) GetAllAnime(locale string) ([]crunchyroll.Anime
 	return dtos, nil
 }
 
-func (client *CrunchyrollClient) GetAllSeasonsBySeriesId(locale, seriesId string) ([]crunchyroll.SeasonDto, error) {
+func (client *CrunchyrollClient) GetAllSeasonsBySeriesId(seriesId string) ([]crunchyroll.SeasonDto, error) {
 	// Use Japanese as the preferred audio language, so we can get the full lists of subs and dubs.
 	var seasonsResponse seasonsResponse
 	err := client.get(fmt.Sprintf("content/v2/cms/series/%s/seasons", seriesId), &seasonsResponse, map[string]string{
-		"locale":                   locale,
-		"preferred_audio_language": "ja-JP",
+		"locale":                   core.NewEnglishLocale().Name(),
+		"preferred_audio_language": core.NewJapaneseLocale().Name(),
 	})
 	if err != nil {
 		return nil, err
@@ -216,6 +217,16 @@ func (client *CrunchyrollClient) GetAllSeasonsBySeriesId(locale, seriesId string
 }
 
 func (client *CrunchyrollClient) GetAllEpisodesBySeasonId(locale, seasonId string) error {
+	var episodesResponse seasonEpisodesResponse
+	err := client.get(fmt.Sprintf("content/v2/cms/seasons/%s/episodes", seasonId), &episodesResponse, map[string]string{
+		"locale": locale,
+	})
+	if err != nil {
+		return err
+	}
+
+	// TODO put into DTOs
+
 	return nil
 }
 
@@ -226,6 +237,7 @@ func (client *CrunchyrollClient) get(path string, responseStruct any, queryParam
 	}
 
 	// Re-login if we believe the token is expired about now.
+	// Crunchyroll does return 300 seconds for when it expires, but I've seen it expire before then, so I don't trust it...
 	if time.Since(client.lastLogin).Seconds() > 180 {
 		err = client.Login()
 		if err != nil {

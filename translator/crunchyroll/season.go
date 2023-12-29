@@ -1,12 +1,11 @@
 package crunchyroll
 
 import (
-	"schoperation/crunchyrollanimestatus/domain/core"
 	"schoperation/crunchyrollanimestatus/domain/crunchyroll"
 )
 
 type crunchyrollAnimeSeasonClient interface {
-	GetAllSeasonsBySeriesId(locale, seriesId string) ([]crunchyroll.SeasonDto, error)
+	GetAllSeasonsBySeriesId(seriesId string) ([]crunchyroll.SeasonDto, error)
 }
 
 type SeasonTranslator struct {
@@ -19,8 +18,8 @@ func NewSeasonTranslator(crunchyrollAnimeSeasonClient crunchyrollAnimeSeasonClie
 	}
 }
 
-func (translator SeasonTranslator) GetAllSeasonsBySeriesId(locale core.Locale, seriesId string) ([]crunchyroll.Season, error) {
-	dtos, err := translator.crunchyrollAnimeSeasonClient.GetAllSeasonsBySeriesId(locale.Name(), seriesId)
+func (translator SeasonTranslator) GetAllSeasonsBySeriesId(seriesId string) ([]crunchyroll.Season, error) {
+	dtos, err := translator.crunchyrollAnimeSeasonClient.GetAllSeasonsBySeriesId(seriesId)
 	if err != nil {
 		return nil, err
 	}
