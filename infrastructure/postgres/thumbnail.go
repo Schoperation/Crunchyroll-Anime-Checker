@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"schoperation/crunchyrollanimestatus/domain/anime"
+	"schoperation/crunchyrollanimestatus/domain/core"
 
 	"github.com/doug-martin/goqu/v9"
 	"github.com/jackc/pgx/v5"
@@ -54,7 +55,7 @@ func (dao ThumbnailDao) GetAllByAnimeId(animeId int) ([]anime.ImageDto, error) {
 	for i, model := range models {
 		dtos[i] = anime.ImageDto{
 			AnimeId:       model.AnimeId,
-			ImageType:     anime.ImageTypeThumbnail.Int(),
+			ImageType:     core.ImageTypeThumbnail.Int(),
 			SeasonNumber:  model.SeasonNumber,
 			EpisodeNumber: model.SeasonNumber,
 			Url:           model.Url,

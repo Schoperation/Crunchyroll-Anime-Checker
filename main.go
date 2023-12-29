@@ -7,10 +7,12 @@ import (
 	"io"
 	"os"
 	"schoperation/crunchyrollanimestatus/command"
+	"schoperation/crunchyrollanimestatus/command/subcommand"
 	"schoperation/crunchyrollanimestatus/factory"
 	"schoperation/crunchyrollanimestatus/infrastructure/postgres"
 	"schoperation/crunchyrollanimestatus/infrastructure/rest"
 	anime_translator "schoperation/crunchyrollanimestatus/translator/anime"
+	core_translator "schoperation/crunchyrollanimestatus/translator/core"
 	crunchyroll_translator "schoperation/crunchyrollanimestatus/translator/crunchyroll"
 	"strings"
 
@@ -54,17 +56,22 @@ func main() {
 	thumbnailDao := postgres.NewThumbnailDao(db)
 
 	crunchyrollClient := rest.NewCrunchyrollClient(args.credFilePath)
+	imageClient := rest.NewImageClient()
 
 	latestEpisodesTranslator := anime_translator.NewLatestEpisodesTranslator(latestEpisodesDao)
 	posterTranslator := anime_translator.NewPosterTranslator(posterDao)
 	thumbnailTranslator := anime_translator.NewThumbnailTranslator(thumbnailDao)
+
+	imageTranslator := core_translator.NewImageTranslator(imageClient)
 
 	crunchyrollAnimeTranslator := crunchyroll_translator.NewAnimeTranslator(&crunchyrollClient)
 
 	animeFactory := factory.NewAnimeFactory(posterTranslator, latestEpisodesTranslator, thumbnailTranslator)
 	animeTranslator := anime_translator.NewAnimeTranslator(animeDao, animeFactory)
 
-	refreshAnimeCommand := command.NewRefreshAnimeCommand(crunchyrollAnimeTranslator, animeTranslator)
+	refreshPostersSubCommand := subcommand.NewRefreshPostersSubCommand(imageTranslator)
+
+	refreshAnimeCommand := command.NewRefreshAnimeCommand(crunchyrollAnimeTranslator, animeTranslator, refreshPostersSubCommand)
 
 	output, err := refreshAnimeCommand.Run(command.RefreshAnimeCommandInput{})
 	if err != nil {

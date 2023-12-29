@@ -3,6 +3,7 @@ package anime
 import (
 	"fmt"
 	"net/url"
+	"schoperation/crunchyrollanimestatus/domain/core"
 	"strings"
 )
 
@@ -16,20 +17,17 @@ type ImageDto struct {
 }
 
 type Image struct {
-	animeId       int
-	imageType     ImageType
+	animeId       AnimeId
+	imageType     core.ImageType
 	seasonNumber  int
 	episodeNumber int
 	url           string
 	encoded       string
+	isDirty       bool
 }
 
 func NewImage(dto ImageDto) (Image, error) {
-	if dto.AnimeId <= 0 {
-		return Image{}, fmt.Errorf("image anime id must be greater than 0")
-	}
-
-	imageType, err := NewImageTypeFromNumber(dto.ImageType)
+	imageType, err := core.NewImageTypeFromNumber(dto.ImageType)
 	if err != nil {
 		return Image{}, err
 	}
@@ -56,31 +54,33 @@ func NewImage(dto ImageDto) (Image, error) {
 	}
 
 	return Image{
-		animeId:       dto.AnimeId,
+		animeId:       0,
 		imageType:     imageType,
 		seasonNumber:  dto.SeasonNumber,
 		episodeNumber: dto.EpisodeNumber,
 		url:           dto.Url,
 		encoded:       dto.Encoded,
+		isDirty:       true,
 	}, nil
 }
 
 func ReformImage(dto ImageDto) Image {
 	return Image{
-		animeId:       dto.AnimeId,
-		imageType:     ReformImageTypeFromNumber(dto.ImageType),
+		animeId:       ReformAnimeId(dto.AnimeId),
+		imageType:     core.ReformImageTypeFromNumber(dto.ImageType),
 		seasonNumber:  dto.SeasonNumber,
 		episodeNumber: dto.EpisodeNumber,
 		url:           dto.Url,
 		encoded:       dto.Encoded,
+		isDirty:       false,
 	}
 }
 
-func (image Image) AnimeId() int {
+func (image Image) AnimeId() AnimeId {
 	return image.animeId
 }
 
-func (image Image) ImageType() ImageType {
+func (image Image) ImageType() core.ImageType {
 	return image.imageType
 }
 
@@ -90,4 +90,36 @@ func (image Image) Url() string {
 
 func (image Image) Encoded() string {
 	return image.encoded
+}
+
+func (image Image) IsDirty() bool {
+	return image.isDirty
+}
+
+func (image *Image) AssignAnimeId(animeId AnimeId) {
+	if !image.animeId.IsZero() {
+		return
+	}
+
+	image.animeId = animeId
+	image.isDirty = true
+}
+
+func (image *Image) UpdatePoster(newUrl, encoded string) error {
+	if image.imageType != core.ImageTypePosterTall && image.imageType != core.ImageTypePosterWide {
+		return fmt.Errorf("image must be a poster to only update url and encoded string")
+	}
+
+	if _, err := url.ParseRequestURI(newUrl); err != nil {
+		return fmt.Errorf("image invalid URL for image: %v", err)
+	}
+
+	if strings.Trim(encoded, " ") == "" {
+		return fmt.Errorf("image encoded image must not be blank")
+	}
+
+	image.url = newUrl
+	image.encoded = encoded
+	image.isDirty = true
+	return nil
 }

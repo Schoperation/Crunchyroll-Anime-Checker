@@ -21,3 +21,7 @@ func ReformAnimeId(id int) AnimeId {
 func (id AnimeId) Int() int {
 	return int(id)
 }
+
+func (id AnimeId) IsZero() bool {
+	return id == 0
+}

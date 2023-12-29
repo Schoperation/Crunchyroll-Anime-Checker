@@ -2,6 +2,7 @@ package anime
 
 import (
 	"fmt"
+	"schoperation/crunchyrollanimestatus/domain/core"
 	"strings"
 	"time"
 )
@@ -23,8 +24,7 @@ type Anime struct {
 	title            string
 	lastUpdated      time.Time
 	seasonIdentifier string
-	posterTall       Image
-	posterWide       Image
+	posters          []Image
 	episodes         EpisodeCollection
 }
 
@@ -53,18 +53,13 @@ func NewAnime(
 		return Anime{}, fmt.Errorf("anime must have 2 posters")
 	}
 
-	posterTall := Image{}
 	hasPosterTall := false
-	posterWide := Image{}
 	hasPosterWide := false
-
 	for _, poster := range posters {
 		switch poster.ImageType() {
-		case ImageTypePosterTall:
-			posterTall = poster
+		case core.ImageTypePosterTall:
 			hasPosterTall = true
-		case ImageTypePosterWide:
-			posterWide = poster
+		case core.ImageTypePosterWide:
 			hasPosterWide = true
 		}
 	}
@@ -84,8 +79,7 @@ func NewAnime(
 		title:            dto.Title,
 		lastUpdated:      time.Now().UTC(),
 		seasonIdentifier: dto.SeasonIdentifier,
-		posterTall:       posterTall,
-		posterWide:       posterWide,
+		posters:          posters,
 		episodes:         episodes,
 	}, nil
 }
@@ -95,18 +89,6 @@ func ReformAnime(
 	posters []Image,
 	episodes EpisodeCollection,
 ) Anime {
-	posterTall := Image{}
-	posterWide := Image{}
-
-	for _, poster := range posters {
-		switch poster.ImageType() {
-		case ImageTypePosterTall:
-			posterTall = poster
-		case ImageTypePosterWide:
-			posterWide = poster
-		}
-	}
-
 	return Anime{
 		animeId:          ReformAnimeId(dto.AnimeId),
 		seriesId:         dto.SeriesId,
@@ -114,10 +96,17 @@ func ReformAnime(
 		title:            dto.Title,
 		lastUpdated:      dto.LastUpdated,
 		seasonIdentifier: dto.SeasonIdentifier,
-		posterTall:       posterTall,
-		posterWide:       posterWide,
+		posters:          posters,
 		episodes:         episodes,
 	}
+}
+
+func (anime Anime) SeriesId() string {
+	return anime.seriesId
+}
+
+func (anime Anime) Posters() []Image {
+	return anime.posters
 }
 
 func (anime Anime) Dto() AnimeDto {
