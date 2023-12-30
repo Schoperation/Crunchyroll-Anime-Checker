@@ -30,7 +30,7 @@ func NewLatestEpisodes(dto LatestEpisodesDto) (LatestEpisodes, error) {
 		return LatestEpisodes{}, err
 	}
 
-	locale, err := core.NewLocale(dto.LocaleId)
+	locale, err := core.NewLocaleFromId(dto.LocaleId)
 	if err != nil {
 		return LatestEpisodes{}, err
 	}
@@ -60,7 +60,7 @@ func NewLatestEpisodes(dto LatestEpisodesDto) (LatestEpisodes, error) {
 func ReformLatestEpisodes(dto LatestEpisodesDto) LatestEpisodes {
 	return LatestEpisodes{
 		animeId:   ReformAnimeId(dto.AnimeId),
-		locale:    core.ReformLocale(dto.LocaleId),
+		locale:    core.ReformLocaleFromId(dto.LocaleId),
 		latestSub: ReformMinimalEpisode(dto.LatestSubSeason, dto.LatestSubEpisode, dto.LatestSubTitle),
 		latestDub: ReformMinimalEpisode(dto.LatestDubSeason, dto.LatestDubEpisode, dto.LatestDubTitle),
 	}

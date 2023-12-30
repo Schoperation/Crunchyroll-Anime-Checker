@@ -39,14 +39,14 @@ func ReformTitleCollection(dtos []TitleDto) TitleCollection {
 	}
 
 	for _, dto := range dtos {
-		newCollection.col[core.ReformLocale(dto.LocaleId)] = dto.Title
+		newCollection.col[core.ReformLocaleFromId(dto.LocaleId)] = dto.Title
 	}
 
 	return newCollection
 }
 
 func (collection *TitleCollection) Add(dto TitleDto) error {
-	locale, err := core.NewLocale(dto.LocaleId)
+	locale, err := core.NewLocaleFromId(dto.LocaleId)
 	if err != nil {
 		return err
 	}

@@ -1,8 +1,10 @@
 package crunchyroll
 
 import (
+	"cmp"
 	"fmt"
 	"schoperation/crunchyrollanimestatus/domain/core"
+	"slices"
 	"strings"
 )
 
@@ -23,21 +25,45 @@ func NewSeasonCollection(seriesId string, seasons []Season) (SeasonCollection, e
 		return SeasonCollection{}, fmt.Errorf("anime must have seasons; series ID %s", seriesId)
 	}
 
+	slices.SortFunc(seasons, func(x, y Season) int {
+		return cmp.Compare(x.SequenceNumber(), y.SequenceNumber())
+	})
+
 	return SeasonCollection{
 		seriesId: seriesId,
 		seasons:  seasons,
 	}, nil
 }
 
-func (col SeasonCollection) LatestSub(locale core.Locale) Season {
-	return Season{}
+func (col SeasonCollection) LatestSub(locale core.Locale) (Season, bool) {
+	for i := len(col.seasons) - 1; i >= 0; i-- {
+		if !isValidSeason(col.seasons[i]) {
+			continue
+		}
+
+		if col.seasons[i].HasSubForLocale(locale) {
+			return col.seasons[i], true
+		}
+	}
+
+	return Season{}, false
 }
 
-func (col SeasonCollection) LatestDub(locale core.Locale) Season {
-	return Season{}
+func (col SeasonCollection) LatestDub(locale core.Locale) (Season, bool) {
+	for i := len(col.seasons) - 1; i >= 0; i-- {
+		if !isValidSeason(col.seasons[i]) {
+			continue
+		}
+
+		if col.seasons[i].HasDubForLocale(locale) {
+			return col.seasons[i], true
+		}
+	}
+
+	return Season{}, false
 }
 
 // Determines if a season has tangible episodes rather than a movie, OVA, interview, etc.
-func (col SeasonCollection) isValidSeason(season Season) bool {
-	return true
+func isValidSeason(season Season) bool {
+	return !slices.Contains(season.Keywords(), "movie")
 }

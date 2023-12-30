@@ -1,6 +1,6 @@
 module schoperation/crunchyrollanimestatus
 
-go 1.20
+go 1.21
 
 require (
 	github.com/doug-martin/goqu/v9 v9.19.0

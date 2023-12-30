@@ -16,7 +16,7 @@ type Dub struct {
 }
 
 func ReformDub(dto DubDto) Dub {
-	locale, err := core.NewLocaleByString(dto.AudioLocale)
+	locale, err := core.NewLocaleFromString(dto.AudioLocale)
 	if err != nil {
 		return Dub{}
 	}

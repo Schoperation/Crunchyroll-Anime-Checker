@@ -10,62 +10,57 @@ Locale represents a language supported by Crunchyroll and this project.
 Used in various calls to ensure we get the correct data for a particular language.
 TODO Need to support more than English.
 */
-type Locale struct {
-	id   int
-	name string
+type Locale int
+
+const (
+	LocaleJaJP = 1
+	LocaleKoKR = 2
+	LocaleZhCN = 3
+	LocaleEnUS = 4
+)
+
+var localeNames = map[int]string{
+	LocaleJaJP: "ja-JP",
+	LocaleKoKR: "ko-KR",
+	LocaleZhCN: "zh-CN",
+	LocaleEnUS: "en-US",
 }
 
-var locales = map[int]string{
-	1: "ja-JP",
-	2: "ko-KR",
-	3: "zh-CN",
-	4: "en-US",
-}
-
-func NewLocale(localeId int) (Locale, error) {
-	localeName, ok := locales[localeId]
+func NewLocaleFromId(localeId int) (Locale, error) {
+	_, ok := localeNames[localeId]
 	if !ok {
-		return Locale{}, fmt.Errorf("could not parse locale id %d", localeId)
+		return 0, fmt.Errorf("could not parse locale id %d", localeId)
 	}
 
-	return Locale{
-		id:   localeId,
-		name: localeName,
-	}, nil
+	return Locale(localeId), nil
 }
 
-func NewLocaleByString(localeString string) (Locale, error) {
-	for i, name := range locales {
+func NewLocaleFromString(localeString string) (Locale, error) {
+	for locale, name := range localeNames {
 		if strings.EqualFold(name, localeString) {
-			return Locale{
-				id:   i,
-				name: name,
-			}, nil
+			return Locale(locale), nil
 		}
 	}
 
-	return Locale{}, fmt.Errorf("could not parse locale %s", localeString)
+	return 0, fmt.Errorf("could not parse locale %s", localeString)
 }
 
-func ReformLocale(localeId int) Locale {
-	return Locale{
-		id:   localeId,
-		name: locales[localeId],
-	}
+func ReformLocaleFromId(localeId int) Locale {
+	return Locale(localeId)
 }
 
 func (l Locale) Id() int {
-	return l.id
+	return int(l)
 }
 
 func (l Locale) Name() string {
-	return l.name
-}
-
-func NewEnglishLocale() Locale {
-	return ReformLocale(4)
+	return localeNames[int(l)]
 }
 
 func NewJapaneseLocale() Locale {
-	return ReformLocale(1)
+	return ReformLocaleFromId(LocaleJaJP)
+}
+
+func NewEnglishLocale() Locale {
+	return ReformLocaleFromId(LocaleEnUS)
 }

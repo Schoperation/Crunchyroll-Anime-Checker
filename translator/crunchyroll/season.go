@@ -18,10 +18,10 @@ func NewSeasonTranslator(crunchyrollAnimeSeasonClient crunchyrollAnimeSeasonClie
 	}
 }
 
-func (translator SeasonTranslator) GetAllSeasonsBySeriesId(seriesId string) ([]crunchyroll.Season, error) {
+func (translator SeasonTranslator) GetAllSeasonsBySeriesId(seriesId string) (crunchyroll.SeasonCollection, error) {
 	dtos, err := translator.crunchyrollAnimeSeasonClient.GetAllSeasonsBySeriesId(seriesId)
 	if err != nil {
-		return nil, err
+		return crunchyroll.SeasonCollection{}, err
 	}
 
 	seasons := make([]crunchyroll.Season, len(dtos))
@@ -29,5 +29,5 @@ func (translator SeasonTranslator) GetAllSeasonsBySeriesId(seriesId string) ([]c
 		seasons[i] = crunchyroll.ReformSeason(dto)
 	}
 
-	return seasons, nil
+	return crunchyroll.NewSeasonCollection(seriesId, seasons)
 }

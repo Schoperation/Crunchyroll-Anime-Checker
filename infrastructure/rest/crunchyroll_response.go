@@ -44,12 +44,14 @@ type seasonsResponse struct {
 }
 
 type season struct {
-	Id              string    `json:"id"`
-	Identifier      string    `json:"identifier"`
-	SeasonNumber    int       `json:"season_number"`
-	AudioLocales    []string  `json:"audio_locales"`
-	SubtitleLocales []string  `json:"subtitle_locales"`
-	Versions        []version `json:"versions"`
+	Id                   string    `json:"id"`
+	Identifier           string    `json:"identifier"`
+	SeasonNumber         int       `json:"season_number"`
+	SeasonSequenceNumber int       `json:"season_sequence_number"`
+	Keywords             []string  `json:"keywords"`
+	AudioLocales         []string  `json:"audio_locales"`
+	SubtitleLocales      []string  `json:"subtitle_locales"`
+	Versions             []version `json:"versions"`
 }
 
 // An array of "versions", or just different seasons in different locales.
@@ -61,14 +63,20 @@ type version struct {
 	Variant     string `json:"variant"`
 }
 
-type seasonEpisodesResponse struct {
-	Total int             `json:"total"`
-	Data  []seasonEpisode `json:"data"`
+type episodesResponse struct {
+	Total int       `json:"total"`
+	Data  []episode `json:"data"`
 }
 
-type seasonEpisode struct {
-	Number          int       `json:"episode_number"`
-	Title           string    `json:"title"`
-	SubtitleLocales []string  `json:"subtitle_locales"`
-	Versions        []version `json:"versions"`
+type episode struct {
+	Number          int           `json:"episode_number"`
+	Title           string        `json:"title"`
+	SubtitleLocales []string      `json:"subtitle_locales"`
+	Versions        []version     `json:"versions"`
+	Images          episodeImages `json:"images"`
+}
+
+// For some reason it's a 2D array. But all entries use the first index of the first array...
+type episodeImages struct {
+	Thumbnail [][]image `json:"thumbnail"`
 }

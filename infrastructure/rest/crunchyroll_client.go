@@ -216,18 +216,49 @@ func (client *CrunchyrollClient) GetAllSeasonsBySeriesId(seriesId string) ([]cru
 	return seasons, nil
 }
 
-func (client *CrunchyrollClient) GetAllEpisodesBySeasonId(locale, seasonId string) error {
-	var episodesResponse seasonEpisodesResponse
+func (client *CrunchyrollClient) GetAllEpisodesBySeasonId(locale, seasonId string) ([]crunchyroll.EpisodeDto, error) {
+	var episodesResponse episodesResponse
 	err := client.get(fmt.Sprintf("content/v2/cms/seasons/%s/episodes", seasonId), &episodesResponse, map[string]string{
 		"locale": locale,
 	})
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	// TODO put into DTOs
+	episodes := make([]crunchyroll.EpisodeDto, len(episodesResponse.Data))
+	for i, episode := range episodesResponse.Data {
+		dubs := make([]crunchyroll.DubDto, len(episode.Versions))
+		for j, version := range episode.Versions {
+			dubs[j] = crunchyroll.DubDto{
+				AudioLocale: version.AudioLocale,
+				GUID:        version.GUID,
+				Original:    version.Original,
+			}
+		}
 
-	return nil
+		var thumbnails []crunchyroll.ImageDto
+		if len(episode.Images.Thumbnail) > 0 {
+			thumbnails = make([]crunchyroll.ImageDto, len(episode.Images.Thumbnail[0]))
+			for k, image := range episode.Images.Thumbnail[0] {
+				thumbnails[k] = crunchyroll.ImageDto{
+					Width:     image.Width,
+					Height:    image.Height,
+					ImageType: image.Type,
+					Source:    image.Source,
+				}
+			}
+		}
+
+		episodes[i] = crunchyroll.EpisodeDto{
+			Number:          episode.Number,
+			SeasonId:        seasonId,
+			SubtitleLocales: episode.SubtitleLocales,
+			Dubs:            dubs,
+			Thumbnails:      thumbnails,
+		}
+	}
+
+	return episodes, nil
 }
 
 func (client *CrunchyrollClient) get(path string, responseStruct any, queryParams map[string]string) error {
