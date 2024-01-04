@@ -9,13 +9,13 @@ import (
 
 type RefreshPostersSubCommandInput struct {
 	NewCrAnime     []crunchyroll.Anime
-	UpdatedCrAnime map[string]crunchyroll.Anime
-	SavedAnime     []anime.Anime
+	UpdatedCrAnime []crunchyroll.Anime
+	LocalAnime     map[core.SeriesId]anime.Anime
 }
 
 type RefreshPostersSubCommandOutput struct {
-	UpdatedSavedAnime []anime.Anime
-	NewPosters        map[string][]anime.Image
+	UpdatedLocalAnime map[core.SeriesId]anime.Anime
+	NewPosters        map[core.SeriesId][]anime.Image
 }
 
 type getEncodedImageTranslator interface {
@@ -35,13 +35,13 @@ func NewRefreshPostersSubCommand(
 }
 
 func (subcmd RefreshPostersSubCommand) Run(input RefreshPostersSubCommandInput) (RefreshPostersSubCommandOutput, error) {
-	for _, savedAnime := range input.SavedAnime {
-		crAnime, exists := input.UpdatedCrAnime[savedAnime.SeriesId()]
+	for _, crAnime := range input.UpdatedCrAnime {
+		localAnime, exists := input.LocalAnime[crAnime.SeriesId()]
 		if !exists {
-			return RefreshPostersSubCommandOutput{}, fmt.Errorf("couldn't match crunchyroll anime with saved anime: series ID %s", savedAnime.SeriesId())
+			return RefreshPostersSubCommandOutput{}, fmt.Errorf("couldn't match crunchyroll anime with saved anime: series ID %s", localAnime.SeriesId())
 		}
 
-		for _, poster := range savedAnime.Posters() {
+		for _, poster := range localAnime.Posters() {
 			posterUrl := ""
 			switch poster.ImageType() {
 			case core.ImageTypePosterTall:
@@ -66,9 +66,11 @@ func (subcmd RefreshPostersSubCommand) Run(input RefreshPostersSubCommandInput) 
 				return RefreshPostersSubCommandOutput{}, err
 			}
 		}
+
+		input.LocalAnime[crAnime.SeriesId()] = localAnime
 	}
 
-	newPosters := make(map[string][]anime.Image, len(input.NewCrAnime))
+	newPosters := make(map[core.SeriesId][]anime.Image, len(input.NewCrAnime))
 	for _, newCrAnime := range input.NewCrAnime {
 		posters := make([]anime.Image, 2)
 
@@ -110,7 +112,7 @@ func (subcmd RefreshPostersSubCommand) Run(input RefreshPostersSubCommandInput) 
 	}
 
 	return RefreshPostersSubCommandOutput{
-		UpdatedSavedAnime: input.SavedAnime,
+		UpdatedLocalAnime: input.LocalAnime,
 		NewPosters:        newPosters,
 	}, nil
 }

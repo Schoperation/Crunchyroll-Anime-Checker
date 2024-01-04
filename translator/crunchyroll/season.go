@@ -1,6 +1,7 @@
 package crunchyroll
 
 import (
+	"schoperation/crunchyrollanimestatus/domain/core"
 	"schoperation/crunchyrollanimestatus/domain/crunchyroll"
 )
 
@@ -18,8 +19,8 @@ func NewSeasonTranslator(crunchyrollAnimeSeasonClient crunchyrollAnimeSeasonClie
 	}
 }
 
-func (translator SeasonTranslator) GetAllSeasonsBySeriesId(seriesId string) (crunchyroll.SeasonCollection, error) {
-	dtos, err := translator.crunchyrollAnimeSeasonClient.GetAllSeasonsBySeriesId(seriesId)
+func (translator SeasonTranslator) GetAllSeasonsBySeriesId(seriesId core.SeriesId) (crunchyroll.SeasonCollection, error) {
+	dtos, err := translator.crunchyrollAnimeSeasonClient.GetAllSeasonsBySeriesId(seriesId.String())
 	if err != nil {
 		return crunchyroll.SeasonCollection{}, err
 	}

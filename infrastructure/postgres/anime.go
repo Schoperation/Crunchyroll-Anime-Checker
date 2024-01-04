@@ -26,12 +26,11 @@ type minimalAnimeModel struct {
 }
 
 type animeModel struct {
-	AnimeId          int       `db:"anime_id" goqu:"skipinsert,skipupdate"`
-	SeriesId         string    `db:"series_id"`
-	SlugTitle        string    `db:"slug_title"`
-	Title            string    `db:"title"`
-	LastUpdated      time.Time `db:"last_updated"`
-	SeasonIdentifier string    `db:"season_identifier"`
+	AnimeId     int       `db:"anime_id" goqu:"skipinsert,skipupdate"`
+	SeriesId    string    `db:"series_id"`
+	SlugTitle   string    `db:"slug_title"`
+	Title       string    `db:"title"`
+	LastUpdated time.Time `db:"last_updated"`
 }
 
 func (dao AnimeDao) GetAllMinimal() ([]anime.MinimalAnimeDto, error) {
@@ -102,12 +101,11 @@ func (dao AnimeDao) GetAllByAnimeIds(animeIds []int) ([]anime.AnimeDto, error) {
 	dtos := make([]anime.AnimeDto, len(models))
 	for i, model := range models {
 		dtos[i] = anime.AnimeDto{
-			AnimeId:          model.AnimeId,
-			SeriesId:         model.SeriesId,
-			SlugTitle:        model.SlugTitle,
-			Title:            model.Title,
-			LastUpdated:      model.LastUpdated,
-			SeasonIdentifier: model.SeasonIdentifier,
+			AnimeId:     model.AnimeId,
+			SeriesId:    model.SeriesId,
+			SlugTitle:   model.SlugTitle,
+			Title:       model.Title,
+			LastUpdated: model.LastUpdated,
 		}
 	}
 
@@ -166,11 +164,10 @@ func (dao AnimeDao) Update(dto anime.AnimeDto) error {
 
 func (dao AnimeDao) animeDtoToModel(dto anime.AnimeDto) animeModel {
 	return animeModel{
-		AnimeId:          dto.AnimeId,
-		SeriesId:         dto.SeriesId,
-		SlugTitle:        dto.SlugTitle,
-		Title:            dto.Title,
-		LastUpdated:      dto.LastUpdated,
-		SeasonIdentifier: dto.SeasonIdentifier,
+		AnimeId:     dto.AnimeId,
+		SeriesId:    dto.SeriesId,
+		SlugTitle:   dto.SlugTitle,
+		Title:       dto.Title,
+		LastUpdated: dto.LastUpdated,
 	}
 }

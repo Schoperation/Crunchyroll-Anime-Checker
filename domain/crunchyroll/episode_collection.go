@@ -8,6 +8,8 @@ import (
 	"strings"
 )
 
+// EpisodeCollection is a collection of episodes, primarily used to retrieve the latest sub or dub for a specified locale.
+// It is automatically sorted in descending order for easy iteration.
 type EpisodeCollection struct {
 	seasonId string
 	episodes []Episode

@@ -21,8 +21,8 @@ type crunchyrollAnimeTranslator interface {
 }
 
 type localAnimeTranslator interface {
-	GetAllMinimal() (map[string]anime.MinimalAnime, error)
-	GetAllByAnimeIds(animeIds []anime.AnimeId) ([]anime.Anime, error)
+	GetAllMinimal() (map[core.SeriesId]anime.MinimalAnime, error)
+	GetAllByAnimeIds(animeIds []anime.AnimeId) (map[core.SeriesId]anime.Anime, error)
 }
 
 type refreshPostersSubCommand interface {
@@ -48,29 +48,29 @@ func NewRefreshAnimeCommand(
 }
 
 func (cmd RefreshAnimeCommand) Run(input RefreshAnimeCommandInput) (RefreshAnimeCommandOutput, error) {
-	crAnime, err := cmd.crunchyrollAnimeTranslator.GetAllAnime(core.NewEnglishLocale())
+	crAnimes, err := cmd.crunchyrollAnimeTranslator.GetAllAnime(core.NewEnglishLocale())
 	if err != nil {
 		return RefreshAnimeCommandOutput{}, err
 	}
 
-	localMinimalAnime, err := cmd.localAnimeTranslator.GetAllMinimal()
+	localAnimes, err := cmd.localAnimeTranslator.GetAllMinimal()
 	if err != nil {
 		return RefreshAnimeCommandOutput{}, err
 	}
 
 	var newCrAnimes []crunchyroll.Anime
-	updatedCrAnimes := make(map[string]crunchyroll.Anime)
+	var updatedCrAnimes []crunchyroll.Anime
 	var animeIds []anime.AnimeId
-	for _, anime := range crAnime {
-		savedAnime, exists := localMinimalAnime[anime.SeriesId()]
+	for _, crAnime := range crAnimes {
+		localAnime, exists := localAnimes[crAnime.SeriesId()]
 		if !exists {
-			newCrAnimes = append(newCrAnimes, anime)
+			newCrAnimes = append(newCrAnimes, crAnime)
 			continue
 		}
 
-		if savedAnime.LastUpdated().Before(anime.LastUpdated()) {
-			updatedCrAnimes[anime.SeriesId()] = anime
-			animeIds = append(animeIds, savedAnime.AnimeId())
+		if localAnime.LastUpdated().Before(crAnime.LastUpdated()) {
+			updatedCrAnimes = append(updatedCrAnimes, crAnime)
+			animeIds = append(animeIds, localAnime.AnimeId())
 		}
 	}
 
@@ -86,7 +86,7 @@ func (cmd RefreshAnimeCommand) Run(input RefreshAnimeCommandInput) (RefreshAnime
 	posterCmdOutput, err := cmd.refreshPostersSubCommand.Run(subcommand.RefreshPostersSubCommandInput{
 		NewCrAnime:     newCrAnimes,
 		UpdatedCrAnime: updatedCrAnimes,
-		SavedAnime:     animeToBeUpdated,
+		LocalAnime:     animeToBeUpdated,
 	})
 	if err != nil {
 		return RefreshAnimeCommandOutput{}, err

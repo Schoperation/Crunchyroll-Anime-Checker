@@ -1,6 +1,7 @@
 package crunchyroll
 
 import (
+	"schoperation/crunchyrollanimestatus/domain/core"
 	"strings"
 	"time"
 )
@@ -18,7 +19,7 @@ type AnimeDto struct {
 }
 
 type Anime struct {
-	seriesId    string
+	seriesId    core.SeriesId
 	slugTitle   string
 	title       string
 	lastUpdated time.Time
@@ -44,7 +45,7 @@ func ReformAnime(dto AnimeDto) Anime {
 	}
 
 	return Anime{
-		seriesId:    dto.SeriesId,
+		seriesId:    core.ReformSeriesId(dto.SeriesId),
 		slugTitle:   dto.SlugTitle,
 		title:       dto.Title,
 		lastUpdated: dto.LastUpdated,
@@ -87,7 +88,7 @@ func shouldAddAnime(dto AnimeDto) bool {
 	return true
 }
 
-func (anime Anime) SeriesId() string {
+func (anime Anime) SeriesId() core.SeriesId {
 	return anime.seriesId
 }
 

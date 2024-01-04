@@ -2,6 +2,7 @@ package anime
 
 import (
 	"schoperation/crunchyrollanimestatus/domain/anime"
+	"schoperation/crunchyrollanimestatus/domain/core"
 )
 
 type animeDao interface {
@@ -27,21 +28,22 @@ func NewAnimeTranslator(animeDao animeDao, animeFactory animeFactory) AnimeTrans
 	}
 }
 
-func (translator AnimeTranslator) GetAllMinimal() (map[string]anime.MinimalAnime, error) {
+func (translator AnimeTranslator) GetAllMinimal() (map[core.SeriesId]anime.MinimalAnime, error) {
 	dtos, err := translator.animeDao.GetAllMinimal()
 	if err != nil {
 		return nil, err
 	}
 
-	minimalAnime := map[string]anime.MinimalAnime{}
+	minimalAnime := map[core.SeriesId]anime.MinimalAnime{}
 	for _, dto := range dtos {
-		minimalAnime[dto.SeriesId] = anime.ReformMinimalAnime(dto)
+		reformedMinimalAnime := anime.ReformMinimalAnime(dto)
+		minimalAnime[reformedMinimalAnime.SeriesId()] = reformedMinimalAnime
 	}
 
 	return minimalAnime, nil
 }
 
-func (translator AnimeTranslator) GetAllByAnimeIds(animeIds []anime.AnimeId) ([]anime.Anime, error) {
+func (translator AnimeTranslator) GetAllByAnimeIds(animeIds []anime.AnimeId) (map[core.SeriesId]anime.Anime, error) {
 	ids := make([]int, len(animeIds))
 	for i, animeId := range animeIds {
 		ids[i] = animeId.Int()
@@ -52,12 +54,14 @@ func (translator AnimeTranslator) GetAllByAnimeIds(animeIds []anime.AnimeId) ([]
 		return nil, err
 	}
 
-	anime := make([]anime.Anime, len(dtos))
-	for i, dto := range dtos {
-		anime[i], err = translator.animeFactory.Reform(dto)
+	anime := make(map[core.SeriesId]anime.Anime, len(dtos))
+	for _, dto := range dtos {
+		reformedAnime, err := translator.animeFactory.Reform(dto)
 		if err != nil {
 			return nil, err
 		}
+
+		anime[reformedAnime.SeriesId()] = reformedAnime
 	}
 
 	return anime, nil

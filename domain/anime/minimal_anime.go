@@ -1,6 +1,9 @@
 package anime
 
-import "time"
+import (
+	"schoperation/crunchyrollanimestatus/domain/core"
+	"time"
+)
 
 type MinimalAnimeDto struct {
 	AnimeId     int
@@ -10,14 +13,14 @@ type MinimalAnimeDto struct {
 
 type MinimalAnime struct {
 	animeId     AnimeId
-	seriesId    string
+	seriesId    core.SeriesId
 	lastUpdated time.Time
 }
 
 func ReformMinimalAnime(dto MinimalAnimeDto) MinimalAnime {
 	return MinimalAnime{
 		animeId:     ReformAnimeId(dto.AnimeId),
-		seriesId:    dto.SeriesId,
+		seriesId:    core.ReformSeriesId(dto.SeriesId),
 		lastUpdated: dto.LastUpdated,
 	}
 }
@@ -26,7 +29,7 @@ func (anime MinimalAnime) AnimeId() AnimeId {
 	return anime.animeId
 }
 
-func (anime MinimalAnime) SeriesId() string {
+func (anime MinimalAnime) SeriesId() core.SeriesId {
 	return anime.seriesId
 }
 

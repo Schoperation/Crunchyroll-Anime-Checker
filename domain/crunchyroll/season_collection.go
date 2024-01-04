@@ -5,22 +5,18 @@ import (
 	"fmt"
 	"schoperation/crunchyrollanimestatus/domain/core"
 	"slices"
-	"strings"
 )
 
 // SeasonCollection is a collection of seasons for a Crunchyroll anime.
 // This is primarily used to determine the latest season for a particular locale, and
-// to help filter out scrupulous seasons (e.g. OVAs)
+// to help filter out scrupulous seasons (e.g. OVA seasons with one episode)
+// It is sorted in descending order automatically for easier iteration.
 type SeasonCollection struct {
-	seriesId string
+	seriesId core.SeriesId
 	seasons  []Season
 }
 
-func NewSeasonCollection(seriesId string, seasons []Season) (SeasonCollection, error) {
-	if strings.Trim(seriesId, " ") == "" {
-		return SeasonCollection{}, fmt.Errorf("series id must not be blank")
-	}
-
+func NewSeasonCollection(seriesId core.SeriesId, seasons []Season) (SeasonCollection, error) {
 	if len(seasons) == 0 {
 		return SeasonCollection{}, fmt.Errorf("anime must have seasons; series ID %s", seriesId)
 	}
