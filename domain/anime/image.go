@@ -14,6 +14,9 @@ type ImageDto struct {
 	EpisodeNumber int
 	Url           string
 	Encoded       string
+
+	// Used in testing. Ignore otherwise.
+	IsDirty bool
 }
 
 type Image struct {
@@ -72,27 +75,27 @@ func ReformImage(dto ImageDto) Image {
 		episodeNumber: dto.EpisodeNumber,
 		url:           dto.Url,
 		encoded:       dto.Encoded,
-		isDirty:       false,
+		isDirty:       dto.IsDirty,
 	}
 }
 
-func (image Image) AnimeId() AnimeId {
+func (image *Image) AnimeId() AnimeId {
 	return image.animeId
 }
 
-func (image Image) ImageType() core.ImageType {
+func (image *Image) ImageType() core.ImageType {
 	return image.imageType
 }
 
-func (image Image) Url() string {
+func (image *Image) Url() string {
 	return image.url
 }
 
-func (image Image) Encoded() string {
+func (image *Image) Encoded() string {
 	return image.encoded
 }
 
-func (image Image) IsDirty() bool {
+func (image *Image) IsDirty() bool {
 	return image.isDirty
 }
 

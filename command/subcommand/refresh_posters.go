@@ -38,10 +38,11 @@ func (subcmd RefreshPostersSubCommand) Run(input RefreshPostersSubCommandInput) 
 	for _, crAnime := range input.UpdatedCrAnime {
 		localAnime, exists := input.LocalAnime[crAnime.SeriesId()]
 		if !exists {
-			return RefreshPostersSubCommandOutput{}, fmt.Errorf("couldn't match crunchyroll anime with saved anime: series ID %s", localAnime.SeriesId())
+			return RefreshPostersSubCommandOutput{}, fmt.Errorf("no local anime with series ID %s", crAnime.SeriesId())
 		}
 
-		for _, poster := range localAnime.Posters() {
+		newPosters := make([]anime.Image, anime.NumPostersPerAnime)
+		for i, poster := range localAnime.Posters() {
 			posterUrl := ""
 			switch poster.ImageType() {
 			case core.ImageTypePosterTall:
@@ -53,6 +54,7 @@ func (subcmd RefreshPostersSubCommand) Run(input RefreshPostersSubCommandInput) 
 			}
 
 			if poster.Url() == posterUrl {
+				newPosters[i] = poster
 				continue
 			}
 
@@ -65,8 +67,11 @@ func (subcmd RefreshPostersSubCommand) Run(input RefreshPostersSubCommandInput) 
 			if err != nil {
 				return RefreshPostersSubCommandOutput{}, err
 			}
+
+			newPosters[i] = poster
 		}
 
+		localAnime.UpdatePosters(newPosters)
 		input.LocalAnime[crAnime.SeriesId()] = localAnime
 	}
 

@@ -7,12 +7,17 @@ import (
 	"time"
 )
 
+const NumPostersPerAnime = 2
+
 type AnimeDto struct {
 	AnimeId     int
 	SeriesId    string
 	SlugTitle   string
 	Title       string
 	LastUpdated time.Time
+
+	// Used in testing. Ignore otherwise.
+	IsDirty bool
 }
 
 // Anime is what we're all here for!
@@ -46,27 +51,9 @@ func NewAnime(
 		return Anime{}, fmt.Errorf("anime title cannot be blank")
 	}
 
-	if len(posters) != 2 {
-		return Anime{}, fmt.Errorf("anime must have 2 posters")
-	}
-
-	hasPosterTall := false
-	hasPosterWide := false
-	for _, poster := range posters {
-		switch poster.ImageType() {
-		case core.ImageTypePosterTall:
-			hasPosterTall = true
-		case core.ImageTypePosterWide:
-			hasPosterWide = true
-		}
-	}
-
-	if !hasPosterTall {
-		return Anime{}, fmt.Errorf("anime must have a tall poster")
-	}
-
-	if !hasPosterWide {
-		return Anime{}, fmt.Errorf("anime must have a wide poster")
+	err = validateAnimePosters(posters)
+	if err != nil {
+		return Anime{}, err
 	}
 
 	return Anime{
@@ -95,20 +82,28 @@ func ReformAnime(
 		lastUpdated: dto.LastUpdated,
 		posters:     posters,
 		episodes:    episodes,
-		isDirty:     false,
+		isDirty:     dto.IsDirty,
 		isNew:       false,
 	}
 }
 
-func (anime Anime) SeriesId() core.SeriesId {
+func (anime *Anime) SeriesId() core.SeriesId {
 	return anime.seriesId
 }
 
-func (anime Anime) Posters() []Image {
+func (anime *Anime) Posters() []Image {
 	return anime.posters
 }
 
-func (anime Anime) Dto() AnimeDto {
+func (anime *Anime) Episodes() *EpisodeCollection {
+	return &anime.episodes
+}
+
+func (anime *Anime) IsDirty() bool {
+	return anime.isDirty
+}
+
+func (anime *Anime) Dto() AnimeDto {
 	return AnimeDto{
 		AnimeId:     anime.animeId.Int(),
 		SeriesId:    anime.seriesId.String(),
@@ -116,4 +111,42 @@ func (anime Anime) Dto() AnimeDto {
 		Title:       anime.title,
 		LastUpdated: anime.lastUpdated,
 	}
+}
+
+func (anime *Anime) UpdatePosters(newPosters []Image) error {
+	err := validateAnimePosters(newPosters)
+	if err != nil {
+		return err
+	}
+
+	anime.posters = newPosters
+	anime.isDirty = true
+	return nil
+}
+
+func validateAnimePosters(posters []Image) error {
+	if len(posters) != NumPostersPerAnime {
+		return fmt.Errorf("anime must have %d posters", NumPostersPerAnime)
+	}
+
+	hasPosterTall := false
+	hasPosterWide := false
+	for _, poster := range posters {
+		switch poster.ImageType() {
+		case core.ImageTypePosterTall:
+			hasPosterTall = true
+		case core.ImageTypePosterWide:
+			hasPosterWide = true
+		}
+	}
+
+	if !hasPosterTall {
+		return fmt.Errorf("anime must have a tall poster")
+	}
+
+	if !hasPosterWide {
+		return fmt.Errorf("anime must have a wide poster")
+	}
+
+	return nil
 }
