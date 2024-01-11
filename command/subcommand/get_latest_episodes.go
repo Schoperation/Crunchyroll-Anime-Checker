@@ -42,13 +42,35 @@ func NewGetLatestEpisodesSubCommand(
 
 func (subcmd GetLatestEpisodesSubCommand) Run(input GetLatestEpisodesSubCommandInput) (GetLatestEpisodesSubCommandOutput, error) {
 	for _, crAnime := range input.UpdatedCrAnime {
-		localeAnime, exists := input.LocalAnime[crAnime.SeriesId()]
+		localAnime, exists := input.LocalAnime[crAnime.SeriesId()]
 		if !exists {
 			return GetLatestEpisodesSubCommandOutput{}, fmt.Errorf("no local anime with series ID %s", crAnime.SeriesId())
 		}
 
+		crSeasons, err := subcmd.getAllSeasonsTranslator.GetAllSeasonsBySeriesId(crAnime.SeriesId().String())
+		if err != nil {
+			return GetLatestEpisodesSubCommandOutput{}, err
+		}
+
 		for _, locale := range input.Locales {
-			_ = localeAnime.Episodes().GetLatestEpisodesForLocale(locale)
+			savedLatestEpisodes := localAnime.Episodes().GetLatestEpisodesForLocale(locale)
+
+			latestSubSeason, exists := crSeasons.LatestSub(locale)
+			if exists {
+				crEpisodes, err := subcmd.getAllEpisodesTranslator.GetAllEpisodesBySeasonId(locale, latestSubSeason.Id())
+				if err != nil {
+					return GetLatestEpisodesSubCommandOutput{}, err
+				}
+
+				latestCrSub, exists := crEpisodes.LatestSub(locale)
+				if !exists {
+					return GetLatestEpisodesSubCommandOutput{}, fmt.Errorf("could not find latest episode in season that should have sub")
+				}
+
+				latestSavedSub := savedLatestEpisodes.LatestSub()
+				localAnime.Episodes().AddDubForLocale()
+			}
+
 		}
 	}
 

@@ -120,21 +120,17 @@ func (client *CrunchyrollClient) Login() error {
 
 func (client *CrunchyrollClient) GetAllAnime(locale string) ([]crunchyroll.AnimeDto, error) {
 	var allAnime allAnimeResponse
-	if cachedAllAnime, ok := client.cache.GetAllAnimeResponse(); ok {
-		allAnime = cachedAllAnime
-	} else {
-		err := client.get("content/v2/discover/browse", &allAnime, map[string]string{
-			"start":                    "0",
-			"n":                        "2000",
-			"type":                     "series",
-			"sort_by":                  "alphabetical",
-			"ratings":                  "true",
-			"locale":                   locale,
-			"preferred_audio_language": locale,
-		})
-		if err != nil {
-			return nil, err
-		}
+	err := client.get("content/v2/discover/browse", &allAnime, map[string]string{
+		"start":                    "0",
+		"n":                        "2000",
+		"type":                     "series",
+		"sort_by":                  "alphabetical",
+		"ratings":                  "true",
+		"locale":                   locale,
+		"preferred_audio_language": locale,
+	})
+	if err != nil {
+		return nil, err
 	}
 
 	dtos := make([]crunchyroll.AnimeDto, len(allAnime.Data))
@@ -178,7 +174,6 @@ func (client *CrunchyrollClient) GetAllAnime(locale string) ([]crunchyroll.Anime
 		}
 	}
 
-	client.cache.SaveAllAnimeResponse(allAnime)
 	return dtos, nil
 }
 
@@ -218,11 +213,15 @@ func (client *CrunchyrollClient) GetAllSeasonsBySeriesId(seriesId string) ([]cru
 
 func (client *CrunchyrollClient) GetAllEpisodesBySeasonId(locale, seasonId string) ([]crunchyroll.EpisodeDto, error) {
 	var episodesResponse episodesResponse
-	err := client.get(fmt.Sprintf("content/v2/cms/seasons/%s/episodes", seasonId), &episodesResponse, map[string]string{
-		"locale": locale,
-	})
-	if err != nil {
-		return nil, err
+	if cachedResponse, ok := client.cache.GetEpisodesResponse(seasonId); ok {
+		episodesResponse = cachedResponse
+	} else {
+		err := client.get(fmt.Sprintf("content/v2/cms/seasons/%s/episodes", seasonId), &episodesResponse, map[string]string{
+			"locale": locale,
+		})
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	episodes := make([]crunchyroll.EpisodeDto, len(episodesResponse.Data))
@@ -258,6 +257,7 @@ func (client *CrunchyrollClient) GetAllEpisodesBySeasonId(locale, seasonId strin
 		}
 	}
 
+	client.cache.SaveEpisodesResponse(seasonId, episodesResponse)
 	return episodes, nil
 }
 

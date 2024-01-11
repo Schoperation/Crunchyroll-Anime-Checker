@@ -115,6 +115,8 @@ func (epcol *EpisodeCollection) AddSubForLocale(locale core.Locale, sub MinimalE
 		return err
 	}
 
+	// TODO delete old latest dub if applicable
+
 	return nil
 }
 
@@ -128,6 +130,8 @@ func (epcol *EpisodeCollection) AddDubForLocale(locale core.Locale, dub MinimalE
 	if err != nil {
 		return err
 	}
+
+	// TODO delete old latest dub if applicable
 
 	return nil
 }

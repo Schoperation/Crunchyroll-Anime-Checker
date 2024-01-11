@@ -69,3 +69,11 @@ func ReformLatestEpisodes(dto LatestEpisodesDto) LatestEpisodes {
 func (le LatestEpisodes) Locale() core.Locale {
 	return le.locale
 }
+
+func (le LatestEpisodes) LatestSub() MinimalEpisode {
+	return le.latestSub
+}
+
+func (le LatestEpisodes) LatestDub() MinimalEpisode {
+	return le.latestDub
+}

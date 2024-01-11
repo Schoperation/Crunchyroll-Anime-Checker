@@ -54,6 +54,10 @@ func ReformSeason(dto SeasonDto) Season {
 	}
 }
 
+func (season Season) Id() string {
+	return season.id
+}
+
 func (season Season) SequenceNumber() int {
 	return season.sequenceNumber
 }
