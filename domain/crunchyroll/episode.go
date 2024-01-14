@@ -4,6 +4,8 @@ import "schoperation/crunchyrollanimestatus/domain/core"
 
 type EpisodeDto struct {
 	Number          int
+	Season          int
+	Title           string
 	SeasonId        string
 	SubtitleLocales []string
 	Dubs            []DubDto
@@ -12,6 +14,8 @@ type EpisodeDto struct {
 
 type Episode struct {
 	number          int
+	season          int
+	title           string
 	seasonId        string
 	subtitleLocales map[core.Locale]bool
 	dubs            map[core.Locale]Dub
@@ -39,20 +43,21 @@ func ReformEpisode(dto EpisodeDto) Episode {
 		dubs[dub.Locale()] = dub
 	}
 
-	smallestThumbanil := ImageDto{}
+	smallestThumbnail := ImageDto{}
 	for _, thumbnail := range dto.Thumbnails {
 		if thumbnail.Width == 320 && thumbnail.Height == 180 {
-			smallestThumbanil = thumbnail
+			smallestThumbnail = thumbnail
 			break
 		}
 	}
 
 	return Episode{
 		number:          dto.Number,
+		title:           dto.Title,
 		seasonId:        dto.SeasonId,
 		subtitleLocales: subtitleLocales,
 		dubs:            dubs,
-		thumbnail:       ReformImage(smallestThumbanil),
+		thumbnail:       ReformImage(smallestThumbnail),
 	}
 }
 
@@ -60,12 +65,24 @@ func (episode Episode) Number() int {
 	return episode.number
 }
 
-func (episode Episode) HasSubForLocale(locale core.Locale) bool {
+func (episode Episode) Season() int {
+	return episode.season
+}
+
+func (episode Episode) Title() string {
+	return episode.title
+}
+
+func (episode Episode) Thumbnail() Image {
+	return episode.thumbnail
+}
+
+func (episode Episode) hasSubForLocale(locale core.Locale) bool {
 	_, ok := episode.subtitleLocales[locale]
 	return ok
 }
 
-func (episode Episode) HasDubForLocale(locale core.Locale) bool {
+func (episode Episode) hasDubForLocale(locale core.Locale) bool {
 	_, ok := episode.dubs[locale]
 	return ok
 }

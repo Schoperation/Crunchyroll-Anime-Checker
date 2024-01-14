@@ -66,12 +66,12 @@ func (season Season) Keywords() []string {
 	return season.keywords
 }
 
-func (season Season) HasSubForLocale(locale core.Locale) bool {
+func (season Season) hasSubForLocale(locale core.Locale) bool {
 	_, ok := season.subtitleLocales[locale]
 	return ok
 }
 
-func (season Season) HasDubForLocale(locale core.Locale) bool {
+func (season Season) hasDubForLocale(locale core.Locale) bool {
 	_, ok := season.dubs[locale]
 	return ok
 }

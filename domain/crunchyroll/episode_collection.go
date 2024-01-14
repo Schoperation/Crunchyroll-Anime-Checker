@@ -36,7 +36,7 @@ func NewEpisodeCollection(seasonId string, episodes []Episode) (EpisodeCollectio
 
 func (col EpisodeCollection) LatestSub(locale core.Locale) (Episode, bool) {
 	for i := len(col.episodes) - 1; i >= 0; i-- {
-		if col.episodes[i].HasSubForLocale(locale) {
+		if col.episodes[i].hasSubForLocale(locale) {
 			return col.episodes[i], true
 		}
 	}
@@ -46,7 +46,7 @@ func (col EpisodeCollection) LatestSub(locale core.Locale) (Episode, bool) {
 
 func (col EpisodeCollection) LatestDub(locale core.Locale) (Episode, bool) {
 	for i := len(col.episodes) - 1; i >= 0; i-- {
-		if col.episodes[i].HasDubForLocale(locale) {
+		if col.episodes[i].hasDubForLocale(locale) {
 			return col.episodes[i], true
 		}
 	}

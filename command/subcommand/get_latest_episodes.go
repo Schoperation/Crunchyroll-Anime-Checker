@@ -68,7 +68,7 @@ func (subcmd GetLatestEpisodesSubCommand) Run(input GetLatestEpisodesSubCommandI
 				}
 
 				latestSavedSub := savedLatestEpisodes.LatestSub()
-				localAnime.Episodes().AddDubForLocale()
+				fmt.Print(latestCrSub, latestSavedSub)
 			}
 
 		}

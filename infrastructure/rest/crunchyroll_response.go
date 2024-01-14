@@ -70,6 +70,7 @@ type episodesResponse struct {
 
 type episode struct {
 	Number          int           `json:"episode_number"`
+	SeasonNumber    int           `json:"season_number"`
 	Title           string        `json:"title"`
 	SubtitleLocales []string      `json:"subtitle_locales"`
 	Versions        []version     `json:"versions"`

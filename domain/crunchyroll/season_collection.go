@@ -37,7 +37,7 @@ func (col SeasonCollection) LatestSub(locale core.Locale) (Season, bool) {
 			continue
 		}
 
-		if col.seasons[i].HasSubForLocale(locale) {
+		if col.seasons[i].hasSubForLocale(locale) {
 			return col.seasons[i], true
 		}
 	}
@@ -51,7 +51,7 @@ func (col SeasonCollection) LatestDub(locale core.Locale) (Season, bool) {
 			continue
 		}
 
-		if col.seasons[i].HasDubForLocale(locale) {
+		if col.seasons[i].hasDubForLocale(locale) {
 			return col.seasons[i], true
 		}
 	}
