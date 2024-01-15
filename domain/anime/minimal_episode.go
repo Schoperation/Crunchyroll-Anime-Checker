@@ -48,3 +48,7 @@ func (ep MinimalEpisode) Title() string {
 func (ep MinimalEpisode) IsBlank() bool {
 	return ep.season == 0 && ep.number == 0
 }
+
+func (ep MinimalEpisode) Key() string {
+	return fmt.Sprintf("%d-%d", ep.Season(), ep.Number())
+}

@@ -66,6 +66,10 @@ func ReformLatestEpisodes(dto LatestEpisodesDto) LatestEpisodes {
 	}
 }
 
+func (le LatestEpisodes) AnimeId() AnimeId {
+	return le.animeId
+}
+
 func (le LatestEpisodes) Locale() core.Locale {
 	return le.locale
 }

@@ -23,24 +23,24 @@ func NewEpisodeCollection(latestEpisodes []LatestEpisodes, thumbnails map[string
 	}
 
 	for _, latestEpsForLocale := range latestEpisodes {
-		episodeCollection.animeId = latestEpsForLocale.animeId
+		episodeCollection.animeId = latestEpsForLocale.AnimeId()
 
-		thumbnail, exists := thumbnails[fmt.Sprintf("%d-%d", latestEpsForLocale.latestSub.Season(), latestEpsForLocale.latestSub.Number())]
+		thumbnail, exists := thumbnails[latestEpsForLocale.LatestSub().Key()]
 		if !exists {
-			return EpisodeCollection{}, fmt.Errorf("epcol: no thumbnail found for sub: S%dE%d", latestEpsForLocale.latestSub.Season(), latestEpsForLocale.latestSub.Number())
+			return EpisodeCollection{}, fmt.Errorf("epcol: no thumbnail found for sub: %s", latestEpsForLocale.LatestSub().Key())
 		}
 
-		err := episodeCollection.AddSubForLocale(latestEpsForLocale.Locale(), latestEpsForLocale.latestSub, thumbnail)
+		err := episodeCollection.AddSubForLocale(latestEpsForLocale.Locale(), latestEpsForLocale.LatestSub(), thumbnail)
 		if err != nil {
 			return EpisodeCollection{}, nil
 		}
 
-		thumbnail, exists = thumbnails[fmt.Sprintf("%d-%d", latestEpsForLocale.latestDub.Season(), latestEpsForLocale.latestDub.Number())]
+		thumbnail, exists = thumbnails[latestEpsForLocale.LatestDub().Key()]
 		if !exists {
-			return EpisodeCollection{}, fmt.Errorf("epcol: no thumbnail found for dub: S%dE%d", latestEpsForLocale.latestDub.Season(), latestEpsForLocale.latestDub.Number())
+			return EpisodeCollection{}, fmt.Errorf("epcol: no thumbnail found for dub: %s", latestEpsForLocale.LatestDub().Key())
 		}
 
-		err = episodeCollection.AddDubForLocale(latestEpsForLocale.Locale(), latestEpsForLocale.latestDub, thumbnail)
+		err = episodeCollection.AddDubForLocale(latestEpsForLocale.Locale(), latestEpsForLocale.LatestDub(), thumbnail)
 		if err != nil {
 			return EpisodeCollection{}, nil
 		}
@@ -57,13 +57,13 @@ func ReformEpisodeCollection(latestEpisodes []LatestEpisodes, thumbnails map[str
 	}
 
 	for _, latestEpsForLocale := range latestEpisodes {
-		episodeCollection.animeId = latestEpsForLocale.animeId
+		episodeCollection.animeId = latestEpsForLocale.AnimeId()
 
-		thumbnail := thumbnails[fmt.Sprintf("%d-%d", latestEpsForLocale.latestSub.Season(), latestEpsForLocale.latestSub.Number())]
-		_ = episodeCollection.AddSubForLocale(latestEpsForLocale.Locale(), latestEpsForLocale.latestSub, thumbnail)
+		thumbnail := thumbnails[latestEpsForLocale.LatestSub().Key()]
+		_ = episodeCollection.AddSubForLocale(latestEpsForLocale.Locale(), latestEpsForLocale.LatestSub(), thumbnail)
 
-		thumbnail = thumbnails[fmt.Sprintf("%d-%d", latestEpsForLocale.latestDub.Season(), latestEpsForLocale.latestDub.Number())]
-		_ = episodeCollection.AddDubForLocale(latestEpsForLocale.Locale(), latestEpsForLocale.latestDub, thumbnail)
+		thumbnail = thumbnails[latestEpsForLocale.LatestDub().Key()]
+		_ = episodeCollection.AddDubForLocale(latestEpsForLocale.Locale(), latestEpsForLocale.LatestDub(), thumbnail)
 	}
 
 	return episodeCollection
@@ -109,13 +109,11 @@ func (epcol *EpisodeCollection) AddSubForLocale(locale core.Locale, sub MinimalE
 		return nil
 	}
 
-	epcol.latestSubs[locale] = fmt.Sprintf("%d-%d", sub.Season(), sub.Number())
+	epcol.latestSubs[locale] = sub.Key()
 	err := epcol.addEpisode(locale, sub, thumbnail)
 	if err != nil {
 		return err
 	}
-
-	// TODO delete old latest dub if applicable
 
 	return nil
 }
@@ -125,20 +123,17 @@ func (epcol *EpisodeCollection) AddDubForLocale(locale core.Locale, dub MinimalE
 		return nil
 	}
 
-	epcol.latestDubs[locale] = fmt.Sprintf("%d-%d", dub.Season(), dub.Number())
+	epcol.latestDubs[locale] = dub.Key()
 	err := epcol.addEpisode(locale, dub, thumbnail)
 	if err != nil {
 		return err
 	}
 
-	// TODO delete old latest dub if applicable
-
 	return nil
 }
 
 func (epcol *EpisodeCollection) addEpisode(locale core.Locale, episode MinimalEpisode, thumbnail Image) error {
-	key := fmt.Sprintf("%d-%d", episode.Season(), episode.Number())
-	if ep, exists := epcol.episodes[key]; exists {
+	if ep, exists := epcol.episodes[episode.Key()]; exists {
 		ep.AddTitle(TitleDto{
 			LocaleId: locale.Id(),
 			Title:    episode.Title(),
@@ -147,7 +142,7 @@ func (epcol *EpisodeCollection) addEpisode(locale core.Locale, episode MinimalEp
 	}
 
 	var err error
-	epcol.episodes[key], err = newEpisode(NewEpisodeArgs{
+	epcol.episodes[episode.Key()], err = newEpisode(NewEpisodeArgs{
 		Number:       episode.Number(),
 		SeasonNumber: episode.Season(),
 		Thumbnail:    thumbnail,
@@ -163,4 +158,22 @@ func (epcol *EpisodeCollection) addEpisode(locale core.Locale, episode MinimalEp
 	}
 
 	return nil
+}
+
+// cleanEpisodes Removes any unused episodes in the collection.
+func (epcol *EpisodeCollection) CleanEpisodes() {
+	usedKeys := make(map[string]bool, len(epcol.latestSubs)+len(epcol.latestDubs))
+	for _, key := range epcol.latestSubs {
+		usedKeys[key] = true
+	}
+
+	for _, key := range epcol.latestDubs {
+		usedKeys[key] = true
+	}
+
+	for epKey := range epcol.episodes {
+		if _, exists := usedKeys[epKey]; !exists {
+			delete(epcol.episodes, epKey)
+		}
+	}
 }

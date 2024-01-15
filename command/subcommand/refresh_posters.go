@@ -35,10 +35,10 @@ func NewRefreshPostersSubCommand(
 }
 
 func (subcmd RefreshPostersSubCommand) Run(input RefreshPostersSubCommandInput) (RefreshPostersSubCommandOutput, error) {
-	for _, crAnime := range input.UpdatedCrAnime {
-		localAnime, exists := input.LocalAnime[crAnime.SeriesId()]
+	for _, updatedCrAnime := range input.UpdatedCrAnime {
+		localAnime, exists := input.LocalAnime[updatedCrAnime.SeriesId()]
 		if !exists {
-			return RefreshPostersSubCommandOutput{}, fmt.Errorf("no local anime with series ID %s", crAnime.SeriesId())
+			return RefreshPostersSubCommandOutput{}, fmt.Errorf("no local anime with series ID %s", updatedCrAnime.SeriesId())
 		}
 
 		newPosters := make([]anime.Image, anime.NumPostersPerAnime)
@@ -46,11 +46,11 @@ func (subcmd RefreshPostersSubCommand) Run(input RefreshPostersSubCommandInput) 
 			posterUrl := ""
 			switch poster.ImageType() {
 			case core.ImageTypePosterTall:
-				posterUrl = crAnime.TallPoster().Source()
+				posterUrl = updatedCrAnime.TallPoster().Source()
 			case core.ImageTypePosterWide:
-				posterUrl = crAnime.WidePoster().Source()
+				posterUrl = updatedCrAnime.WidePoster().Source()
 			default:
-				posterUrl = crAnime.TallPoster().Source()
+				posterUrl = updatedCrAnime.TallPoster().Source()
 			}
 
 			if poster.Url() == posterUrl {
@@ -72,7 +72,7 @@ func (subcmd RefreshPostersSubCommand) Run(input RefreshPostersSubCommandInput) 
 		}
 
 		localAnime.UpdatePosters(newPosters)
-		input.LocalAnime[crAnime.SeriesId()] = localAnime
+		input.LocalAnime[updatedCrAnime.SeriesId()] = localAnime
 	}
 
 	newPosters := make(map[core.SeriesId][]anime.Image, len(input.NewCrAnime))

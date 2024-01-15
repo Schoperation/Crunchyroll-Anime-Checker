@@ -87,6 +87,10 @@ func ReformAnime(
 	}
 }
 
+func (anime *Anime) AnimeId() AnimeId {
+	return anime.animeId
+}
+
 func (anime *Anime) SeriesId() core.SeriesId {
 	return anime.seriesId
 }
