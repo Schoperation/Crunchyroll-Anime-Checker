@@ -65,13 +65,16 @@ func main() {
 	imageTranslator := core_translator.NewImageTranslator(imageClient)
 
 	crunchyrollAnimeTranslator := crunchyroll_translator.NewAnimeTranslator(&crunchyrollClient)
+	crunchyrollSeasonTranslator := crunchyroll_translator.NewSeasonTranslator(&crunchyrollClient)
+	crunchyrollEpisodeTranslator := crunchyroll_translator.NewEpisodeTranslator(&crunchyrollClient)
 
 	animeFactory := factory.NewAnimeFactory(posterTranslator, latestEpisodesTranslator, thumbnailTranslator)
 	animeTranslator := anime_translator.NewAnimeTranslator(animeDao, animeFactory)
 
 	refreshPostersSubCommand := subcommand.NewRefreshPostersSubCommand(imageTranslator)
+	getLatestEpisodesSubCommand := subcommand.NewGetLatestEpisodesSubCommand(crunchyrollSeasonTranslator, crunchyrollEpisodeTranslator, imageTranslator)
 
-	refreshAnimeCommand := command.NewRefreshAnimeCommand(crunchyrollAnimeTranslator, animeTranslator, refreshPostersSubCommand)
+	refreshAnimeCommand := command.NewRefreshAnimeCommand(crunchyrollAnimeTranslator, animeTranslator, refreshPostersSubCommand, getLatestEpisodesSubCommand)
 
 	output, err := refreshAnimeCommand.Run(command.RefreshAnimeCommandInput{})
 	if err != nil {

@@ -36,6 +36,11 @@ func (cache *crunchyrollCache) SaveEpisodesResponse(seasonId string, resp episod
 		cache.oldestOrder++
 	}
 
+	_, exists := cache.episodeResponses[seasonId]
+	if exists {
+		return
+	}
+
 	cache.episodeResponses[seasonId] = resp
 	cache.episodeResponsesOrder[cache.newestOrder+1] = seasonId
 	cache.newestOrder++

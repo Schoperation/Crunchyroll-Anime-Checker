@@ -15,16 +15,15 @@ type EpisodeCollection struct {
 	episodes   map[string]Episode
 }
 
-func NewEpisodeCollection(latestEpisodes []LatestEpisodes, thumbnails map[string]Image) (EpisodeCollection, error) {
+func NewEpisodeCollection(animeId AnimeId, latestEpisodes []LatestEpisodes, thumbnails map[string]Image) (EpisodeCollection, error) {
 	episodeCollection := EpisodeCollection{
+		animeId:    animeId,
 		latestSubs: map[core.Locale]string{},
 		latestDubs: map[core.Locale]string{},
 		episodes:   map[string]Episode{},
 	}
 
 	for _, latestEpsForLocale := range latestEpisodes {
-		episodeCollection.animeId = latestEpsForLocale.AnimeId()
-
 		thumbnail, exists := thumbnails[latestEpsForLocale.LatestSub().Key()]
 		if !exists {
 			return EpisodeCollection{}, fmt.Errorf("epcol: no thumbnail found for sub: %s", latestEpsForLocale.LatestSub().Key())
@@ -49,16 +48,15 @@ func NewEpisodeCollection(latestEpisodes []LatestEpisodes, thumbnails map[string
 	return episodeCollection, nil
 }
 
-func ReformEpisodeCollection(latestEpisodes []LatestEpisodes, thumbnails map[string]Image) EpisodeCollection {
+func ReformEpisodeCollection(animeId AnimeId, latestEpisodes []LatestEpisodes, thumbnails map[string]Image) EpisodeCollection {
 	episodeCollection := EpisodeCollection{
+		animeId:    animeId,
 		latestSubs: map[core.Locale]string{},
 		latestDubs: map[core.Locale]string{},
 		episodes:   map[string]Episode{},
 	}
 
 	for _, latestEpsForLocale := range latestEpisodes {
-		episodeCollection.animeId = latestEpsForLocale.AnimeId()
-
 		thumbnail := thumbnails[latestEpsForLocale.LatestSub().Key()]
 		_ = episodeCollection.AddSubForLocale(latestEpsForLocale.Locale(), latestEpsForLocale.LatestSub(), thumbnail)
 

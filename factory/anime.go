@@ -34,10 +34,6 @@ func NewAnimeFactory(
 	}
 }
 
-func (factory AnimeFactory) Create(dto anime.AnimeDto) (anime.Anime, error) {
-	return anime.Anime{}, nil
-}
-
 func (factory AnimeFactory) Reform(dto anime.AnimeDto) (anime.Anime, error) {
 	animeId := anime.ReformAnimeId(dto.AnimeId)
 
@@ -56,7 +52,7 @@ func (factory AnimeFactory) Reform(dto anime.AnimeDto) (anime.Anime, error) {
 		return anime.Anime{}, err
 	}
 
-	episodes := anime.ReformEpisodeCollection(latestEpisodes, thumbnails)
+	episodes := anime.ReformEpisodeCollection(animeId, latestEpisodes, thumbnails)
 
 	return anime.ReformAnime(dto, posters, episodes), nil
 }

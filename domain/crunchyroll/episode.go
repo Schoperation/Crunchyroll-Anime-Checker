@@ -54,6 +54,7 @@ func ReformEpisode(dto EpisodeDto) Episode {
 	return Episode{
 		number:          dto.Number,
 		title:           dto.Title,
+		season:          dto.Season,
 		seasonId:        dto.SeasonId,
 		subtitleLocales: subtitleLocales,
 		dubs:            dubs,

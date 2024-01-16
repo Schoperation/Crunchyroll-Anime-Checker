@@ -29,21 +29,28 @@ type refreshPostersSubCommand interface {
 	Run(input subcommand.RefreshPostersSubCommandInput) (subcommand.RefreshPostersSubCommandOutput, error)
 }
 
+type getLatestEpisodesSubCommand interface {
+	Run(input subcommand.GetLatestEpisodesSubCommandInput) (subcommand.GetLatestEpisodesSubCommandOutput, error)
+}
+
 type RefreshAnimeCommand struct {
-	crunchyrollAnimeTranslator crunchyrollAnimeTranslator
-	localAnimeTranslator       localAnimeTranslator
-	refreshPostersSubCommand   refreshPostersSubCommand
+	crunchyrollAnimeTranslator  crunchyrollAnimeTranslator
+	localAnimeTranslator        localAnimeTranslator
+	refreshPostersSubCommand    refreshPostersSubCommand
+	getLatestEpisodesSubCommand getLatestEpisodesSubCommand
 }
 
 func NewRefreshAnimeCommand(
 	crunchyrollAnimeTranslator crunchyrollAnimeTranslator,
 	localAnimeTranslator localAnimeTranslator,
 	refreshPostersSubCommand refreshPostersSubCommand,
+	getLatestEpisodesSubCommand getLatestEpisodesSubCommand,
 ) RefreshAnimeCommand {
 	return RefreshAnimeCommand{
-		crunchyrollAnimeTranslator: crunchyrollAnimeTranslator,
-		localAnimeTranslator:       localAnimeTranslator,
-		refreshPostersSubCommand:   refreshPostersSubCommand,
+		crunchyrollAnimeTranslator:  crunchyrollAnimeTranslator,
+		localAnimeTranslator:        localAnimeTranslator,
+		refreshPostersSubCommand:    refreshPostersSubCommand,
+		getLatestEpisodesSubCommand: getLatestEpisodesSubCommand,
 	}
 }
 
@@ -78,21 +85,37 @@ func (cmd RefreshAnimeCommand) Run(input RefreshAnimeCommandInput) (RefreshAnime
 		return RefreshAnimeCommandOutput{}, nil
 	}
 
-	animeToBeUpdated, err := cmd.localAnimeTranslator.GetAllByAnimeIds(animeIds)
+	fmt.Printf("%d new anime to add, %d anime to update...\n", len(newCrAnimes), len(updatedCrAnimes))
+
+	localAnimeToBeUpdated, err := cmd.localAnimeTranslator.GetAllByAnimeIds(animeIds)
 	if err != nil {
 		return RefreshAnimeCommandOutput{}, err
 	}
 
-	posterCmdOutput, err := cmd.refreshPostersSubCommand.Run(subcommand.RefreshPostersSubCommandInput{
+	/*
+		fmt.Printf("Refreshing posters...")
+		posterCmdOutput, err := cmd.refreshPostersSubCommand.Run(subcommand.RefreshPostersSubCommandInput{
+			NewCrAnime:     newCrAnimes,
+			UpdatedCrAnime: updatedCrAnimes,
+			LocalAnime:     localAnimeToBeUpdated,
+		})
+		if err != nil {
+			return RefreshAnimeCommandOutput{}, err
+		}
+	*/
+
+	fmt.Printf("Refreshing latest episodes...")
+	latestEpisodeCmdOutput, err := cmd.getLatestEpisodesSubCommand.Run(subcommand.GetLatestEpisodesSubCommandInput{
 		NewCrAnime:     newCrAnimes,
 		UpdatedCrAnime: updatedCrAnimes,
-		LocalAnime:     animeToBeUpdated,
+		LocalAnime:     localAnimeToBeUpdated,
+		Locales:        []core.Locale{core.NewEnglishLocale()},
 	})
 	if err != nil {
 		return RefreshAnimeCommandOutput{}, err
 	}
 
-	fmt.Println(len(posterCmdOutput.NewPosters))
+	fmt.Println(len(latestEpisodeCmdOutput.NewEpisodeCollections))
 
 	return RefreshAnimeCommandOutput{
 		NewAnimeCount:     len(newCrAnimes),

@@ -14,6 +14,10 @@ func NewAnimeId(id int) (AnimeId, error) {
 	return AnimeId(id), nil
 }
 
+func NewBlankAnimeId() AnimeId {
+	return AnimeId(0)
+}
+
 func ReformAnimeId(id int) AnimeId {
 	return AnimeId(id)
 }
