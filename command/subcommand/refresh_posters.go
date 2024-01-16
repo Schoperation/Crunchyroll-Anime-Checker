@@ -77,8 +77,9 @@ func (subcmd RefreshPostersSubCommand) Run(input RefreshPostersSubCommandInput) 
 
 	newPosters := make(map[core.SeriesId][]anime.Image, len(input.NewCrAnime))
 	for _, newCrAnime := range input.NewCrAnime {
+		fmt.Printf("%s - %s\n", newCrAnime.SeriesId(), newCrAnime.SlugTitle())
+
 		posters := make([]anime.Image, 2)
-		fmt.Printf("%s\n", newCrAnime.SlugTitle())
 
 		encodedTallPoster, err := subcmd.getEncodedImageTranslator.GetEncodedImageByURL(newCrAnime.TallPoster().Source())
 		if err != nil {

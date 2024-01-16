@@ -104,7 +104,7 @@ func (cmd RefreshAnimeCommand) Run(input RefreshAnimeCommandInput) (RefreshAnime
 		}
 	*/
 
-	fmt.Printf("Refreshing latest episodes...")
+	fmt.Println("Refreshing latest episodes...")
 	latestEpisodeCmdOutput, err := cmd.getLatestEpisodesSubCommand.Run(subcommand.GetLatestEpisodesSubCommandInput{
 		NewCrAnime:     newCrAnimes,
 		UpdatedCrAnime: updatedCrAnimes,

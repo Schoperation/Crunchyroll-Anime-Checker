@@ -8,6 +8,7 @@ type SeasonDto struct {
 	SequenceNumber  int
 	Keywords        []string
 	Identifier      string
+	IsSubbed        bool
 	SubtitleLocales []string
 	Dubs            []DubDto
 }
@@ -23,6 +24,12 @@ type Season struct {
 }
 
 func ReformSeason(dto SeasonDto) Season {
+	// Sometimes CR leaves out subtitle locales (e.g. A Certain Magical Index, Arawaka Under The Bridge) even though it's subbed in English.
+	// If IsSubbed is true then we can assume there are English subtitles; likely embedded into the episodes themselves.
+	if dto.IsSubbed && len(dto.SubtitleLocales) == 0 {
+		dto.SubtitleLocales = []string{core.NewEnglishLocale().Name()}
+	}
+
 	subtitleLocales := map[core.Locale]bool{}
 	for _, sub := range dto.SubtitleLocales {
 		locale, err := core.NewLocaleFromString(sub)

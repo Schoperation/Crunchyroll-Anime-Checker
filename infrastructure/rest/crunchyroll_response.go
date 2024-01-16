@@ -51,6 +51,7 @@ type season struct {
 	Keywords             []string  `json:"keywords"`
 	AudioLocales         []string  `json:"audio_locales"`
 	SubtitleLocales      []string  `json:"subtitle_locales"`
+	IsSubbed             bool      `json:"is_subbed"`
 	Versions             []version `json:"versions"`
 }
 
@@ -72,6 +73,7 @@ type episode struct {
 	Number          int           `json:"episode_number"`
 	SeasonNumber    int           `json:"season_number"`
 	Title           string        `json:"title"`
+	IsSubbed        bool          `json:"is_subbed"`
 	SubtitleLocales []string      `json:"subtitle_locales"`
 	Versions        []version     `json:"versions"`
 	Images          episodeImages `json:"images"`

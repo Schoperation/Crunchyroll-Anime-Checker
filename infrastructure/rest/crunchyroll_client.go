@@ -205,6 +205,7 @@ func (client *CrunchyrollClient) GetAllSeasonsBySeriesId(seriesId string) ([]cru
 			SequenceNumber:  season.SeasonSequenceNumber,
 			Keywords:        season.Keywords,
 			Identifier:      season.Identifier,
+			IsSubbed:        season.IsSubbed,
 			SubtitleLocales: season.SubtitleLocales,
 			Dubs:            dubs,
 		}
@@ -255,6 +256,7 @@ func (client *CrunchyrollClient) GetAllEpisodesBySeasonId(locale, seasonId strin
 			Season:          episode.SeasonNumber,
 			Title:           episode.Title,
 			SeasonId:        seasonId,
+			IsSubbed:        episode.IsSubbed,
 			SubtitleLocales: episode.SubtitleLocales,
 			Dubs:            dubs,
 			Thumbnails:      thumbnails,

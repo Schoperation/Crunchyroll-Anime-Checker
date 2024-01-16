@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"schoperation/crunchyrollanimestatus/domain/core"
 	"slices"
+	"strings"
 )
 
 // SeasonCollection is a collection of seasons for a Crunchyroll anime.
@@ -61,5 +62,23 @@ func (col SeasonCollection) LatestDub(locale core.Locale) (Season, bool) {
 
 // Determines if a season has tangible episodes rather than a movie, OVA, interview, etc.
 func isValidSeason(season Season) bool {
-	return !slices.Contains(season.Keywords(), "movie")
+	if slices.Contains(season.Keywords(), "movie") {
+		return false
+	}
+
+	if strings.Trim(season.identifier, " ") != "" {
+		parts := strings.Split(season.identifier, "|")
+		idPart := strings.ToLower(parts[1])
+		if strings.Contains(idPart, "oad") {
+			return false
+		}
+
+		if strings.Contains(idPart, "ova") {
+			return false
+		}
+	}
+
+	// TODO add season_display_number and check if blank
+
+	return true
 }

@@ -1,7 +1,7 @@
 pixlet
 crunchyrollanimestatus
 *.webp
-*.txt
+#*.txt
 .vscode
 
 # Temp stuff
