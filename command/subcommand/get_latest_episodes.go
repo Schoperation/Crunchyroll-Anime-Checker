@@ -5,6 +5,7 @@ import (
 	"schoperation/crunchyrollanimestatus/domain/anime"
 	"schoperation/crunchyrollanimestatus/domain/core"
 	"schoperation/crunchyrollanimestatus/domain/crunchyroll"
+	"slices"
 )
 
 type GetLatestEpisodesSubCommandInput struct {
@@ -125,6 +126,11 @@ func (subcmd GetLatestEpisodesSubCommand) Run(input GetLatestEpisodesSubCommandI
 
 	newEpisodeCollections := make(map[core.SeriesId]anime.EpisodeCollection, len(input.NewCrAnime))
 	for _, newCrAnime := range input.NewCrAnime {
+
+		// if !subcmd.validSeriesId(newCrAnime.SeriesId()) {
+		// 	continue
+		// }
+
 		fmt.Printf("%s - %s\n", newCrAnime.SeriesId(), newCrAnime.SlugTitle())
 
 		crSeasons, err := subcmd.getAllSeasonsTranslator.GetAllSeasonsBySeriesId(newCrAnime.SeriesId())
@@ -210,6 +216,62 @@ func (subcmd GetLatestEpisodesSubCommand) Run(input GetLatestEpisodesSubCommandI
 		NewEpisodeCollections: newEpisodeCollections,
 		Errors:                errors,
 	}, nil
+}
+
+func (subcmd GetLatestEpisodesSubCommand) validSeriesId(seriesId core.SeriesId) bool {
+	validSeriesIds := []string{
+		"GYEX5E1G6",
+		"G62487M9Y",
+		"GY2420WPR",
+		"GRZX4X5MY",
+		"G5PHNMWWN",
+		"GDKHZE1GP",
+		"G5PHNM77K",
+		"GDKHZEPP3",
+		"GDKHZE2Q7",
+		"GRG5HJN5W",
+		"G5PHNM7M1",
+		"G79H23XN2",
+		"GYGG9Z2WY",
+		"GW4HM7GNK",
+		"G9VHN91G5",
+		"GY79XX9MR",
+		"GY2P5MW0Y",
+		"G24H1NZXD",
+		"GR3K50PZR",
+		"GRWEMGNER",
+		"GXJHM3PVQ",
+		"GYDKQX9Z6",
+		"G24H1NW17",
+		"GRP85E0MR",
+		"G6EXH7VKM",
+		"GR79V3VN6",
+		"GVDHX8V05",
+		"GY190V9ER",
+		"GR2420096",
+		"GXJHM3NEV",
+		"G4PH0WEGW",
+		"GYEXXWD36",
+		"G1XHJV2PZ",
+		"G67570P3R",
+		"G6WE4W0N6",
+		"G79H23WQ7",
+		"GR8DN7N7R",
+		"G79H23XVZ",
+		"G0XHWM00Z",
+		"GYGVNVEDY",
+		"GRGGP17PR",
+		"GR09QX10R",
+		"GRPP77VJR",
+		"GR24JZ886",
+		"GR49G9VP6",
+		"GRVND1G3Y",
+		"G8DHV7478",
+		"GXJHM397N",
+		"G79H23ZD5",
+	}
+
+	return slices.Contains(validSeriesIds, seriesId.String())
 }
 
 func (subcmd GetLatestEpisodesSubCommand) areEpisodesTheSame(crEp crunchyroll.Episode, savedEp anime.MinimalEpisode) bool {

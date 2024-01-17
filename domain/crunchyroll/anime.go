@@ -2,6 +2,7 @@ package crunchyroll
 
 import (
 	"schoperation/crunchyrollanimestatus/domain/core"
+	"slices"
 	"strings"
 	"time"
 )
@@ -82,6 +83,16 @@ func shouldAddAnime(dto AnimeDto) bool {
 
 	// Try not to include OVAs; since they're basically one-time
 	if strings.HasSuffix(dto.SlugTitle, "-ova") {
+		return false
+	}
+
+	// Lol (these are busted anyway and don't want them clogging up the logs...)
+	animeInQuotationMarks := []string{
+		"anifile",
+		"otalku",
+	}
+
+	if slices.Contains(animeInQuotationMarks, dto.SlugTitle) {
 		return false
 	}
 

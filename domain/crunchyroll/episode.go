@@ -1,6 +1,9 @@
 package crunchyroll
 
-import "schoperation/crunchyrollanimestatus/domain/core"
+import (
+	"schoperation/crunchyrollanimestatus/domain/core"
+	"strings"
+)
 
 type EpisodeDto struct {
 	Number          int
@@ -30,6 +33,11 @@ func ReformEpisode(dto EpisodeDto) Episode {
 		dto.SubtitleLocales = []string{core.NewEnglishLocale().Name()}
 	}
 
+	// Sometimes CR leaves out the episode number if it's some bizarre decima (e.g. BURN THE WITCH)...
+	if dto.Number <= 0 {
+		dto.Number = 1
+	}
+
 	subtitleLocales := map[core.Locale]bool{}
 	for _, sub := range dto.SubtitleLocales {
 		locale, err := core.NewLocaleFromString(sub)
@@ -56,6 +64,11 @@ func ReformEpisode(dto EpisodeDto) Episode {
 			smallestThumbnail = thumbnail
 			break
 		}
+	}
+
+	if strings.Trim(smallestThumbnail.Source, " ") == "" {
+		smallestThumbnail.Source = "https://static.crunchyroll.com/assets/avatar/170x170/0008-cr-orange-black.png"
+		smallestThumbnail.ImageType = core.ImageTypeThumbnail.Name()
 	}
 
 	return Episode{

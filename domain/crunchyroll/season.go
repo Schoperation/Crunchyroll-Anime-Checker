@@ -6,6 +6,7 @@ type SeasonDto struct {
 	Id              string
 	Number          int
 	SequenceNumber  int
+	DisplayNumber   string
 	Keywords        []string
 	Identifier      string
 	IsSubbed        bool
@@ -17,6 +18,7 @@ type Season struct {
 	id              string
 	number          int
 	sequenceNumber  int
+	displayNumber   string
 	keywords        []string
 	identifier      string
 	subtitleLocales map[core.Locale]bool
@@ -54,6 +56,7 @@ func ReformSeason(dto SeasonDto) Season {
 		id:              dto.Id,
 		number:          dto.Number,
 		sequenceNumber:  dto.SequenceNumber,
+		displayNumber:   dto.DisplayNumber,
 		keywords:        dto.Keywords,
 		identifier:      dto.Identifier,
 		subtitleLocales: subtitleLocales,
@@ -69,8 +72,16 @@ func (season Season) SequenceNumber() int {
 	return season.sequenceNumber
 }
 
+func (season Season) DisplayNumber() string {
+	return season.displayNumber
+}
+
 func (season Season) Keywords() []string {
 	return season.keywords
+}
+
+func (season Season) Identifier() string {
+	return season.identifier
 }
 
 func (season Season) hasSubForLocale(locale core.Locale) bool {

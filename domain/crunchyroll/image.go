@@ -1,6 +1,8 @@
 package crunchyroll
 
-import "schoperation/crunchyrollanimestatus/domain/core"
+import (
+	"schoperation/crunchyrollanimestatus/domain/core"
+)
 
 type ImageDto struct {
 	Width     int

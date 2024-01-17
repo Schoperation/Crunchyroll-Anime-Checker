@@ -1,7 +1,6 @@
 package anime
 
 import (
-	"fmt"
 	"schoperation/crunchyrollanimestatus/domain/core"
 	"strings"
 )
@@ -52,7 +51,7 @@ func (collection *TitleCollection) Add(dto TitleDto) error {
 	}
 
 	if strings.Trim(dto.Title, " ") == "" {
-		return fmt.Errorf("title must not be blank in title collection")
+		dto.Title = "Untitled"
 	}
 
 	collection.col[locale] = dto.Title

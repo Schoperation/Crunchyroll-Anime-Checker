@@ -34,7 +34,7 @@ func NewSeasonCollection(seriesId core.SeriesId, seasons []Season) (SeasonCollec
 
 func (col SeasonCollection) LatestSub(locale core.Locale) (Season, bool) {
 	for i := len(col.seasons) - 1; i >= 0; i-- {
-		if !isValidSeason(col.seasons[i]) {
+		if !col.isValidSeason(col.seasons[i]) {
 			continue
 		}
 
@@ -48,7 +48,7 @@ func (col SeasonCollection) LatestSub(locale core.Locale) (Season, bool) {
 
 func (col SeasonCollection) LatestDub(locale core.Locale) (Season, bool) {
 	for i := len(col.seasons) - 1; i >= 0; i-- {
-		if !isValidSeason(col.seasons[i]) {
+		if !col.isValidSeason(col.seasons[i]) {
 			continue
 		}
 
@@ -61,24 +61,37 @@ func (col SeasonCollection) LatestDub(locale core.Locale) (Season, bool) {
 }
 
 // Determines if a season has tangible episodes rather than a movie, OVA, interview, etc.
-func isValidSeason(season Season) bool {
-	if slices.Contains(season.Keywords(), "movie") {
-		return false
+func (col SeasonCollection) isValidSeason(season Season) bool {
+	if len(col.seasons) == 1 {
+		return true
 	}
 
-	if strings.Trim(season.identifier, " ") != "" {
-		parts := strings.Split(season.identifier, "|")
+	for _, keyword := range season.Keywords() {
+		if strings.Contains(keyword, "movie") {
+			return false
+		}
+	}
+
+	// if strings.Trim(season.DisplayNumber(), " ") == "" {
+	// 	return false
+	// }
+
+	if strings.Trim(season.Identifier(), " ") != "" {
+		parts := strings.Split(season.Identifier(), "|")
 		idPart := strings.ToLower(parts[1])
-		if strings.Contains(idPart, "oad") {
-			return false
+
+		bannedWords := []string{
+			"oad",
+			"ova",
+			"m",
 		}
 
-		if strings.Contains(idPart, "ova") {
-			return false
+		for _, bannedWord := range bannedWords {
+			if strings.Contains(idPart, bannedWord) {
+				return false
+			}
 		}
 	}
-
-	// TODO add season_display_number and check if blank
 
 	return true
 }

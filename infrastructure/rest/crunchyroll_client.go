@@ -203,6 +203,7 @@ func (client *CrunchyrollClient) GetAllSeasonsBySeriesId(seriesId string) ([]cru
 			Id:              season.Id,
 			Number:          season.SeasonNumber,
 			SequenceNumber:  season.SeasonSequenceNumber,
+			DisplayNumber:   season.SeasonDisplayNumber,
 			Keywords:        season.Keywords,
 			Identifier:      season.Identifier,
 			IsSubbed:        season.IsSubbed,

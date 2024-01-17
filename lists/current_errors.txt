@@ -46,4 +46,16 @@
 "GRVND1G3Y": *errors.errorString {s: "could not find latest episode in season that should have sub"}, 
 "G8DHV7478": *errors.errorString {s: "title must not be blank in title collection"}, 
 "GXJHM397N": *errors.errorString {s: "could not find sub or dub"}, 
-"G79H23ZD5": *errors.errorString {s: "image episode number must be greater than 0"}, ]
+"G79H23ZD5": *errors.errorString {s: "image episode number must be greater than 0"},
+
+
+"G6EXH7VKM": *errors.errorString {s: "could not find sub or dub"}, shit
+"G6WE4W0N6": *errors.errorString {s: "could not find latest episode in season that should have sub"}, chinese
+"G24H1NZXD": *errors.errorString {s: "could not find sub or dub"}, movie
+"G1XHJV2PZ": *errors.errorString {s: "could not find sub or dub"}, portuguese
+"GRWEMGNER": *errors.errorString {s: "could not find latest episode in season that should have sub"}, chinese
+"GRP85E0MR": *errors.errorString {s: "could not find latest episode in season that should have sub"}, chinese
+"GRVND1G3Y": *errors.errorString {s: "could not find latest episode in season that should have sub"}, chinese
+"G5PHNM77K": *errors.errorString {s: "could not find sub or dub"}, movie
+"G79H23XN2": *errors.errorString {s: "could not find sub or dub"}, movie
+"GRG5HJN5W": *errors.errorString {s: "could not find sub or dub"}, shit
