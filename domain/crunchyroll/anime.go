@@ -86,13 +86,18 @@ func shouldAddAnime(dto AnimeDto) bool {
 		return false
 	}
 
-	// Lol (these are busted anyway and don't want them clogging up the logs...)
-	animeInQuotationMarks := []string{
-		"anifile",
-		"otalku",
+	// These are busted anyway, at least for now
+	blacklistedAnime := []string{
+		"G6EXH7VKM", // anifile
+		"GRG5HJN5W", // otalku
+		"G6WE4W0N6", // chinese
+		"GRWEMGNER", // "
+		"GRP85E0MR", // "
+		"GRVND1G3Y", // "
+
 	}
 
-	if slices.Contains(animeInQuotationMarks, dto.SlugTitle) {
+	if slices.Contains(blacklistedAnime, dto.SeriesId) {
 		return false
 	}
 

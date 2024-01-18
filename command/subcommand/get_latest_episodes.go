@@ -127,9 +127,9 @@ func (subcmd GetLatestEpisodesSubCommand) Run(input GetLatestEpisodesSubCommandI
 	newEpisodeCollections := make(map[core.SeriesId]anime.EpisodeCollection, len(input.NewCrAnime))
 	for _, newCrAnime := range input.NewCrAnime {
 
-		// if !subcmd.validSeriesId(newCrAnime.SeriesId()) {
-		// 	continue
-		// }
+		if !subcmd.validSeriesId(newCrAnime.SeriesId()) {
+			continue
+		}
 
 		fmt.Printf("%s - %s\n", newCrAnime.SeriesId(), newCrAnime.SlugTitle())
 
