@@ -1,19 +1,19 @@
-package postgres
+package sqlite
 
 import (
-	"context"
+	"database/sql"
 	"schoperation/crunchyrollanimestatus/domain/anime"
 	"schoperation/crunchyrollanimestatus/domain/core"
 
 	"github.com/doug-martin/goqu/v9"
-	"github.com/jackc/pgx/v5"
+	_ "github.com/doug-martin/goqu/v9/dialect/sqlite3"
 )
 
 type ThumbnailDao struct {
-	db *pgx.Conn
+	db *sql.DB
 }
 
-func NewThumbnailDao(db *pgx.Conn) ThumbnailDao {
+func NewThumbnailDao(db *sql.DB) ThumbnailDao {
 	return ThumbnailDao{
 		db: db,
 	}
@@ -34,19 +34,19 @@ func (dao ThumbnailDao) GetAllByAnimeId(animeId int) ([]anime.ImageDto, error) {
 		Where(
 			goqu.C("anime_id").Eq(animeId),
 		).
-		WithDialect("postgres").
+		WithDialect(GoquDialect).
 		Prepared(true).
 		ToSQL()
 	if err != nil {
 		return nil, sqlBuilderError("thumbnail", err)
 	}
 
-	rows, err := dao.db.Query(context.Background(), sql, args...)
+	rows, err := dao.db.Query(sql, args...)
 	if err != nil {
 		return nil, couldNotRetrieveError("thumbnail", err)
 	}
 
-	models, err := pgx.CollectRows(rows, pgx.RowToStructByName[thumbnailModel])
+	models, err := scanRows[thumbnailModel](rows)
 	if err != nil {
 		return nil, couldNotRetrieveError("thumbnail", err)
 	}
@@ -79,14 +79,14 @@ func (dao ThumbnailDao) InsertAll(dtos []anime.ImageDto) error {
 	sql, args, err := goqu.
 		Insert("thumbnail").
 		Rows(models).
-		WithDialect("postgres").
+		WithDialect(GoquDialect).
 		Prepared(false).
 		ToSQL()
 	if err != nil {
 		return sqlBuilderError("thumbnail", err)
 	}
 
-	_, err = dao.db.Exec(context.Background(), sql, args...)
+	_, err = dao.db.Exec(sql, args...)
 	if err != nil {
 		return couldNotCreateError("thumbnail", err)
 	}
@@ -102,14 +102,14 @@ func (dao ThumbnailDao) Delete(dto anime.ImageDto) error {
 			goqu.C("season_number").Eq(dto.SeasonNumber),
 			goqu.C("episode_number").Eq(dto.EpisodeNumber),
 		).
-		WithDialect("postgres").
+		WithDialect(GoquDialect).
 		Prepared(false).
 		ToSQL()
 	if err != nil {
 		return sqlBuilderError("thumbnail", err)
 	}
 
-	_, err = dao.db.Exec(context.Background(), sql, args...)
+	_, err = dao.db.Exec(sql, args...)
 	if err != nil {
 		return couldNotDeleteError("thumbnail", err)
 	}

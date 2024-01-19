@@ -162,15 +162,17 @@ func (client *CrunchyrollClient) GetAllAnime(locale string) ([]crunchyroll.Anime
 		}
 
 		dtos[i] = crunchyroll.AnimeDto{
-			SeriesId:     anime.Id,
-			SlugTitle:    anime.SlugTitle,
-			Title:        anime.Title,
+			SeriesId:    anime.Id,
+			SlugTitle:   anime.SlugTitle,
+			Title:       anime.Title,
+			IsSimulcast: anime.SeriesMetaData.IsSimulcast,
+			LastUpdated: anime.LastPublic,
+			TallPosters: tallPosters,
+			WidePosters: widePosters,
+
 			New:          anime.New,
-			LastUpdated:  anime.LastPublic,
 			SeasonCount:  anime.SeriesMetaData.SeasonCount,
 			EpisodeCount: anime.SeriesMetaData.EpisodeCount,
-			TallPosters:  tallPosters,
-			WidePosters:  widePosters,
 		}
 	}
 
@@ -203,7 +205,6 @@ func (client *CrunchyrollClient) GetAllSeasonsBySeriesId(seriesId string) ([]cru
 			Id:              season.Id,
 			Number:          season.SeasonNumber,
 			SequenceNumber:  season.SeasonSequenceNumber,
-			DisplayNumber:   season.SeasonDisplayNumber,
 			Keywords:        season.Keywords,
 			Identifier:      season.Identifier,
 			IsSubbed:        season.IsSubbed,

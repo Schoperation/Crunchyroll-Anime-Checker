@@ -63,12 +63,19 @@ func (subcmd RefreshPostersSubCommand) Run(input RefreshPostersSubCommandInput) 
 				return RefreshPostersSubCommandOutput{}, err
 			}
 
-			err = poster.UpdatePoster(posterUrl, newEncodedImage)
+			newPoster, err := anime.NewImage(anime.ImageDto{
+				AnimeId:       poster.AnimeId().Int(),
+				ImageType:     poster.ImageType().Int(),
+				SeasonNumber:  0,
+				EpisodeNumber: 0,
+				Url:           posterUrl,
+				Encoded:       newEncodedImage,
+			})
 			if err != nil {
 				return RefreshPostersSubCommandOutput{}, err
 			}
 
-			newPosters[i] = poster
+			newPosters[i] = newPoster
 		}
 
 		localAnime.UpdatePosters(newPosters)

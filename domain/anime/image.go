@@ -14,9 +14,6 @@ type ImageDto struct {
 	EpisodeNumber int
 	Url           string
 	Encoded       string
-
-	// Used in testing. Ignore otherwise.
-	IsDirty bool
 }
 
 type Image struct {
@@ -26,7 +23,6 @@ type Image struct {
 	episodeNumber int
 	url           string
 	encoded       string
-	isDirty       bool
 }
 
 func NewImage(dto ImageDto) (Image, error) {
@@ -57,13 +53,12 @@ func NewImage(dto ImageDto) (Image, error) {
 	}
 
 	return Image{
-		animeId:       0,
+		animeId:       AnimeId(dto.AnimeId),
 		imageType:     imageType,
 		seasonNumber:  dto.SeasonNumber,
 		episodeNumber: dto.EpisodeNumber,
 		url:           dto.Url,
 		encoded:       dto.Encoded,
-		isDirty:       true,
 	}, nil
 }
 
@@ -75,7 +70,6 @@ func ReformImage(dto ImageDto) Image {
 		episodeNumber: dto.EpisodeNumber,
 		url:           dto.Url,
 		encoded:       dto.Encoded,
-		isDirty:       dto.IsDirty,
 	}
 }
 
@@ -95,8 +89,15 @@ func (image *Image) Encoded() string {
 	return image.encoded
 }
 
-func (image *Image) IsDirty() bool {
-	return image.isDirty
+func (image *Image) Dto() ImageDto {
+	return ImageDto{
+		AnimeId:       image.animeId.Int(),
+		ImageType:     image.imageType.Int(),
+		SeasonNumber:  image.seasonNumber,
+		EpisodeNumber: image.episodeNumber,
+		Url:           image.url,
+		Encoded:       image.encoded,
+	}
 }
 
 func (image *Image) AssignAnimeId(animeId AnimeId) {
@@ -104,25 +105,9 @@ func (image *Image) AssignAnimeId(animeId AnimeId) {
 		return
 	}
 
+	if animeId.IsZero() {
+		return
+	}
+
 	image.animeId = animeId
-	image.isDirty = true
-}
-
-func (image *Image) UpdatePoster(newUrl, encoded string) error {
-	if image.imageType != core.ImageTypePosterTall && image.imageType != core.ImageTypePosterWide {
-		return fmt.Errorf("image must be a poster to only update url and encoded string")
-	}
-
-	if _, err := url.ParseRequestURI(newUrl); err != nil {
-		return fmt.Errorf("image invalid URL for image: %v", err)
-	}
-
-	if strings.Trim(encoded, " ") == "" {
-		return fmt.Errorf("image encoded image must not be blank")
-	}
-
-	image.url = newUrl
-	image.encoded = encoded
-	image.isDirty = true
-	return nil
 }

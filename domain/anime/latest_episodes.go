@@ -81,3 +81,16 @@ func (le LatestEpisodes) LatestSub() MinimalEpisode {
 func (le LatestEpisodes) LatestDub() MinimalEpisode {
 	return le.latestDub
 }
+
+func (le LatestEpisodes) Dto() LatestEpisodesDto {
+	return LatestEpisodesDto{
+		AnimeId:          le.animeId.Int(),
+		LocaleId:         le.locale.Id(),
+		LatestSubSeason:  le.latestSub.Season(),
+		LatestSubEpisode: le.latestSub.Number(),
+		LatestSubTitle:   le.latestSub.Title(),
+		LatestDubSeason:  le.latestDub.Season(),
+		LatestDubEpisode: le.latestDub.Number(),
+		LatestDubTitle:   le.latestDub.Title(),
+	}
+}

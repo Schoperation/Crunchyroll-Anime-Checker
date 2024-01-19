@@ -7,6 +7,7 @@ import (
 
 type thumbnailDao interface {
 	GetAllByAnimeId(animeId int) ([]anime.ImageDto, error)
+	InsertAll(dtos []anime.ImageDto) error
 }
 
 type ThumbnailTranslator struct {
@@ -32,4 +33,18 @@ func (translator ThumbnailTranslator) GetAllByAnimeId(animeId anime.AnimeId) (ma
 	}
 
 	return images, nil
+}
+
+func (translator ThumbnailTranslator) SaveAll(newThumbnails []anime.Image) error {
+	newDtos := make([]anime.ImageDto, len(newThumbnails))
+	for i, thumbnail := range newThumbnails {
+		newDtos[i] = thumbnail.Dto()
+	}
+
+	err := translator.thumbnailDao.InsertAll(newDtos)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

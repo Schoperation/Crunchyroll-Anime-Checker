@@ -8,21 +8,24 @@ import (
 )
 
 type AnimeDto struct {
-	SeriesId     string
-	SlugTitle    string
-	Title        string
+	SeriesId    string
+	SlugTitle   string
+	Title       string
+	IsSimulcast bool
+	LastUpdated time.Time
+	TallPosters []ImageDto
+	WidePosters []ImageDto
+
 	New          bool
-	LastUpdated  time.Time
 	SeasonCount  int
 	EpisodeCount int
-	TallPosters  []ImageDto
-	WidePosters  []ImageDto
 }
 
 type Anime struct {
 	seriesId    core.SeriesId
 	slugTitle   string
 	title       string
+	isSimulcast bool
 	lastUpdated time.Time
 	tallPoster  Image
 	widePoster  Image
@@ -49,6 +52,7 @@ func ReformAnime(dto AnimeDto) Anime {
 		seriesId:    core.ReformSeriesId(dto.SeriesId),
 		slugTitle:   dto.SlugTitle,
 		title:       dto.Title,
+		isSimulcast: dto.IsSimulcast,
 		lastUpdated: dto.LastUpdated,
 		tallPoster:  ReformImage(tallPoster),
 		widePoster:  ReformImage(widePoster),
@@ -114,6 +118,10 @@ func (anime Anime) SlugTitle() string {
 
 func (anime Anime) Title() string {
 	return anime.title
+}
+
+func (anime Anime) IsSimulcast() bool {
+	return anime.isSimulcast
 }
 
 func (anime Anime) LastUpdated() time.Time {

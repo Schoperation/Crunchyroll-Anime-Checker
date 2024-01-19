@@ -6,6 +6,7 @@ import (
 
 type latestEpisodesDao interface {
 	GetAllByAnimeId(animeId int) ([]anime.LatestEpisodesDto, error)
+	InsertAll(dtos []anime.LatestEpisodesDto) error
 }
 
 type LatestEpisodesTranslator struct {
@@ -30,4 +31,18 @@ func (translator LatestEpisodesTranslator) GetAllByAnimeId(animeId anime.AnimeId
 	}
 
 	return latestEpisodes, nil
+}
+
+func (translator LatestEpisodesTranslator) SaveAll(newLatestEpisodes []anime.LatestEpisodes) error {
+	newDtos := make([]anime.LatestEpisodesDto, len(newLatestEpisodes))
+	for i, le := range newLatestEpisodes {
+		newDtos[i] = le.Dto()
+	}
+
+	err := translator.latestEpisodesDao.InsertAll(newDtos)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

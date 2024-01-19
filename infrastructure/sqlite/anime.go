@@ -1,19 +1,19 @@
-package postgres
+package sqlite
 
 import (
-	"context"
+	"database/sql"
 	"schoperation/crunchyrollanimestatus/domain/anime"
 	"time"
 
 	"github.com/doug-martin/goqu/v9"
-	"github.com/jackc/pgx/v5"
+	_ "github.com/doug-martin/goqu/v9/dialect/sqlite3"
 )
 
 type AnimeDao struct {
-	db *pgx.Conn
+	db *sql.DB
 }
 
-func NewAnimeDao(db *pgx.Conn) AnimeDao {
+func NewAnimeDao(db *sql.DB) AnimeDao {
 	return AnimeDao{
 		db: db,
 	}
@@ -30,6 +30,7 @@ type animeModel struct {
 	SeriesId    string    `db:"series_id"`
 	SlugTitle   string    `db:"slug_title"`
 	Title       string    `db:"title"`
+	IsSimulcast bool      `db:"is_simulcast"`
 	LastUpdated time.Time `db:"last_updated"`
 }
 
@@ -37,19 +38,19 @@ func (dao AnimeDao) GetAllMinimal() ([]anime.MinimalAnimeDto, error) {
 	sql, args, err := goqu.
 		Select(&minimalAnimeModel{}).
 		From("anime").
-		WithDialect("postgres").
+		WithDialect(GoquDialect).
 		Prepared(true).
 		ToSQL()
 	if err != nil {
 		return nil, sqlBuilderError("anime", err)
 	}
 
-	rows, err := dao.db.Query(context.Background(), sql, args...)
+	rows, err := dao.db.Query(sql, args...)
 	if err != nil {
 		return nil, couldNotRetrieveError("anime", err)
 	}
 
-	models, err := pgx.CollectRows(rows, pgx.RowToStructByName[minimalAnimeModel])
+	models, err := scanRows[animeModel](rows)
 	if err != nil {
 		return nil, couldNotRetrieveError("anime", err)
 	}
@@ -77,19 +78,20 @@ func (dao AnimeDao) GetAllByAnimeIds(animeIds []int) ([]anime.AnimeDto, error) {
 		Where(
 			goqu.C("anime_id").In(animeIds),
 		).
-		WithDialect("postgres").
+		WithDialect(GoquDialect).
 		Prepared(true).
 		ToSQL()
 	if err != nil {
 		return nil, sqlBuilderError("anime", err)
 	}
 
-	rows, err := dao.db.Query(context.Background(), sql, args...)
+	rows, err := dao.db.Query(sql, args...)
 	if err != nil {
 		return nil, couldNotRetrieveError("anime", err)
 	}
+	defer rows.Close()
 
-	models, err := pgx.CollectRows(rows, pgx.RowToStructByName[animeModel])
+	models, err := scanRows[animeModel](rows)
 	if err != nil {
 		return nil, couldNotRetrieveError("anime", err)
 	}
@@ -105,6 +107,7 @@ func (dao AnimeDao) GetAllByAnimeIds(animeIds []int) ([]anime.AnimeDto, error) {
 			SeriesId:    model.SeriesId,
 			SlugTitle:   model.SlugTitle,
 			Title:       model.Title,
+			IsSimulcast: model.IsSimulcast,
 			LastUpdated: model.LastUpdated,
 		}
 	}
@@ -125,14 +128,14 @@ func (dao AnimeDao) InsertAll(dtos []anime.AnimeDto) error {
 	sql, args, err := goqu.
 		Insert("anime").
 		Rows(models).
-		WithDialect("postgres").
+		WithDialect(GoquDialect).
 		Prepared(false).
 		ToSQL()
 	if err != nil {
 		return sqlBuilderError("anime", err)
 	}
 
-	_, err = dao.db.Exec(context.Background(), sql, args...)
+	_, err = dao.db.Exec(sql, args...)
 	if err != nil {
 		return couldNotCreateError("anime", err)
 	}
@@ -147,14 +150,14 @@ func (dao AnimeDao) Update(dto anime.AnimeDto) error {
 		Where(
 			goqu.C("anime_id").Eq(dto.AnimeId),
 		).
-		WithDialect("postgres").
+		WithDialect(GoquDialect).
 		Prepared(false).
 		ToSQL()
 	if err != nil {
 		return sqlBuilderError("anime", err)
 	}
 
-	_, err = dao.db.Exec(context.Background(), sql, args...)
+	_, err = dao.db.Exec(sql, args...)
 	if err != nil {
 		return couldNotUpdateError("anime", err)
 	}
@@ -168,6 +171,7 @@ func (dao AnimeDao) animeDtoToModel(dto anime.AnimeDto) animeModel {
 		SeriesId:    dto.SeriesId,
 		SlugTitle:   dto.SlugTitle,
 		Title:       dto.Title,
+		IsSimulcast: dto.IsSimulcast,
 		LastUpdated: dto.LastUpdated,
 	}
 }

@@ -6,11 +6,14 @@ import (
 	"schoperation/crunchyrollanimestatus/domain/core"
 	"schoperation/crunchyrollanimestatus/domain/crunchyroll"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/require"
 )
 
 func TestRefreshPostersSubCommand(t *testing.T) {
+	anime.SetNowFunc(func() time.Time { return time.Date(2020, time.April, 1, 0, 0, 0, 0, time.UTC) })
+
 	seriesId := core.SeriesId("G20")
 	testResources := refreshPostersSubCommandTestResources{}
 
@@ -108,23 +111,22 @@ func (resources refreshPostersSubCommandTestResources) getDummyLocalAnime(id str
 					ImageType: core.ImageTypePosterTall.Int(),
 					Url:       "http://www.example.com/oldsourcetall",
 					Encoded:   "old picture",
-					IsDirty:   false,
 				}),
 				anime.ReformImage(anime.ImageDto{
 					AnimeId:   1,
 					ImageType: core.ImageTypePosterWide.Int(),
 					Url:       "http://www.example.com/oldsourcewide",
 					Encoded:   "old picture",
-					IsDirty:   false,
 				}),
 			},
 			anime.EpisodeCollection{}),
 		"updated_posters": anime.ReformAnime(anime.AnimeDto{
-			AnimeId:   1,
-			SeriesId:  "G20",
-			SlugTitle: "i-would-do-a-very-long-name-but-that-might-break-the-character-limit",
-			Title:     "I Would Do a Very Long Name But That Might Break the Character Limit",
-			IsDirty:   true,
+			AnimeId:     1,
+			SeriesId:    "G20",
+			SlugTitle:   "i-would-do-a-very-long-name-but-that-might-break-the-character-limit",
+			Title:       "I Would Do a Very Long Name But That Might Break the Character Limit",
+			IsDirty:     true,
+			LastUpdated: time.Date(2020, time.April, 1, 0, 0, 0, 0, time.UTC),
 		},
 			[]anime.Image{
 				anime.ReformImage(anime.ImageDto{
@@ -132,14 +134,12 @@ func (resources refreshPostersSubCommandTestResources) getDummyLocalAnime(id str
 					ImageType: core.ImageTypePosterTall.Int(),
 					Url:       "http://www.example.com/newsourcetall",
 					Encoded:   "new picture",
-					IsDirty:   true,
 				}),
 				anime.ReformImage(anime.ImageDto{
 					AnimeId:   1,
 					ImageType: core.ImageTypePosterWide.Int(),
 					Url:       "http://www.example.com/newsourcewide",
 					Encoded:   "new picture",
-					IsDirty:   true,
 				}),
 			},
 			anime.EpisodeCollection{}),

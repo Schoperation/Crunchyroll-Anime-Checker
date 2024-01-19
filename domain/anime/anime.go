@@ -14,6 +14,7 @@ type AnimeDto struct {
 	SeriesId    string
 	SlugTitle   string
 	Title       string
+	IsSimulcast bool
 	LastUpdated time.Time
 
 	// Used in testing. Ignore otherwise.
@@ -26,11 +27,11 @@ type Anime struct {
 	seriesId    core.SeriesId
 	slugTitle   string
 	title       string
+	isSimulcast bool
 	lastUpdated time.Time
 	posters     []Image
 	episodes    EpisodeCollection
 	isDirty     bool
-	isNew       bool
 }
 
 func NewAnime(
@@ -61,11 +62,11 @@ func NewAnime(
 		seriesId:    seriesId,
 		slugTitle:   dto.SlugTitle,
 		title:       dto.Title,
-		lastUpdated: time.Now().UTC(),
+		isSimulcast: dto.IsSimulcast,
+		lastUpdated: now(),
 		posters:     posters,
 		episodes:    episodes,
 		isDirty:     true,
-		isNew:       true,
 	}, nil
 }
 
@@ -79,11 +80,11 @@ func ReformAnime(
 		seriesId:    core.ReformSeriesId(dto.SeriesId),
 		slugTitle:   dto.SlugTitle,
 		title:       dto.Title,
+		isSimulcast: dto.IsSimulcast,
 		lastUpdated: dto.LastUpdated,
 		posters:     posters,
 		episodes:    episodes,
 		isDirty:     dto.IsDirty,
-		isNew:       false,
 	}
 }
 
@@ -117,6 +118,23 @@ func (anime *Anime) Dto() AnimeDto {
 	}
 }
 
+func (anime *Anime) SetDirty() {
+	anime.isDirty = true
+	anime.lastUpdated = now()
+}
+
+func (anime *Anime) AssignAnimeId(animeId AnimeId) {
+	if !anime.animeId.IsZero() {
+		return
+	}
+
+	if animeId.IsZero() {
+		return
+	}
+
+	anime.animeId = animeId
+}
+
 func (anime *Anime) UpdatePosters(newPosters []Image) error {
 	err := validateAnimePosters(newPosters)
 	if err != nil {
@@ -124,7 +142,7 @@ func (anime *Anime) UpdatePosters(newPosters []Image) error {
 	}
 
 	anime.posters = newPosters
-	anime.isDirty = true
+	anime.SetDirty()
 	return nil
 }
 

@@ -68,12 +68,12 @@ func (translator AnimeTranslator) GetAllByAnimeIds(animeIds []anime.AnimeId) (ma
 }
 
 func (translator AnimeTranslator) SaveAll(newAnime []anime.Anime, updatedAnime []anime.Anime) error {
-	dtos := make([]anime.AnimeDto, len(newAnime))
+	newDtos := make([]anime.AnimeDto, len(newAnime))
 	for i, series := range newAnime {
-		dtos[i] = series.Dto()
+		newDtos[i] = series.Dto()
 	}
 
-	err := translator.animeDao.InsertAll(dtos)
+	err := translator.animeDao.InsertAll(newDtos)
 	if err != nil {
 		return err
 	}

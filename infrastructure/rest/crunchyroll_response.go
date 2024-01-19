@@ -21,8 +21,9 @@ type series struct {
 }
 
 type seriesMetaData struct {
-	SeasonCount  int `json:"season_count"`
-	EpisodeCount int `json:"episode_count"`
+	SeasonCount  int  `json:"season_count"`
+	EpisodeCount int  `json:"episode_count"`
+	IsSimulcast  bool `json:"is_simulcast"`
 }
 
 // For some reason it's a 2D array. But all entries use the first index of the first array...
@@ -48,7 +49,6 @@ type season struct {
 	Identifier           string    `json:"identifier"`
 	SeasonNumber         int       `json:"season_number"`
 	SeasonSequenceNumber int       `json:"season_sequence_number"`
-	SeasonDisplayNumber  string    `json:"season_display_number"`
 	Keywords             []string  `json:"keywords"`
 	AudioLocales         []string  `json:"audio_locales"`
 	SubtitleLocales      []string  `json:"subtitle_locales"`

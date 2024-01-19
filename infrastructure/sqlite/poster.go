@@ -1,18 +1,18 @@
-package postgres
+package sqlite
 
 import (
-	"context"
+	"database/sql"
 	"schoperation/crunchyrollanimestatus/domain/anime"
 
 	"github.com/doug-martin/goqu/v9"
-	"github.com/jackc/pgx/v5"
+	_ "github.com/doug-martin/goqu/v9/dialect/sqlite3"
 )
 
 type PosterDao struct {
-	db *pgx.Conn
+	db *sql.DB
 }
 
-func NewPosterDao(db *pgx.Conn) PosterDao {
+func NewPosterDao(db *sql.DB) PosterDao {
 	return PosterDao{
 		db: db,
 	}
@@ -32,19 +32,19 @@ func (dao PosterDao) GetAllByAnimeId(animeId int) ([]anime.ImageDto, error) {
 		Where(
 			goqu.C("anime_id").Eq(animeId),
 		).
-		WithDialect("postgres").
+		WithDialect(GoquDialect).
 		Prepared(true).
 		ToSQL()
 	if err != nil {
 		return nil, sqlBuilderError("poster", err)
 	}
 
-	rows, err := dao.db.Query(context.Background(), sql, args...)
+	rows, err := dao.db.Query(sql, args...)
 	if err != nil {
 		return nil, couldNotRetrieveError("poster", err)
 	}
 
-	models, err := pgx.CollectRows(rows, pgx.RowToStructByName[posterModel])
+	models, err := scanRows[posterModel](rows)
 	if err != nil {
 		return nil, couldNotRetrieveError("poster", err)
 	}
@@ -78,14 +78,14 @@ func (dao PosterDao) InsertAll(dtos []anime.ImageDto) error {
 		Insert("poster").
 		Rows(models).
 		OnConflict(goqu.DoNothing()).
-		WithDialect("postgres").
+		WithDialect(GoquDialect).
 		Prepared(false).
 		ToSQL()
 	if err != nil {
 		return sqlBuilderError("poster", err)
 	}
 
-	_, err = dao.db.Exec(context.Background(), sql, args...)
+	_, err = dao.db.Exec(sql, args...)
 	if err != nil {
 		return couldNotCreateError("poster", err)
 	}
@@ -101,14 +101,14 @@ func (dao PosterDao) Update(dto anime.ImageDto) error {
 			goqu.C("anime_id").Eq(dto.AnimeId),
 			goqu.C("image_type_id").Eq(dto.ImageType),
 		).
-		WithDialect("postgres").
+		WithDialect(GoquDialect).
 		Prepared(false).
 		ToSQL()
 	if err != nil {
 		return sqlBuilderError("poster", err)
 	}
 
-	_, err = dao.db.Exec(context.Background(), sql, args...)
+	_, err = dao.db.Exec(sql, args...)
 	if err != nil {
 		return couldNotUpdateError("poster", err)
 	}
