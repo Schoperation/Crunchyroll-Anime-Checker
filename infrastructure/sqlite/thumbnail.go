@@ -66,6 +66,49 @@ func (dao ThumbnailDao) GetAllByAnimeId(animeId int) ([]anime.ImageDto, error) {
 	return dtos, nil
 }
 
+func (dao ThumbnailDao) GetAllByAnimeIds(animeIds []int) ([]anime.ImageDto, error) {
+	sql, args, err := goqu.
+		Select(&thumbnailModel{}).
+		From("thumbnail").
+		Where(
+			goqu.C("anime_id").In(animeIds),
+		).
+		WithDialect(GoquDialect).
+		Prepared(true).
+		ToSQL()
+	if err != nil {
+		return nil, sqlBuilderError("thumbnail", err)
+	}
+
+	rows, err := dao.db.Query(sql, args...)
+	if err != nil {
+		return nil, couldNotRetrieveError("thumbnail", err)
+	}
+
+	models, err := scanRows[thumbnailModel](rows)
+	if err != nil {
+		return nil, couldNotRetrieveError("thumbnail", err)
+	}
+
+	if len(models) < len(animeIds) {
+		return nil, couldNotRetrieveAllError("thumbnail", len(animeIds), len(models))
+	}
+
+	dtos := make([]anime.ImageDto, len(models))
+	for i, model := range models {
+		dtos[i] = anime.ImageDto{
+			AnimeId:       model.AnimeId,
+			ImageType:     core.ImageTypeThumbnail.Int(),
+			SeasonNumber:  model.SeasonNumber,
+			EpisodeNumber: model.SeasonNumber,
+			Url:           model.Url,
+			Encoded:       model.Encoded,
+		}
+	}
+
+	return dtos, nil
+}
+
 func (dao ThumbnailDao) InsertAll(dtos []anime.ImageDto) error {
 	if len(dtos) == 0 {
 		return nil

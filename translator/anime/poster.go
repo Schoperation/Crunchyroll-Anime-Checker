@@ -4,6 +4,7 @@ import "schoperation/crunchyrollanimestatus/domain/anime"
 
 type posterDao interface {
 	GetAllByAnimeId(animeId int) ([]anime.ImageDto, error)
+	GetAllByAnimeIds(animeIds []int) ([]anime.ImageDto, error)
 	InsertAll(dtos []anime.ImageDto) error
 }
 
@@ -29,6 +30,32 @@ func (translator PosterTranslator) GetAllByAnimeId(animeId anime.AnimeId) ([]ani
 	}
 
 	return images, nil
+}
+
+func (translator PosterTranslator) GetAllByAnimeIds(animeIds []anime.AnimeId) (map[anime.AnimeId][]anime.Image, error) {
+	ids := make([]int, len(animeIds))
+	for i, animeId := range animeIds {
+		ids[i] = animeId.Int()
+	}
+
+	dtos, err := translator.posterDao.GetAllByAnimeIds(ids)
+	if err != nil {
+		return nil, err
+	}
+
+	posterMap := make(map[anime.AnimeId][]anime.Image)
+	for _, dto := range dtos {
+		animeId := anime.ReformAnimeId(dto.AnimeId)
+
+		if posters, exists := posterMap[animeId]; exists {
+			posterMap[animeId] = append(posters, anime.ReformImage(dto))
+			continue
+		}
+
+		posterMap[animeId] = []anime.Image{anime.ReformImage(dto)}
+	}
+
+	return posterMap, nil
 }
 
 func (translator PosterTranslator) SaveAll(newPosters []anime.Image) error {

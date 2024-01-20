@@ -128,7 +128,7 @@ func (subcmd GetLatestEpisodesSubCommand) Run(input GetLatestEpisodesSubCommandI
 	for _, newCrAnime := range input.NewCrAnime {
 
 		// TODO temp testing
-		if !newCrAnime.IsSimulcast() {
+		if newCrAnime.SeriesId().String() != "G1XHJV0KV" {
 			continue
 		}
 

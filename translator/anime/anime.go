@@ -14,6 +14,7 @@ type animeDao interface {
 
 type animeFactory interface {
 	Reform(dto anime.AnimeDto) (anime.Anime, error)
+	ReformAll(dtos []anime.AnimeDto) (map[core.SeriesId]anime.Anime, error)
 }
 
 type AnimeTranslator struct {
@@ -54,17 +55,7 @@ func (translator AnimeTranslator) GetAllByAnimeIds(animeIds []anime.AnimeId) (ma
 		return nil, err
 	}
 
-	anime := make(map[core.SeriesId]anime.Anime, len(dtos))
-	for _, dto := range dtos {
-		reformedAnime, err := translator.animeFactory.Reform(dto)
-		if err != nil {
-			return nil, err
-		}
-
-		anime[reformedAnime.SeriesId()] = reformedAnime
-	}
-
-	return anime, nil
+	return translator.animeFactory.ReformAll(dtos)
 }
 
 func (translator AnimeTranslator) SaveAll(newAnime []anime.Anime, updatedAnime []anime.Anime) error {

@@ -64,6 +64,49 @@ func (dao PosterDao) GetAllByAnimeId(animeId int) ([]anime.ImageDto, error) {
 	return dtos, nil
 }
 
+func (dao PosterDao) GetAllByAnimeIds(animeIds []int) ([]anime.ImageDto, error) {
+	sql, args, err := goqu.
+		Select(&posterModel{}).
+		From("poster").
+		Where(
+			goqu.C("anime_id").In(animeIds),
+		).
+		WithDialect(GoquDialect).
+		Prepared(true).
+		ToSQL()
+	if err != nil {
+		return nil, sqlBuilderError("poster", err)
+	}
+
+	rows, err := dao.db.Query(sql, args...)
+	if err != nil {
+		return nil, couldNotRetrieveError("poster", err)
+	}
+
+	models, err := scanRows[posterModel](rows)
+	if err != nil {
+		return nil, couldNotRetrieveError("poster", err)
+	}
+
+	if len(models) < len(animeIds) {
+		return nil, couldNotRetrieveAllError("poster", len(animeIds), len(models))
+	}
+
+	dtos := make([]anime.ImageDto, len(models))
+	for i, model := range models {
+		dtos[i] = anime.ImageDto{
+			AnimeId:       model.AnimeId,
+			ImageType:     model.ImageTypeId,
+			SeasonNumber:  0,
+			EpisodeNumber: 0,
+			Url:           model.Url,
+			Encoded:       model.Encoded,
+		}
+	}
+
+	return dtos, nil
+}
+
 func (dao PosterDao) InsertAll(dtos []anime.ImageDto) error {
 	if len(dtos) == 0 {
 		return nil

@@ -89,6 +89,10 @@ func (image *Image) Encoded() string {
 	return image.encoded
 }
 
+func (image *Image) Key() string {
+	return fmt.Sprintf("%d-%d", image.seasonNumber, image.episodeNumber)
+}
+
 func (image *Image) Dto() ImageDto {
 	return ImageDto{
 		AnimeId:       image.animeId.Int(),

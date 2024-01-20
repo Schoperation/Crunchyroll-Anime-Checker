@@ -70,6 +70,51 @@ func (dao LatestEpisodesDao) GetAllByAnimeId(animeId int) ([]anime.LatestEpisode
 	return dtos, nil
 }
 
+func (dao LatestEpisodesDao) GetAllByAnimeIds(animeIds []int) ([]anime.LatestEpisodesDto, error) {
+	sql, args, err := goqu.
+		Select(&latestEpisodesModel{}).
+		From("latest_episodes").
+		Where(
+			goqu.C("anime_id").In(animeIds),
+		).
+		WithDialect(GoquDialect).
+		Prepared(true).
+		ToSQL()
+	if err != nil {
+		return nil, sqlBuilderError("latest_episodes", err)
+	}
+
+	rows, err := dao.db.Query(sql, args...)
+	if err != nil {
+		return nil, couldNotRetrieveError("latest_episodes", err)
+	}
+
+	models, err := scanRows[latestEpisodesModel](rows)
+	if err != nil {
+		return nil, couldNotRetrieveError("latest_episodes", err)
+	}
+
+	if len(models) < len(animeIds) {
+		return nil, couldNotRetrieveAllError("latest_episodes", len(animeIds), len(models))
+	}
+
+	dtos := make([]anime.LatestEpisodesDto, len(models))
+	for i, model := range models {
+		dtos[i] = anime.LatestEpisodesDto{
+			AnimeId:          model.AnimeId,
+			LocaleId:         model.LocaleId,
+			LatestSubSeason:  model.LatestSubSeason,
+			LatestSubEpisode: model.LatestSubEpisode,
+			LatestSubTitle:   model.LatestSubTitle,
+			LatestDubSeason:  model.LatestDubSeason,
+			LatestDubEpisode: model.LatestDubEpisode,
+			LatestDubTitle:   model.LatestDubTitle,
+		}
+	}
+
+	return dtos, nil
+}
+
 func (dao LatestEpisodesDao) InsertAll(dtos []anime.LatestEpisodesDto) error {
 	if len(dtos) == 0 {
 		return nil
