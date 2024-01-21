@@ -16,7 +16,7 @@ import (
 	"strings"
 
 	"github.com/doug-martin/goqu/v9"
-	goqusqlite3 "github.com/doug-martin/goqu/v9/dialect/sqlite3"
+	goqu_sqlite3_dialect "github.com/doug-martin/goqu/v9/dialect/sqlite3"
 	_ "modernc.org/sqlite"
 )
 
@@ -50,15 +50,17 @@ func main() {
 	}
 	defer db.Close()
 
-	// Pending new release from goqu, in the meantime creating new dialect
-	goquDialectOpts := goqusqlite3.DialectOptions()
+	// Pending new release from goqu to fix this...
+	// In the meantime, creating new dialect
+	goquDialectOpts := goqu_sqlite3_dialect.DialectOptions()
 	goquDialectOpts.SupportsReturn = true
-	goqu.RegisterDialect("sqlite3_with_returning", goquDialectOpts)
+	goqu.RegisterDialect(sqlite.Dialect, goquDialectOpts)
+	goquDb := goqu.New(sqlite.Dialect, db)
 
-	animeDao := sqlite.NewAnimeDao(db)
-	latestEpisodesDao := sqlite.NewLatestEpisodesDao(db)
-	posterDao := sqlite.NewPosterDao(db)
-	thumbnailDao := sqlite.NewThumbnailDao(db)
+	animeDao := sqlite.NewAnimeDao(goquDb)
+	latestEpisodesDao := sqlite.NewLatestEpisodesDao(goquDb)
+	posterDao := sqlite.NewPosterDao(goquDb)
+	thumbnailDao := sqlite.NewThumbnailDao(goquDb)
 
 	crunchyrollClient := rest.NewCrunchyrollClient(args.credFilePath)
 	imageClient := rest.NewImageClient()

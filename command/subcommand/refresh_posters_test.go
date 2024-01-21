@@ -17,8 +17,8 @@ func TestRefreshPostersSubCommand(t *testing.T) {
 	seriesId := core.SeriesId("G20")
 	testResources := refreshPostersSubCommandTestResources{}
 
-	getEncodedImageTranslator := dummyGetEncodedImageTranslator{}
-	subCommand := NewRefreshPostersSubCommand(getEncodedImageTranslator)
+	encodedImageFetcher := dummyEncodedImageFetcher{}
+	subCommand := NewRefreshPostersSubCommand(encodedImageFetcher)
 
 	testCases := []struct {
 		name           string
@@ -60,9 +60,9 @@ func TestRefreshPostersSubCommand(t *testing.T) {
 	}
 }
 
-type dummyGetEncodedImageTranslator struct{}
+type dummyEncodedImageFetcher struct{}
 
-func (translator dummyGetEncodedImageTranslator) GetEncodedImageByURL(url string) (string, error) {
+func (translator dummyEncodedImageFetcher) GetEncodedImageByURL(url string) (string, error) {
 	return "new picture", nil
 }
 

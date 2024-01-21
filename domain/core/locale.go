@@ -17,6 +17,7 @@ const (
 	LocaleKoKR = 2
 	LocaleZhCN = 3
 	LocaleEnUS = 4
+	LocaleEsES = 5
 )
 
 var localeNames = map[int]string{
@@ -24,6 +25,7 @@ var localeNames = map[int]string{
 	LocaleKoKR: "ko-KR",
 	LocaleZhCN: "zh-CN",
 	LocaleEnUS: "en-US",
+	LocaleEsES: "es-ES",
 }
 
 func NewLocaleFromId(localeId int) (Locale, error) {
@@ -63,4 +65,8 @@ func NewJapaneseLocale() Locale {
 
 func NewEnglishLocale() Locale {
 	return ReformLocaleFromId(LocaleEnUS)
+}
+
+func NewSpanishLocale() Locale {
+	return ReformLocaleFromId(LocaleEsES)
 }

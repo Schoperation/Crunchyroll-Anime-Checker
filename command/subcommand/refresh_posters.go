@@ -18,19 +18,19 @@ type RefreshPostersSubCommandOutput struct {
 	NewPosters        map[core.SeriesId][]anime.Image
 }
 
-type getEncodedImageTranslator interface {
+type encodedPosterFetcher interface {
 	GetEncodedImageByURL(url string) (string, error)
 }
 
 type RefreshPostersSubCommand struct {
-	getEncodedImageTranslator getEncodedImageTranslator
+	encodedPosterFetcher encodedPosterFetcher
 }
 
 func NewRefreshPostersSubCommand(
-	getEncodedImageTranslator getEncodedImageTranslator,
+	encodedPosterFetcher encodedPosterFetcher,
 ) RefreshPostersSubCommand {
 	return RefreshPostersSubCommand{
-		getEncodedImageTranslator: getEncodedImageTranslator,
+		encodedPosterFetcher: encodedPosterFetcher,
 	}
 }
 
@@ -58,7 +58,7 @@ func (subcmd RefreshPostersSubCommand) Run(input RefreshPostersSubCommandInput) 
 				continue
 			}
 
-			newEncodedImage, err := subcmd.getEncodedImageTranslator.GetEncodedImageByURL(posterUrl)
+			newEncodedImage, err := subcmd.encodedPosterFetcher.GetEncodedImageByURL(posterUrl)
 			if err != nil {
 				return RefreshPostersSubCommandOutput{}, err
 			}
@@ -94,12 +94,12 @@ func (subcmd RefreshPostersSubCommand) Run(input RefreshPostersSubCommandInput) 
 
 		posters := make([]anime.Image, 2)
 
-		encodedTallPoster, err := subcmd.getEncodedImageTranslator.GetEncodedImageByURL(newCrAnime.TallPoster().Source())
+		encodedTallPoster, err := subcmd.encodedPosterFetcher.GetEncodedImageByURL(newCrAnime.TallPoster().Source())
 		if err != nil {
 			return RefreshPostersSubCommandOutput{}, err
 		}
 
-		encodedWidePoster, err := subcmd.getEncodedImageTranslator.GetEncodedImageByURL(newCrAnime.WidePoster().Source())
+		encodedWidePoster, err := subcmd.encodedPosterFetcher.GetEncodedImageByURL(newCrAnime.WidePoster().Source())
 		if err != nil {
 			return RefreshPostersSubCommandOutput{}, err
 		}

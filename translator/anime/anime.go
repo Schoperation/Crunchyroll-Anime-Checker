@@ -13,7 +13,6 @@ type animeDao interface {
 }
 
 type animeFactory interface {
-	Reform(dto anime.AnimeDto) (anime.Anime, error)
 	ReformAll(dtos []anime.AnimeDto) (map[core.SeriesId]anime.Anime, error)
 }
 

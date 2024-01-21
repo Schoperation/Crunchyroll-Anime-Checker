@@ -20,33 +20,33 @@ type GetLatestEpisodesSubCommandOutput struct {
 	Errors                map[core.SeriesId]error
 }
 
-type getAllSeasonsTranslator interface {
+type seriesSeasonsFetcher interface {
 	GetAllSeasonsBySeriesId(seriesId core.SeriesId) (crunchyroll.SeasonCollection, error)
 }
 
-type getAllEpisodesTranslator interface {
+type seasonEpisodesFetcher interface {
 	GetAllEpisodesBySeasonId(locale core.Locale, seasonId string) (crunchyroll.EpisodeCollection, error)
 }
 
-type getEncodedThumbnailTranslator interface {
+type encodedThumbnailFetcher interface {
 	GetEncodedImageByURL(url string) (string, error)
 }
 
 type GetLatestEpisodesSubCommand struct {
-	getAllSeasonsTranslator       getAllSeasonsTranslator
-	getAllEpisodesTranslator      getAllEpisodesTranslator
-	getEncodedThumbnailTranslator getEncodedThumbnailTranslator
+	seriesSeasonsFetcher    seriesSeasonsFetcher
+	seasonEpisodesFetcher   seasonEpisodesFetcher
+	encodedThumbnailFetcher encodedThumbnailFetcher
 }
 
 func NewGetLatestEpisodesSubCommand(
-	getAllSeasonsTranslator getAllSeasonsTranslator,
-	getAllEpisodesTranslator getAllEpisodesTranslator,
-	getEncodedThumbnailTranslator getEncodedThumbnailTranslator,
+	seriesSeasonsFetcher seriesSeasonsFetcher,
+	seasonEpisodesFetcher seasonEpisodesFetcher,
+	encodedThumbnailFetcher encodedThumbnailFetcher,
 ) GetLatestEpisodesSubCommand {
 	return GetLatestEpisodesSubCommand{
-		getAllSeasonsTranslator:       getAllSeasonsTranslator,
-		getAllEpisodesTranslator:      getAllEpisodesTranslator,
-		getEncodedThumbnailTranslator: getEncodedThumbnailTranslator,
+		seriesSeasonsFetcher:    seriesSeasonsFetcher,
+		seasonEpisodesFetcher:   seasonEpisodesFetcher,
+		encodedThumbnailFetcher: encodedThumbnailFetcher,
 	}
 }
 
@@ -58,7 +58,7 @@ func (subcmd GetLatestEpisodesSubCommand) Run(input GetLatestEpisodesSubCommandI
 			return GetLatestEpisodesSubCommandOutput{}, fmt.Errorf("no local anime with series ID %s", updatedCrAnime.SeriesId())
 		}
 
-		crSeasons, err := subcmd.getAllSeasonsTranslator.GetAllSeasonsBySeriesId(updatedCrAnime.SeriesId())
+		crSeasons, err := subcmd.seriesSeasonsFetcher.GetAllSeasonsBySeriesId(updatedCrAnime.SeriesId())
 		if err != nil {
 			return GetLatestEpisodesSubCommandOutput{}, err
 		}
@@ -68,7 +68,7 @@ func (subcmd GetLatestEpisodesSubCommand) Run(input GetLatestEpisodesSubCommandI
 
 			latestSubSeason, subExists := crSeasons.LatestSub(locale)
 			if subExists {
-				crEpisodes, err := subcmd.getAllEpisodesTranslator.GetAllEpisodesBySeasonId(locale, latestSubSeason.Id())
+				crEpisodes, err := subcmd.seasonEpisodesFetcher.GetAllEpisodesBySeasonId(locale, latestSubSeason.Id())
 				if err != nil {
 					return GetLatestEpisodesSubCommandOutput{}, err
 				}
@@ -94,7 +94,7 @@ func (subcmd GetLatestEpisodesSubCommand) Run(input GetLatestEpisodesSubCommandI
 
 			latestDubSeason, dubExists := crSeasons.LatestDub(locale)
 			if dubExists {
-				crEpisodes, err := subcmd.getAllEpisodesTranslator.GetAllEpisodesBySeasonId(locale, latestDubSeason.Id())
+				crEpisodes, err := subcmd.seasonEpisodesFetcher.GetAllEpisodesBySeasonId(locale, latestDubSeason.Id())
 				if err != nil {
 					return GetLatestEpisodesSubCommandOutput{}, err
 				}
@@ -134,7 +134,7 @@ func (subcmd GetLatestEpisodesSubCommand) Run(input GetLatestEpisodesSubCommandI
 
 		fmt.Printf("%s - %s\n", newCrAnime.SeriesId(), newCrAnime.SlugTitle())
 
-		crSeasons, err := subcmd.getAllSeasonsTranslator.GetAllSeasonsBySeriesId(newCrAnime.SeriesId())
+		crSeasons, err := subcmd.seriesSeasonsFetcher.GetAllSeasonsBySeriesId(newCrAnime.SeriesId())
 		if err != nil {
 			errors[newCrAnime.SeriesId()] = err
 			continue
@@ -149,7 +149,7 @@ func (subcmd GetLatestEpisodesSubCommand) Run(input GetLatestEpisodesSubCommandI
 		for _, locale := range input.Locales {
 			latestSubSeason, subExists := crSeasons.LatestSub(locale)
 			if subExists {
-				crEpisodes, err := subcmd.getAllEpisodesTranslator.GetAllEpisodesBySeasonId(locale, latestSubSeason.Id())
+				crEpisodes, err := subcmd.seasonEpisodesFetcher.GetAllEpisodesBySeasonId(locale, latestSubSeason.Id())
 				if err != nil {
 					errors[newCrAnime.SeriesId()] = err
 					break
@@ -176,7 +176,7 @@ func (subcmd GetLatestEpisodesSubCommand) Run(input GetLatestEpisodesSubCommandI
 
 			latestDubSeason, dubExists := crSeasons.LatestDub(locale)
 			if dubExists {
-				crEpisodes, err := subcmd.getAllEpisodesTranslator.GetAllEpisodesBySeasonId(locale, latestDubSeason.Id())
+				crEpisodes, err := subcmd.seasonEpisodesFetcher.GetAllEpisodesBySeasonId(locale, latestDubSeason.Id())
 				if err != nil {
 					errors[newCrAnime.SeriesId()] = err
 					break
@@ -229,7 +229,7 @@ func (subcmd GetLatestEpisodesSubCommand) generateNewEpisode(animeId anime.Anime
 		return anime.MinimalEpisode{}, anime.Image{}, err
 	}
 
-	encodedThumbnail, err := subcmd.getEncodedThumbnailTranslator.GetEncodedImageByURL(crEpisode.Thumbnail().Source())
+	encodedThumbnail, err := subcmd.encodedThumbnailFetcher.GetEncodedImageByURL(crEpisode.Thumbnail().Source())
 	if err != nil {
 		return anime.MinimalEpisode{}, anime.Image{}, err
 	}

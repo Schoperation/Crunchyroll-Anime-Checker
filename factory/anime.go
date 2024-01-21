@@ -7,17 +7,14 @@ import (
 )
 
 type posterTranslator interface {
-	GetAllByAnimeId(animeId anime.AnimeId) ([]anime.Image, error)
 	GetAllByAnimeIds(animeIds []anime.AnimeId) (map[anime.AnimeId][]anime.Image, error)
 }
 
 type latestEpisodesTranslator interface {
-	GetAllByAnimeId(animeId anime.AnimeId) ([]anime.LatestEpisodes, error)
 	GetAllByAnimeIds(animeIds []anime.AnimeId) (map[anime.AnimeId][]anime.LatestEpisodes, error)
 }
 
 type thumbnailTranslator interface {
-	GetAllByAnimeId(animeId anime.AnimeId) (map[string]anime.Image, error)
 	GetAllByAnimeIds(animeIds []anime.AnimeId) (map[anime.AnimeId]map[string]anime.Image, error)
 }
 
@@ -37,29 +34,6 @@ func NewAnimeFactory(
 		latestEpisodesTranslator: latestEpisodesTranslator,
 		thumbnailTranslator:      thumbnailTranslator,
 	}
-}
-
-func (factory AnimeFactory) Reform(dto anime.AnimeDto) (anime.Anime, error) {
-	animeId := anime.ReformAnimeId(dto.AnimeId)
-
-	posters, err := factory.posterTranslator.GetAllByAnimeId(animeId)
-	if err != nil {
-		return anime.Anime{}, err
-	}
-
-	latestEpisodes, err := factory.latestEpisodesTranslator.GetAllByAnimeId(animeId)
-	if err != nil {
-		return anime.Anime{}, err
-	}
-
-	thumbnails, err := factory.thumbnailTranslator.GetAllByAnimeId(animeId)
-	if err != nil {
-		return anime.Anime{}, err
-	}
-
-	episodes := anime.ReformEpisodeCollection(animeId, latestEpisodes, thumbnails)
-
-	return anime.ReformAnime(dto, posters, episodes), nil
 }
 
 func (factory AnimeFactory) ReformAll(dtos []anime.AnimeDto) (map[core.SeriesId]anime.Anime, error) {

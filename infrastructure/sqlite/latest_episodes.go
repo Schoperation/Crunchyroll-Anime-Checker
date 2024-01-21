@@ -1,7 +1,6 @@
 package sqlite
 
 import (
-	"database/sql"
 	"schoperation/crunchyrollanimestatus/domain/anime"
 
 	"github.com/doug-martin/goqu/v9"
@@ -9,10 +8,10 @@ import (
 )
 
 type LatestEpisodesDao struct {
-	db *sql.DB
+	db *goqu.Database
 }
 
-func NewLatestEpisodesDao(db *sql.DB) LatestEpisodesDao {
+func NewLatestEpisodesDao(db *goqu.Database) LatestEpisodesDao {
 	return LatestEpisodesDao{
 		db: db,
 	}
@@ -29,67 +28,18 @@ type latestEpisodesModel struct {
 	LatestDubTitle   string `db:"latest_dub_title"`
 }
 
-func (dao LatestEpisodesDao) GetAllByAnimeId(animeId int) ([]anime.LatestEpisodesDto, error) {
-	sql, args, err := goqu.
-		Select(&latestEpisodesModel{}).
-		From("latest_episodes").
-		Where(
-			goqu.C("anime_id").Eq(animeId),
-		).
-		WithDialect(GoquDialect).
-		Prepared(true).
-		ToSQL()
-	if err != nil {
-		return nil, sqlBuilderError("latest_episodes", err)
-	}
-
-	rows, err := dao.db.Query(sql, args...)
-	if err != nil {
-		return nil, couldNotRetrieveError("latest_episodes", err)
-	}
-
-	models, err := scanRows[latestEpisodesModel](rows)
-	if err != nil {
-		return nil, couldNotRetrieveError("latest_episodes", err)
-	}
-
-	dtos := make([]anime.LatestEpisodesDto, len(models))
-	for i, model := range models {
-		dtos[i] = anime.LatestEpisodesDto{
-			AnimeId:          model.AnimeId,
-			LocaleId:         model.LocaleId,
-			LatestSubSeason:  model.LatestSubSeason,
-			LatestSubEpisode: model.LatestSubEpisode,
-			LatestSubTitle:   model.LatestSubTitle,
-			LatestDubSeason:  model.LatestDubSeason,
-			LatestDubEpisode: model.LatestDubEpisode,
-			LatestDubTitle:   model.LatestDubTitle,
-		}
-	}
-
-	return dtos, nil
-}
-
 func (dao LatestEpisodesDao) GetAllByAnimeIds(animeIds []int) ([]anime.LatestEpisodesDto, error) {
-	sql, args, err := goqu.
+	var models []latestEpisodesModel
+	err := dao.db.
 		Select(&latestEpisodesModel{}).
 		From("latest_episodes").
 		Where(
 			goqu.C("anime_id").In(animeIds),
 		).
-		WithDialect(GoquDialect).
+		WithDialect(Dialect).
 		Prepared(true).
-		ToSQL()
-	if err != nil {
-		return nil, sqlBuilderError("latest_episodes", err)
-	}
-
-	rows, err := dao.db.Query(sql, args...)
-	if err != nil {
-		return nil, couldNotRetrieveError("latest_episodes", err)
-	}
-
-	models, err := scanRows[latestEpisodesModel](rows)
+		Executor().
+		ScanStructs(&models)
 	if err != nil {
 		return nil, couldNotRetrieveError("latest_episodes", err)
 	}
@@ -125,17 +75,13 @@ func (dao LatestEpisodesDao) InsertAll(dtos []anime.LatestEpisodesDto) error {
 		models[i] = dao.latestEpisodesDtoToModel(dto)
 	}
 
-	sql, args, err := goqu.
+	_, err := dao.db.
 		Insert("latest_episodes").
 		Rows(models).
-		WithDialect(GoquDialect).
+		WithDialect(Dialect).
 		Prepared(false).
-		ToSQL()
-	if err != nil {
-		return sqlBuilderError("latest_episodes", err)
-	}
-
-	_, err = dao.db.Exec(sql, args...)
+		Executor().
+		Exec()
 	if err != nil {
 		return couldNotCreateError("latest_episodes", err)
 	}

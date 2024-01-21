@@ -17,11 +17,11 @@ type RefreshAnimeCommandOutput struct {
 	UpdatedAnimeCount int
 }
 
-type crunchyrollAnimeTranslator interface {
+type crunchyrollAnimeFetcher interface {
 	GetAllAnime(locale core.Locale) ([]crunchyroll.Anime, error)
 }
 
-type localAnimeTranslator interface {
+type localAnimeFetcher interface {
 	GetAllMinimal() (map[core.SeriesId]anime.MinimalAnime, error)
 	GetAllByAnimeIds(animeIds []anime.AnimeId) (map[core.SeriesId]anime.Anime, error)
 }
@@ -39,23 +39,23 @@ type animeSaver interface {
 }
 
 type RefreshAnimeCommand struct {
-	crunchyrollAnimeTranslator  crunchyrollAnimeTranslator
-	localAnimeTranslator        localAnimeTranslator
+	crunchyrollAnimeFetcher     crunchyrollAnimeFetcher
+	localAnimeFetcher           localAnimeFetcher
 	refreshPostersSubCommand    refreshPostersSubCommand
 	getLatestEpisodesSubCommand getLatestEpisodesSubCommand
 	animeSaver                  animeSaver
 }
 
 func NewRefreshAnimeCommand(
-	crunchyrollAnimeTranslator crunchyrollAnimeTranslator,
-	localAnimeTranslator localAnimeTranslator,
+	crunchyrollAnimeFetcher crunchyrollAnimeFetcher,
+	localAnimeFetcher localAnimeFetcher,
 	refreshPostersSubCommand refreshPostersSubCommand,
 	getLatestEpisodesSubCommand getLatestEpisodesSubCommand,
 	animeSaver animeSaver,
 ) RefreshAnimeCommand {
 	return RefreshAnimeCommand{
-		crunchyrollAnimeTranslator:  crunchyrollAnimeTranslator,
-		localAnimeTranslator:        localAnimeTranslator,
+		crunchyrollAnimeFetcher:     crunchyrollAnimeFetcher,
+		localAnimeFetcher:           localAnimeFetcher,
 		refreshPostersSubCommand:    refreshPostersSubCommand,
 		getLatestEpisodesSubCommand: getLatestEpisodesSubCommand,
 		animeSaver:                  animeSaver,
@@ -65,16 +65,17 @@ func NewRefreshAnimeCommand(
 func (cmd RefreshAnimeCommand) Run(input RefreshAnimeCommandInput) (RefreshAnimeCommandOutput, error) {
 	locales := []core.Locale{
 		core.NewEnglishLocale(),
+		core.NewSpanishLocale(),
 	}
 
 	fmt.Printf("Retrieving anime...\n")
 	startTime := time.Now().UTC()
-	crAnimes, err := cmd.crunchyrollAnimeTranslator.GetAllAnime(core.NewEnglishLocale())
+	crAnimes, err := cmd.crunchyrollAnimeFetcher.GetAllAnime(core.NewEnglishLocale())
 	if err != nil {
 		return RefreshAnimeCommandOutput{}, err
 	}
 
-	localAnimes, err := cmd.localAnimeTranslator.GetAllMinimal()
+	localAnimes, err := cmd.localAnimeFetcher.GetAllMinimal()
 	if err != nil {
 		return RefreshAnimeCommandOutput{}, err
 	}
@@ -101,7 +102,7 @@ func (cmd RefreshAnimeCommand) Run(input RefreshAnimeCommandInput) (RefreshAnime
 
 	fmt.Printf("%d new anime to add, %d anime to update...\n", len(newCrAnimes), len(updatedCrAnimes))
 
-	localAnimeToBeUpdated, err := cmd.localAnimeTranslator.GetAllByAnimeIds(animeIds)
+	localAnimeToBeUpdated, err := cmd.localAnimeFetcher.GetAllByAnimeIds(animeIds)
 	if err != nil {
 		return RefreshAnimeCommandOutput{}, err
 	}

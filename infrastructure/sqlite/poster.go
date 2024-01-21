@@ -1,7 +1,6 @@
 package sqlite
 
 import (
-	"database/sql"
 	"schoperation/crunchyrollanimestatus/domain/anime"
 
 	"github.com/doug-martin/goqu/v9"
@@ -9,81 +8,34 @@ import (
 )
 
 type PosterDao struct {
-	db *sql.DB
+	db *goqu.Database
 }
 
-func NewPosterDao(db *sql.DB) PosterDao {
+func NewPosterDao(db *goqu.Database) PosterDao {
 	return PosterDao{
 		db: db,
 	}
 }
 
 type posterModel struct {
-	AnimeId     int    `db:"anime_id" goqu:"skipinsert,skipupdate"`
+	AnimeId     int    `db:"anime_id" goqu:"skipupdate"`
 	ImageTypeId int    `db:"image_type_id"`
 	Url         string `db:"url"`
 	Encoded     string `db:"encoded"`
 }
 
-func (dao PosterDao) GetAllByAnimeId(animeId int) ([]anime.ImageDto, error) {
-	sql, args, err := goqu.
-		Select(&posterModel{}).
-		From("poster").
-		Where(
-			goqu.C("anime_id").Eq(animeId),
-		).
-		WithDialect(GoquDialect).
-		Prepared(true).
-		ToSQL()
-	if err != nil {
-		return nil, sqlBuilderError("poster", err)
-	}
-
-	rows, err := dao.db.Query(sql, args...)
-	if err != nil {
-		return nil, couldNotRetrieveError("poster", err)
-	}
-
-	models, err := scanRows[posterModel](rows)
-	if err != nil {
-		return nil, couldNotRetrieveError("poster", err)
-	}
-
-	dtos := make([]anime.ImageDto, len(models))
-	for i, model := range models {
-		dtos[i] = anime.ImageDto{
-			AnimeId:       model.AnimeId,
-			ImageType:     model.ImageTypeId,
-			SeasonNumber:  0,
-			EpisodeNumber: 0,
-			Url:           model.Url,
-			Encoded:       model.Encoded,
-		}
-	}
-
-	return dtos, nil
-}
-
 func (dao PosterDao) GetAllByAnimeIds(animeIds []int) ([]anime.ImageDto, error) {
-	sql, args, err := goqu.
+	var models []posterModel
+	err := dao.db.
 		Select(&posterModel{}).
 		From("poster").
 		Where(
 			goqu.C("anime_id").In(animeIds),
 		).
-		WithDialect(GoquDialect).
+		WithDialect(Dialect).
 		Prepared(true).
-		ToSQL()
-	if err != nil {
-		return nil, sqlBuilderError("poster", err)
-	}
-
-	rows, err := dao.db.Query(sql, args...)
-	if err != nil {
-		return nil, couldNotRetrieveError("poster", err)
-	}
-
-	models, err := scanRows[posterModel](rows)
+		Executor().
+		ScanStructs(&models)
 	if err != nil {
 		return nil, couldNotRetrieveError("poster", err)
 	}
@@ -117,18 +69,14 @@ func (dao PosterDao) InsertAll(dtos []anime.ImageDto) error {
 		models[i] = dao.imageDtoToModel(dto)
 	}
 
-	sql, args, err := goqu.
+	_, err := dao.db.
 		Insert("poster").
 		Rows(models).
 		OnConflict(goqu.DoNothing()).
-		WithDialect(GoquDialect).
+		WithDialect(Dialect).
 		Prepared(false).
-		ToSQL()
-	if err != nil {
-		return sqlBuilderError("poster", err)
-	}
-
-	_, err = dao.db.Exec(sql, args...)
+		Executor().
+		Exec()
 	if err != nil {
 		return couldNotCreateError("poster", err)
 	}
@@ -144,7 +92,7 @@ func (dao PosterDao) Update(dto anime.ImageDto) error {
 			goqu.C("anime_id").Eq(dto.AnimeId),
 			goqu.C("image_type_id").Eq(dto.ImageType),
 		).
-		WithDialect(GoquDialect).
+		WithDialect(Dialect).
 		Prepared(false).
 		ToSQL()
 	if err != nil {

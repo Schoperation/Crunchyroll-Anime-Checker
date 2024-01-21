@@ -1,7 +1,6 @@
 package sqlite
 
 import (
-	"database/sql"
 	"schoperation/crunchyrollanimestatus/domain/anime"
 	"schoperation/crunchyrollanimestatus/domain/core"
 
@@ -10,10 +9,10 @@ import (
 )
 
 type ThumbnailDao struct {
-	db *sql.DB
+	db *goqu.Database
 }
 
-func NewThumbnailDao(db *sql.DB) ThumbnailDao {
+func NewThumbnailDao(db *goqu.Database) ThumbnailDao {
 	return ThumbnailDao{
 		db: db,
 	}
@@ -27,65 +26,18 @@ type thumbnailModel struct {
 	Encoded       string `db:"encoded"`
 }
 
-func (dao ThumbnailDao) GetAllByAnimeId(animeId int) ([]anime.ImageDto, error) {
-	sql, args, err := goqu.
-		Select(&thumbnailModel{}).
-		From("thumbnail").
-		Where(
-			goqu.C("anime_id").Eq(animeId),
-		).
-		WithDialect(GoquDialect).
-		Prepared(true).
-		ToSQL()
-	if err != nil {
-		return nil, sqlBuilderError("thumbnail", err)
-	}
-
-	rows, err := dao.db.Query(sql, args...)
-	if err != nil {
-		return nil, couldNotRetrieveError("thumbnail", err)
-	}
-
-	models, err := scanRows[thumbnailModel](rows)
-	if err != nil {
-		return nil, couldNotRetrieveError("thumbnail", err)
-	}
-
-	dtos := make([]anime.ImageDto, len(models))
-	for i, model := range models {
-		dtos[i] = anime.ImageDto{
-			AnimeId:       model.AnimeId,
-			ImageType:     core.ImageTypeThumbnail.Int(),
-			SeasonNumber:  model.SeasonNumber,
-			EpisodeNumber: model.SeasonNumber,
-			Url:           model.Url,
-			Encoded:       model.Encoded,
-		}
-	}
-
-	return dtos, nil
-}
-
 func (dao ThumbnailDao) GetAllByAnimeIds(animeIds []int) ([]anime.ImageDto, error) {
-	sql, args, err := goqu.
+	var models []thumbnailModel
+	err := dao.db.
 		Select(&thumbnailModel{}).
 		From("thumbnail").
 		Where(
 			goqu.C("anime_id").In(animeIds),
 		).
-		WithDialect(GoquDialect).
+		WithDialect(Dialect).
 		Prepared(true).
-		ToSQL()
-	if err != nil {
-		return nil, sqlBuilderError("thumbnail", err)
-	}
-
-	rows, err := dao.db.Query(sql, args...)
-	if err != nil {
-		return nil, couldNotRetrieveError("thumbnail", err)
-	}
-
-	models, err := scanRows[thumbnailModel](rows)
+		Executor().
+		ScanStructs(&models)
 	if err != nil {
 		return nil, couldNotRetrieveError("thumbnail", err)
 	}
@@ -119,17 +71,13 @@ func (dao ThumbnailDao) InsertAll(dtos []anime.ImageDto) error {
 		models[i] = dao.imageDtoToModel(dto)
 	}
 
-	sql, args, err := goqu.
+	_, err := dao.db.
 		Insert("thumbnail").
 		Rows(models).
-		WithDialect(GoquDialect).
+		WithDialect(Dialect).
 		Prepared(false).
-		ToSQL()
-	if err != nil {
-		return sqlBuilderError("thumbnail", err)
-	}
-
-	_, err = dao.db.Exec(sql, args...)
+		Executor().
+		Exec()
 	if err != nil {
 		return couldNotCreateError("thumbnail", err)
 	}
@@ -145,7 +93,7 @@ func (dao ThumbnailDao) Delete(dto anime.ImageDto) error {
 			goqu.C("season_number").Eq(dto.SeasonNumber),
 			goqu.C("episode_number").Eq(dto.EpisodeNumber),
 		).
-		WithDialect(GoquDialect).
+		WithDialect(Dialect).
 		Prepared(false).
 		ToSQL()
 	if err != nil {

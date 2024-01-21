@@ -5,7 +5,6 @@ import (
 )
 
 type latestEpisodesDao interface {
-	GetAllByAnimeId(animeId int) ([]anime.LatestEpisodesDto, error)
 	GetAllByAnimeIds(animeIds []int) ([]anime.LatestEpisodesDto, error)
 	InsertAll(dtos []anime.LatestEpisodesDto) error
 }
@@ -18,20 +17,6 @@ func NewLatestEpisodesTranslator(latestEpisodesDao latestEpisodesDao) LatestEpis
 	return LatestEpisodesTranslator{
 		latestEpisodesDao: latestEpisodesDao,
 	}
-}
-
-func (translator LatestEpisodesTranslator) GetAllByAnimeId(animeId anime.AnimeId) ([]anime.LatestEpisodes, error) {
-	dtos, err := translator.latestEpisodesDao.GetAllByAnimeId(animeId.Int())
-	if err != nil {
-		return nil, err
-	}
-
-	latestEpisodes := make([]anime.LatestEpisodes, len(dtos))
-	for i, dto := range dtos {
-		latestEpisodes[i] = anime.ReformLatestEpisodes(dto)
-	}
-
-	return latestEpisodes, nil
 }
 
 func (translator LatestEpisodesTranslator) GetAllByAnimeIds(animeIds []anime.AnimeId) (map[anime.AnimeId][]anime.LatestEpisodes, error) {
