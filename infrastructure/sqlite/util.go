@@ -4,7 +4,7 @@ import (
 	"database/sql"
 )
 
-const GoquDialect = "sqlite3"
+const GoquDialect = "sqlite3_with_returning"
 
 func scanRows[ModelType any](rows *sql.Rows) ([]ModelType, error) {
 	defer rows.Close()

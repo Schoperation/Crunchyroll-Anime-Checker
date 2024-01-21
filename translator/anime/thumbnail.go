@@ -64,7 +64,7 @@ func (translator ThumbnailTranslator) GetAllByAnimeIds(animeIds []anime.AnimeId)
 	return thumbnailMap, nil
 }
 
-func (translator ThumbnailTranslator) SaveAll(newThumbnails []anime.Image) error {
+func (translator ThumbnailTranslator) SaveAll(newThumbnails []anime.Image, updatedThumbnails []anime.Image) error {
 	newDtos := make([]anime.ImageDto, len(newThumbnails))
 	for i, thumbnail := range newThumbnails {
 		newDtos[i] = thumbnail.Dto()

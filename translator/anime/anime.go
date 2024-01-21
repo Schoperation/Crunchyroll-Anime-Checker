@@ -8,7 +8,7 @@ import (
 type animeDao interface {
 	GetAllMinimal() ([]anime.MinimalAnimeDto, error)
 	GetAllByAnimeIds(animeIds []int) ([]anime.AnimeDto, error)
-	InsertAll(dtos []anime.AnimeDto) error
+	InsertAll(dtos []anime.AnimeDto) ([]anime.MinimalAnimeDto, error)
 	Update(dto anime.AnimeDto) error
 }
 
@@ -35,13 +35,13 @@ func (translator AnimeTranslator) GetAllMinimal() (map[core.SeriesId]anime.Minim
 		return nil, err
 	}
 
-	minimalAnime := map[core.SeriesId]anime.MinimalAnime{}
+	minimalAnimes := map[core.SeriesId]anime.MinimalAnime{}
 	for _, dto := range dtos {
-		reformedMinimalAnime := anime.ReformMinimalAnime(dto)
-		minimalAnime[reformedMinimalAnime.SeriesId()] = reformedMinimalAnime
+		seriesId := core.ReformSeriesId(dto.SeriesId)
+		minimalAnimes[seriesId] = anime.ReformMinimalAnime(dto)
 	}
 
-	return minimalAnime, nil
+	return minimalAnimes, nil
 }
 
 func (translator AnimeTranslator) GetAllByAnimeIds(animeIds []anime.AnimeId) (map[core.SeriesId]anime.Anime, error) {
@@ -58,16 +58,22 @@ func (translator AnimeTranslator) GetAllByAnimeIds(animeIds []anime.AnimeId) (ma
 	return translator.animeFactory.ReformAll(dtos)
 }
 
-func (translator AnimeTranslator) SaveAll(newAnime []anime.Anime, updatedAnime []anime.Anime) error {
+func (translator AnimeTranslator) SaveAll(newAnime []anime.Anime, updatedAnime []anime.Anime) (map[core.SeriesId]anime.MinimalAnime, error) {
 	newDtos := make([]anime.AnimeDto, len(newAnime))
 	for i, series := range newAnime {
 		newDtos[i] = series.Dto()
 	}
 
-	err := translator.animeDao.InsertAll(newDtos)
+	minimalAnimeDtos, err := translator.animeDao.InsertAll(newDtos)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	minimalAnimes := make(map[core.SeriesId]anime.MinimalAnime, len(minimalAnimeDtos))
+	for _, dto := range minimalAnimeDtos {
+		seriesId := core.ReformSeriesId(dto.SeriesId)
+		minimalAnimes[seriesId] = anime.ReformMinimalAnime(dto)
+	}
+
+	return minimalAnimes, nil
 }

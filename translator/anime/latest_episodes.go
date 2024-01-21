@@ -60,7 +60,7 @@ func (translator LatestEpisodesTranslator) GetAllByAnimeIds(animeIds []anime.Ani
 	return latestEpisodesMap, nil
 }
 
-func (translator LatestEpisodesTranslator) SaveAll(newLatestEpisodes []anime.LatestEpisodes) error {
+func (translator LatestEpisodesTranslator) SaveAll(newLatestEpisodes []anime.LatestEpisodes, updatedLatestEpisodes []anime.LatestEpisodes) error {
 	newDtos := make([]anime.LatestEpisodesDto, len(newLatestEpisodes))
 	for i, le := range newLatestEpisodes {
 		newDtos[i] = le.Dto()

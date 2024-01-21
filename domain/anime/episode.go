@@ -55,19 +55,19 @@ func ReformEpisode(args NewEpisodeArgs) Episode {
 	}
 }
 
-func (e Episode) Number() int {
+func (e *Episode) Number() int {
 	return e.number
 }
 
-func (e Episode) Season() int {
+func (e *Episode) Season() int {
 	return e.seasonNumber
 }
 
-func (e Episode) Thumbnail() Image {
-	return e.thumbnail
+func (e *Episode) Thumbnail() *Image {
+	return &e.thumbnail
 }
 
-func (e Episode) Titles() TitleCollection {
+func (e *Episode) Titles() TitleCollection {
 	return e.titles
 }
 

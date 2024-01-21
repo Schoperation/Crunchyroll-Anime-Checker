@@ -115,9 +115,9 @@ func (dao AnimeDao) GetAllByAnimeIds(animeIds []int) ([]anime.AnimeDto, error) {
 	return dtos, nil
 }
 
-func (dao AnimeDao) InsertAll(dtos []anime.AnimeDto) error {
+func (dao AnimeDao) InsertAll(dtos []anime.AnimeDto) ([]anime.MinimalAnimeDto, error) {
 	if len(dtos) == 0 {
-		return nil
+		return nil, nil
 	}
 
 	models := make([]animeModel, len(dtos))
@@ -128,19 +128,39 @@ func (dao AnimeDao) InsertAll(dtos []anime.AnimeDto) error {
 	sql, args, err := goqu.
 		Insert("anime").
 		Rows(models).
+		Returning("anime_id", "series_id", "last_updated").
 		WithDialect(GoquDialect).
 		Prepared(false).
 		ToSQL()
 	if err != nil {
-		return sqlBuilderError("anime", err)
+		return nil, sqlBuilderError("anime", err)
 	}
 
-	_, err = dao.db.Exec(sql, args...)
+	rows, err := dao.db.Query(sql, args...)
 	if err != nil {
-		return couldNotCreateError("anime", err)
+		return nil, couldNotCreateError("anime", err)
+	}
+	defer rows.Close()
+
+	minimalModels, err := scanRows[minimalAnimeModel](rows)
+	if err != nil {
+		return nil, couldNotRetrieveError("minimal anime", err)
 	}
 
-	return nil
+	if len(minimalModels) != len(dtos) {
+		return nil, couldNotRetrieveAllError("minimal anime", len(dtos), len(minimalModels))
+	}
+
+	minimalDtos := make([]anime.MinimalAnimeDto, len(minimalModels))
+	for i, model := range minimalModels {
+		minimalDtos[i] = anime.MinimalAnimeDto{
+			AnimeId:     model.AnimeId,
+			SeriesId:    model.SeriesId,
+			LastUpdated: model.LastUpdated,
+		}
+	}
+
+	return minimalDtos, nil
 }
 
 func (dao AnimeDao) Update(dto anime.AnimeDto) error {

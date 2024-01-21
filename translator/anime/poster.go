@@ -58,7 +58,7 @@ func (translator PosterTranslator) GetAllByAnimeIds(animeIds []anime.AnimeId) (m
 	return posterMap, nil
 }
 
-func (translator PosterTranslator) SaveAll(newPosters []anime.Image) error {
+func (translator PosterTranslator) SaveAll(newPosters []anime.Image, updatedPosters []anime.Image) error {
 	newDtos := make([]anime.ImageDto, len(newPosters))
 	for i, poster := range newPosters {
 		newDtos[i] = poster.Dto()

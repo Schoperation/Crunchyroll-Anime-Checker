@@ -58,7 +58,7 @@ func NewAnime(
 	}
 
 	return Anime{
-		animeId:     0,
+		animeId:     NewBlankAnimeId(),
 		seriesId:    seriesId,
 		slugTitle:   dto.SlugTitle,
 		title:       dto.Title,
@@ -114,6 +114,7 @@ func (anime *Anime) Dto() AnimeDto {
 		SeriesId:    anime.seriesId.String(),
 		SlugTitle:   anime.slugTitle,
 		Title:       anime.title,
+		IsSimulcast: anime.isSimulcast,
 		LastUpdated: anime.lastUpdated,
 	}
 }
@@ -123,16 +124,25 @@ func (anime *Anime) SetDirty() {
 	anime.lastUpdated = now()
 }
 
-func (anime *Anime) AssignAnimeId(animeId AnimeId) {
+func (anime *Anime) AssignAnimeId(animeId AnimeId) error {
 	if !anime.animeId.IsZero() {
-		return
+		return fmt.Errorf("anime must have zeroed ID")
 	}
 
 	if animeId.IsZero() {
-		return
+		return fmt.Errorf("new anime ID must be above zero")
 	}
 
 	anime.animeId = animeId
+	anime.episodes.assignAnimeId(animeId)
+
+	for i, poster := range anime.posters {
+		poster.assignAnimeId(animeId)
+		anime.posters[i] = poster
+	}
+
+	anime.SetDirty()
+	return nil
 }
 
 func (anime *Anime) UpdatePosters(newPosters []Image) error {

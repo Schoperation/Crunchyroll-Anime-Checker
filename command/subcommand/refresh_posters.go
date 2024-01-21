@@ -84,6 +84,12 @@ func (subcmd RefreshPostersSubCommand) Run(input RefreshPostersSubCommandInput) 
 
 	newPosters := make(map[core.SeriesId][]anime.Image, len(input.NewCrAnime))
 	for _, newCrAnime := range input.NewCrAnime {
+
+		// TODO temp testing
+		if newCrAnime.SeriesId().String() != "G1XHJV0KV" {
+			continue
+		}
+
 		fmt.Printf("%s - %s\n", newCrAnime.SeriesId(), newCrAnime.SlugTitle())
 
 		posters := make([]anime.Image, 2)

@@ -158,7 +158,18 @@ func (epcol *EpisodeCollection) addEpisode(locale core.Locale, episode MinimalEp
 	return nil
 }
 
-// cleanEpisodes Removes any unused episodes in the collection.
+func (epcol *EpisodeCollection) Thumbnails() []Image {
+	thumbnails := make([]Image, len(epcol.episodes))
+	i := 0
+	for _, ep := range epcol.episodes {
+		thumbnails[i] = *ep.Thumbnail()
+		i++
+	}
+
+	return thumbnails
+}
+
+// Removes any unused episodes in the collection.
 func (epcol *EpisodeCollection) CleanEpisodes() {
 	usedKeys := make(map[string]bool, len(epcol.latestSubs)+len(epcol.latestDubs))
 	for _, key := range epcol.latestSubs {
@@ -173,5 +184,14 @@ func (epcol *EpisodeCollection) CleanEpisodes() {
 		if _, exists := usedKeys[epKey]; !exists {
 			delete(epcol.episodes, epKey)
 		}
+	}
+}
+
+func (epcol *EpisodeCollection) assignAnimeId(animeId AnimeId) {
+	epcol.animeId = animeId
+
+	for key, ep := range epcol.episodes {
+		ep.Thumbnail().assignAnimeId(animeId)
+		epcol.episodes[key] = ep
 	}
 }

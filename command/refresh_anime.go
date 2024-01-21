@@ -6,6 +6,7 @@ import (
 	"schoperation/crunchyrollanimestatus/domain/anime"
 	"schoperation/crunchyrollanimestatus/domain/core"
 	"schoperation/crunchyrollanimestatus/domain/crunchyroll"
+	"time"
 )
 
 type RefreshAnimeCommandInput struct {
@@ -33,11 +34,16 @@ type getLatestEpisodesSubCommand interface {
 	Run(input subcommand.GetLatestEpisodesSubCommandInput) (subcommand.GetLatestEpisodesSubCommandOutput, error)
 }
 
+type animeSaver interface {
+	SaveAll(locales []core.Locale, newAnimes []anime.Anime, updatedAnimes []anime.Anime) error
+}
+
 type RefreshAnimeCommand struct {
 	crunchyrollAnimeTranslator  crunchyrollAnimeTranslator
 	localAnimeTranslator        localAnimeTranslator
 	refreshPostersSubCommand    refreshPostersSubCommand
 	getLatestEpisodesSubCommand getLatestEpisodesSubCommand
+	animeSaver                  animeSaver
 }
 
 func NewRefreshAnimeCommand(
@@ -45,16 +51,24 @@ func NewRefreshAnimeCommand(
 	localAnimeTranslator localAnimeTranslator,
 	refreshPostersSubCommand refreshPostersSubCommand,
 	getLatestEpisodesSubCommand getLatestEpisodesSubCommand,
+	animeSaver animeSaver,
 ) RefreshAnimeCommand {
 	return RefreshAnimeCommand{
 		crunchyrollAnimeTranslator:  crunchyrollAnimeTranslator,
 		localAnimeTranslator:        localAnimeTranslator,
 		refreshPostersSubCommand:    refreshPostersSubCommand,
 		getLatestEpisodesSubCommand: getLatestEpisodesSubCommand,
+		animeSaver:                  animeSaver,
 	}
 }
 
 func (cmd RefreshAnimeCommand) Run(input RefreshAnimeCommandInput) (RefreshAnimeCommandOutput, error) {
+	locales := []core.Locale{
+		core.NewEnglishLocale(),
+	}
+
+	fmt.Printf("Retrieving anime...\n")
+	startTime := time.Now().UTC()
 	crAnimes, err := cmd.crunchyrollAnimeTranslator.GetAllAnime(core.NewEnglishLocale())
 	if err != nil {
 		return RefreshAnimeCommandOutput{}, err
@@ -91,31 +105,69 @@ func (cmd RefreshAnimeCommand) Run(input RefreshAnimeCommandInput) (RefreshAnime
 	if err != nil {
 		return RefreshAnimeCommandOutput{}, err
 	}
+	fmt.Printf("Finished anime retrieval in %v\n", time.Since(startTime))
 
-	/*
-		fmt.Printf("Refreshing posters...")
-		posterCmdOutput, err := cmd.refreshPostersSubCommand.Run(subcommand.RefreshPostersSubCommandInput{
-			NewCrAnime:     newCrAnimes,
-			UpdatedCrAnime: updatedCrAnimes,
-			LocalAnime:     localAnimeToBeUpdated,
-		})
-		if err != nil {
-			return RefreshAnimeCommandOutput{}, err
-		}
-	*/
-
-	fmt.Println("Refreshing latest episodes...")
-	latestEpisodeCmdOutput, err := cmd.getLatestEpisodesSubCommand.Run(subcommand.GetLatestEpisodesSubCommandInput{
+	fmt.Printf("Refreshing posters...\n")
+	startTime = time.Now().UTC()
+	posterCmdOutput, err := cmd.refreshPostersSubCommand.Run(subcommand.RefreshPostersSubCommandInput{
 		NewCrAnime:     newCrAnimes,
 		UpdatedCrAnime: updatedCrAnimes,
 		LocalAnime:     localAnimeToBeUpdated,
-		Locales:        []core.Locale{core.NewEnglishLocale()},
 	})
 	if err != nil {
 		return RefreshAnimeCommandOutput{}, err
 	}
+	fmt.Printf("Finished posters in %v\n", time.Since(startTime))
 
-	fmt.Println(len(latestEpisodeCmdOutput.NewEpisodeCollections))
+	fmt.Printf("Refreshing latest episodes...\n")
+	startTime = time.Now().UTC()
+	latestEpisodeCmdOutput, err := cmd.getLatestEpisodesSubCommand.Run(subcommand.GetLatestEpisodesSubCommandInput{
+		NewCrAnime:     newCrAnimes,
+		UpdatedCrAnime: updatedCrAnimes,
+		LocalAnime:     localAnimeToBeUpdated,
+		Locales:        locales,
+	})
+	if err != nil {
+		return RefreshAnimeCommandOutput{}, err
+	}
+	fmt.Printf("Finished latest episodes in %v\n", time.Since(startTime))
+
+	fmt.Printf("Saving anime...\n")
+	startTime = time.Now().UTC()
+	newLocalAnimes := make([]anime.Anime, 1)
+	for i, newCrAnime := range newCrAnimes {
+
+		// TODO temp testing
+		if newCrAnime.SeriesId().String() != "G1XHJV0KV" {
+			continue
+		}
+
+		posters := posterCmdOutput.NewPosters[newCrAnime.SeriesId()]
+		episodes := latestEpisodeCmdOutput.NewEpisodeCollections[newCrAnime.SeriesId()]
+
+		newAnime, err := anime.NewAnime(anime.AnimeDto{
+			AnimeId:     0,
+			SeriesId:    newCrAnime.SeriesId().String(),
+			SlugTitle:   newCrAnime.SlugTitle(),
+			Title:       newCrAnime.Title(),
+			IsSimulcast: newCrAnime.IsSimulcast(),
+			LastUpdated: newCrAnime.LastUpdated(),
+		},
+			posters,
+			episodes)
+		if err != nil {
+			return RefreshAnimeCommandOutput{}, err
+		}
+
+		newLocalAnimes[i] = newAnime
+	}
+
+	err = cmd.animeSaver.SaveAll(locales, newLocalAnimes, nil)
+	if err != nil {
+		return RefreshAnimeCommandOutput{}, err
+	}
+
+	fmt.Printf("Finished saving anime in %v\n", time.Since(startTime))
 
 	return RefreshAnimeCommandOutput{
 		NewAnimeCount:     len(newCrAnimes),

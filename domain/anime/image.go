@@ -104,14 +104,6 @@ func (image *Image) Dto() ImageDto {
 	}
 }
 
-func (image *Image) AssignAnimeId(animeId AnimeId) {
-	if !image.animeId.IsZero() {
-		return
-	}
-
-	if animeId.IsZero() {
-		return
-	}
-
+func (image *Image) assignAnimeId(animeId AnimeId) {
 	image.animeId = animeId
 }
