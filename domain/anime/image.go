@@ -81,6 +81,14 @@ func (image *Image) ImageType() core.ImageType {
 	return image.imageType
 }
 
+func (image *Image) SeasonNumber() int {
+	return image.seasonNumber
+}
+
+func (image *Image) EpisodeNumber() int {
+	return image.episodeNumber
+}
+
 func (image *Image) Url() string {
 	return image.url
 }

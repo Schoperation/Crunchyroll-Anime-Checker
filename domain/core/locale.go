@@ -17,7 +17,6 @@ const (
 	LocaleKoKR = 2
 	LocaleZhCN = 3
 	LocaleEnUS = 4
-	LocaleEsES = 5
 )
 
 var localeNames = map[int]string{
@@ -25,7 +24,6 @@ var localeNames = map[int]string{
 	LocaleKoKR: "ko-KR",
 	LocaleZhCN: "zh-CN",
 	LocaleEnUS: "en-US",
-	LocaleEsES: "es-ES",
 }
 
 func NewLocaleFromId(localeId int) (Locale, error) {
@@ -67,6 +65,18 @@ func NewEnglishLocale() Locale {
 	return ReformLocaleFromId(LocaleEnUS)
 }
 
-func NewSpanishLocale() Locale {
-	return ReformLocaleFromId(LocaleEsES)
+func SupportedLocales() []Locale {
+	locales := make([]Locale, len(localeNames)-3)
+	i := 0
+
+	for id := range localeNames {
+		if id < LocaleEnUS {
+			continue
+		}
+
+		locales[i] = ReformLocaleFromId(id)
+		i++
+	}
+
+	return locales
 }

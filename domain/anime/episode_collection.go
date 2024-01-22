@@ -67,7 +67,7 @@ func ReformEpisodeCollection(animeId AnimeId, latestEpisodes []LatestEpisodes, t
 	return episodeCollection
 }
 
-func (epcol *EpisodeCollection) GetLatestEpisodesForLocale(locale core.Locale) LatestEpisodes {
+func (epcol *EpisodeCollection) GetLatestEpisodesForLocale(locale core.Locale) (LatestEpisodes, error) {
 	latestSubSeason := 0
 	latestSubEpisode := 0
 	latestSubTitle := ""
@@ -90,7 +90,7 @@ func (epcol *EpisodeCollection) GetLatestEpisodesForLocale(locale core.Locale) L
 		latestDubTitle = episode.Titles().Title(locale)
 	}
 
-	return ReformLatestEpisodes(LatestEpisodesDto{
+	return NewLatestEpisodes(LatestEpisodesDto{
 		AnimeId:          epcol.animeId.Int(),
 		LocaleId:         locale.Id(),
 		LatestSubSeason:  latestSubSeason,
@@ -100,6 +100,27 @@ func (epcol *EpisodeCollection) GetLatestEpisodesForLocale(locale core.Locale) L
 		LatestDubEpisode: latestDubEpisode,
 		LatestDubTitle:   latestDubTitle,
 	})
+}
+
+func (epcol *EpisodeCollection) Locales() []core.Locale {
+	var locales []core.Locale
+	addedLocales := make(map[core.Locale]bool)
+
+	for locale := range epcol.latestSubs {
+		addedLocales[locale] = true
+		locales = append(locales, locale)
+	}
+
+	for locale := range epcol.latestDubs {
+		if _, added := addedLocales[locale]; added {
+			continue
+		}
+
+		addedLocales[locale] = true
+		locales = append(locales, locale)
+	}
+
+	return locales
 }
 
 func (epcol *EpisodeCollection) AddSubForLocale(locale core.Locale, sub MinimalEpisode, thumbnail Image) error {
@@ -169,9 +190,11 @@ func (epcol *EpisodeCollection) Thumbnails() []Image {
 	return thumbnails
 }
 
-// Removes any unused episodes in the collection.
-func (epcol *EpisodeCollection) CleanEpisodes() {
+// Removes any unused episodes in the collection, and returns unused thumbnails for deletion.
+func (epcol *EpisodeCollection) CleanEpisodes() []Image {
 	usedKeys := make(map[string]bool, len(epcol.latestSubs)+len(epcol.latestDubs))
+	var deletedThumbnails []Image
+
 	for _, key := range epcol.latestSubs {
 		usedKeys[key] = true
 	}
@@ -182,9 +205,13 @@ func (epcol *EpisodeCollection) CleanEpisodes() {
 
 	for epKey := range epcol.episodes {
 		if _, exists := usedKeys[epKey]; !exists {
+			ep := epcol.episodes[epKey]
+			deletedThumbnails = append(deletedThumbnails, *ep.Thumbnail())
 			delete(epcol.episodes, epKey)
 		}
 	}
+
+	return deletedThumbnails
 }
 
 func (epcol *EpisodeCollection) assignAnimeId(animeId AnimeId) {

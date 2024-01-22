@@ -19,7 +19,7 @@ func NewLatestEpisodesDao(db *goqu.Database) LatestEpisodesDao {
 
 type latestEpisodesModel struct {
 	AnimeId          int    `db:"anime_id" goqu:"skipupdate"`
-	LocaleId         int    `db:"locale_id"`
+	LocaleId         int    `db:"locale_id" goqu:"skipupdate"`
 	LatestSubSeason  int    `db:"latest_sub_season"`
 	LatestSubEpisode int    `db:"latest_sub_episode"`
 	LatestSubTitle   string `db:"latest_sub_title"`
@@ -37,7 +37,6 @@ func (dao LatestEpisodesDao) GetAllByAnimeIds(animeIds []int) ([]anime.LatestEpi
 			goqu.C("anime_id").In(animeIds),
 		).
 		WithDialect(Dialect).
-		Prepared(true).
 		Executor().
 		ScanStructs(&models)
 	if err != nil {
@@ -78,12 +77,30 @@ func (dao LatestEpisodesDao) InsertAll(dtos []anime.LatestEpisodesDto) error {
 	_, err := dao.db.
 		Insert("latest_episodes").
 		Rows(models).
+		OnConflict(goqu.DoNothing()).
 		WithDialect(Dialect).
-		Prepared(false).
 		Executor().
 		Exec()
 	if err != nil {
 		return couldNotCreateError("latest_episodes", err)
+	}
+
+	return nil
+}
+
+func (dao LatestEpisodesDao) Update(dto anime.LatestEpisodesDto) error {
+	_, err := dao.db.
+		Update("latest_episodes").
+		Set(dao.latestEpisodesDtoToModel(dto)).
+		Where(
+			goqu.C("anime_id").Eq(dto.AnimeId),
+			goqu.C("locale_id").Eq(dto.LocaleId),
+		).
+		WithDialect(Dialect).
+		Executor().
+		Exec()
+	if err != nil {
+		return couldNotUpdateError("latest_episodes", err)
 	}
 
 	return nil

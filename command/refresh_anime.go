@@ -23,53 +23,58 @@ type crunchyrollAnimeFetcher interface {
 
 type localAnimeFetcher interface {
 	GetAllMinimal() (map[core.SeriesId]anime.MinimalAnime, error)
-	GetAllByAnimeIds(animeIds []anime.AnimeId) (map[core.SeriesId]anime.Anime, error)
+	GetAllByAnimeIds(animeIds []anime.AnimeId) (map[core.SeriesId]anime.Anime, map[core.SeriesId]anime.Anime, error)
+}
+
+type refreshBasicInfoSubCommand interface {
+	Run(input subcommand.RefreshBasicInfoInput) (subcommand.RefreshBasicInfoOutput, map[core.SeriesId]error)
 }
 
 type refreshPostersSubCommand interface {
-	Run(input subcommand.RefreshPostersSubCommandInput) (subcommand.RefreshPostersSubCommandOutput, error)
+	Run(input subcommand.RefreshPostersSubCommandInput) (subcommand.RefreshPostersSubCommandOutput, map[core.SeriesId]error)
 }
 
-type getLatestEpisodesSubCommand interface {
-	Run(input subcommand.GetLatestEpisodesSubCommandInput) (subcommand.GetLatestEpisodesSubCommandOutput, error)
+type refreshLatestEpisodesSubCommand interface {
+	Run(input subcommand.RefreshLatestEpisodesSubCommandInput) (subcommand.RefreshLatestEpisodesSubCommandOutput, map[core.SeriesId]error)
 }
 
 type animeSaver interface {
-	SaveAll(locales []core.Locale, newAnimes []anime.Anime, updatedAnimes []anime.Anime) error
+	SaveAll(locales []core.Locale, newAnimes []anime.Anime, updatedAnimes []anime.Anime, originalLocalAnimes map[core.SeriesId]anime.Anime) error
 }
 
 type RefreshAnimeCommand struct {
-	crunchyrollAnimeFetcher     crunchyrollAnimeFetcher
-	localAnimeFetcher           localAnimeFetcher
-	refreshPostersSubCommand    refreshPostersSubCommand
-	getLatestEpisodesSubCommand getLatestEpisodesSubCommand
-	animeSaver                  animeSaver
+	crunchyrollAnimeFetcher         crunchyrollAnimeFetcher
+	localAnimeFetcher               localAnimeFetcher
+	refreshBasicInfoSubCommand      refreshBasicInfoSubCommand
+	refreshPostersSubCommand        refreshPostersSubCommand
+	refreshLatestEpisodesSubCommand refreshLatestEpisodesSubCommand
+	animeSaver                      animeSaver
 }
 
 func NewRefreshAnimeCommand(
 	crunchyrollAnimeFetcher crunchyrollAnimeFetcher,
 	localAnimeFetcher localAnimeFetcher,
+	refreshBasicInfoSubCommand refreshBasicInfoSubCommand,
 	refreshPostersSubCommand refreshPostersSubCommand,
-	getLatestEpisodesSubCommand getLatestEpisodesSubCommand,
+	refreshLatestEpisodesSubCommand refreshLatestEpisodesSubCommand,
 	animeSaver animeSaver,
 ) RefreshAnimeCommand {
 	return RefreshAnimeCommand{
-		crunchyrollAnimeFetcher:     crunchyrollAnimeFetcher,
-		localAnimeFetcher:           localAnimeFetcher,
-		refreshPostersSubCommand:    refreshPostersSubCommand,
-		getLatestEpisodesSubCommand: getLatestEpisodesSubCommand,
-		animeSaver:                  animeSaver,
+		crunchyrollAnimeFetcher:         crunchyrollAnimeFetcher,
+		localAnimeFetcher:               localAnimeFetcher,
+		refreshBasicInfoSubCommand:      refreshBasicInfoSubCommand,
+		refreshPostersSubCommand:        refreshPostersSubCommand,
+		refreshLatestEpisodesSubCommand: refreshLatestEpisodesSubCommand,
+		animeSaver:                      animeSaver,
 	}
 }
 
 func (cmd RefreshAnimeCommand) Run(input RefreshAnimeCommandInput) (RefreshAnimeCommandOutput, error) {
-	locales := []core.Locale{
-		core.NewEnglishLocale(),
-		core.NewSpanishLocale(),
-	}
+	locales := core.SupportedLocales()
 
 	fmt.Printf("Retrieving anime...\n")
 	startTime := time.Now().UTC()
+
 	crAnimes, err := cmd.crunchyrollAnimeFetcher.GetAllAnime(core.NewEnglishLocale())
 	if err != nil {
 		return RefreshAnimeCommandOutput{}, err
@@ -100,78 +105,103 @@ func (cmd RefreshAnimeCommand) Run(input RefreshAnimeCommandInput) (RefreshAnime
 		return RefreshAnimeCommandOutput{}, nil
 	}
 
-	fmt.Printf("%d new anime to add, %d anime to update...\n", len(newCrAnimes), len(updatedCrAnimes))
+	fmt.Printf("%d new anime to add, %d anime to update.\n", len(newCrAnimes), len(updatedCrAnimes))
 
-	localAnimeToBeUpdated, err := cmd.localAnimeFetcher.GetAllByAnimeIds(animeIds)
+	localAnimeToBeUpdated, originalLocalAnimes, err := cmd.localAnimeFetcher.GetAllByAnimeIds(animeIds)
 	if err != nil {
 		return RefreshAnimeCommandOutput{}, err
 	}
-	fmt.Printf("Finished anime retrieval in %v\n", time.Since(startTime))
+
+	fmt.Printf("Finished anime retrieval in %v.\n\n", time.Since(startTime))
+
+	fmt.Printf("Refreshing basic info...\n")
+	startTime = time.Now().UTC()
+
+	basicInfoCmdOutput, errs := cmd.refreshBasicInfoSubCommand.Run(subcommand.RefreshBasicInfoInput{
+		NewCrAnime:     newCrAnimes,
+		UpdatedCrAnime: updatedCrAnimes,
+		LocalAnime:     localAnimeToBeUpdated,
+	})
+	if errs != nil {
+		cmd.printErrors(errs)
+	}
+	fmt.Printf("Finished basic info refreshing in %v.\n\n", time.Since(startTime))
 
 	fmt.Printf("Refreshing posters...\n")
 	startTime = time.Now().UTC()
-	posterCmdOutput, err := cmd.refreshPostersSubCommand.Run(subcommand.RefreshPostersSubCommandInput{
+
+	posterCmdOutput, errs := cmd.refreshPostersSubCommand.Run(subcommand.RefreshPostersSubCommandInput{
 		NewCrAnime:     newCrAnimes,
 		UpdatedCrAnime: updatedCrAnimes,
-		LocalAnime:     localAnimeToBeUpdated,
+		LocalAnime:     basicInfoCmdOutput.UpdatedLocalAnime,
 	})
-	if err != nil {
-		return RefreshAnimeCommandOutput{}, err
+	if errs != nil {
+		cmd.printErrors(errs)
 	}
-	fmt.Printf("Finished posters in %v\n", time.Since(startTime))
+	fmt.Printf("Finished posters in %v.\n\n", time.Since(startTime))
 
 	fmt.Printf("Refreshing latest episodes...\n")
 	startTime = time.Now().UTC()
-	latestEpisodeCmdOutput, err := cmd.getLatestEpisodesSubCommand.Run(subcommand.GetLatestEpisodesSubCommandInput{
+
+	latestEpisodeCmdOutput, errs := cmd.refreshLatestEpisodesSubCommand.Run(subcommand.RefreshLatestEpisodesSubCommandInput{
 		NewCrAnime:     newCrAnimes,
 		UpdatedCrAnime: updatedCrAnimes,
-		LocalAnime:     localAnimeToBeUpdated,
+		LocalAnime:     posterCmdOutput.UpdatedLocalAnime,
 		Locales:        locales,
 	})
-	if err != nil {
-		return RefreshAnimeCommandOutput{}, err
+	if errs != nil {
+		cmd.printErrors(errs)
 	}
-	fmt.Printf("Finished latest episodes in %v\n", time.Since(startTime))
+	fmt.Printf("Finished latest episodes in %v.\n\n", time.Since(startTime))
 
 	fmt.Printf("Saving anime...\n")
 	startTime = time.Now().UTC()
-	newLocalAnimes := make([]anime.Anime, 1)
-	for i, newCrAnime := range newCrAnimes {
 
-		// TODO temp testing
-		if newCrAnime.SeriesId().String() != "G1XHJV0KV" {
+	var newLocalAnimes []anime.Anime
+	for seriesId, dto := range basicInfoCmdOutput.NewAnimeDtos {
+		posters, exists := posterCmdOutput.NewPosters[seriesId]
+		if !exists {
+			fmt.Printf("\tcould not find posters for anime %s, skipping\n", seriesId)
 			continue
 		}
 
-		posters := posterCmdOutput.NewPosters[newCrAnime.SeriesId()]
-		episodes := latestEpisodeCmdOutput.NewEpisodeCollections[newCrAnime.SeriesId()]
-
-		newAnime, err := anime.NewAnime(anime.AnimeDto{
-			AnimeId:     0,
-			SeriesId:    newCrAnime.SeriesId().String(),
-			SlugTitle:   newCrAnime.SlugTitle(),
-			Title:       newCrAnime.Title(),
-			IsSimulcast: newCrAnime.IsSimulcast(),
-			LastUpdated: newCrAnime.LastUpdated(),
-		},
-			posters,
-			episodes)
-		if err != nil {
-			return RefreshAnimeCommandOutput{}, err
+		episodes, exists := latestEpisodeCmdOutput.NewEpisodeCollections[seriesId]
+		if !exists {
+			fmt.Printf("\tcould not find episodes for anime %s, skipping\n", seriesId)
+			continue
 		}
 
-		newLocalAnimes[i] = newAnime
+		newAnime, err := anime.NewAnime(dto, posters, episodes)
+		if err != nil {
+			fmt.Printf("\tcould not create anime %s, skipping (%v)\n", seriesId, err)
+			continue
+		}
+
+		newLocalAnimes = append(newLocalAnimes, newAnime)
 	}
 
-	err = cmd.animeSaver.SaveAll(locales, newLocalAnimes, nil)
+	updatedLocalAnimes := make([]anime.Anime, len(latestEpisodeCmdOutput.UpdatedLocalAnime))
+	j := 0
+	for _, updatedLocalAnime := range latestEpisodeCmdOutput.UpdatedLocalAnime {
+		updatedLocalAnimes[j] = updatedLocalAnime
+		j++
+	}
+
+	err = cmd.animeSaver.SaveAll(locales, newLocalAnimes, updatedLocalAnimes, originalLocalAnimes)
 	if err != nil {
 		return RefreshAnimeCommandOutput{}, err
 	}
 
-	fmt.Printf("Finished saving anime in %v\n", time.Since(startTime))
+	fmt.Printf("Finished saving anime in %v.\n\n", time.Since(startTime))
 
 	return RefreshAnimeCommandOutput{
 		NewAnimeCount:     len(newCrAnimes),
 		UpdatedAnimeCount: len(updatedCrAnimes),
 	}, nil
+}
+
+func (cmd RefreshAnimeCommand) printErrors(errs map[core.SeriesId]error) {
+	for seriesId, err := range errs {
+		fmt.Printf("\tError w/ series %s: %v\n", seriesId, err)
+	}
 }

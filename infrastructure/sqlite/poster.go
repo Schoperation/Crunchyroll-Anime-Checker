@@ -19,7 +19,7 @@ func NewPosterDao(db *goqu.Database) PosterDao {
 
 type posterModel struct {
 	AnimeId     int    `db:"anime_id" goqu:"skipupdate"`
-	ImageTypeId int    `db:"image_type_id"`
+	ImageTypeId int    `db:"image_type_id" goqu:"skipupdate"`
 	Url         string `db:"url"`
 	Encoded     string `db:"encoded"`
 }
@@ -33,7 +33,6 @@ func (dao PosterDao) GetAllByAnimeIds(animeIds []int) ([]anime.ImageDto, error) 
 			goqu.C("anime_id").In(animeIds),
 		).
 		WithDialect(Dialect).
-		Prepared(true).
 		Executor().
 		ScanStructs(&models)
 	if err != nil {
@@ -74,7 +73,6 @@ func (dao PosterDao) InsertAll(dtos []anime.ImageDto) error {
 		Rows(models).
 		OnConflict(goqu.DoNothing()).
 		WithDialect(Dialect).
-		Prepared(false).
 		Executor().
 		Exec()
 	if err != nil {
@@ -85,7 +83,7 @@ func (dao PosterDao) InsertAll(dtos []anime.ImageDto) error {
 }
 
 func (dao PosterDao) Update(dto anime.ImageDto) error {
-	sql, args, err := goqu.
+	_, err := dao.db.
 		Update("poster").
 		Set(dao.imageDtoToModel(dto)).
 		Where(
@@ -93,13 +91,8 @@ func (dao PosterDao) Update(dto anime.ImageDto) error {
 			goqu.C("image_type_id").Eq(dto.ImageType),
 		).
 		WithDialect(Dialect).
-		Prepared(false).
-		ToSQL()
-	if err != nil {
-		return sqlBuilderError("poster", err)
-	}
-
-	_, err = dao.db.Exec(sql, args...)
+		Executor().
+		Exec()
 	if err != nil {
 		return couldNotUpdateError("poster", err)
 	}

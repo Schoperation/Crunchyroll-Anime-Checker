@@ -72,10 +72,6 @@ func (col SeasonCollection) isValidSeason(season Season) bool {
 		}
 	}
 
-	// if strings.Trim(season.DisplayNumber(), " ") == "" {
-	// 	return false
-	// }
-
 	if strings.Trim(season.Identifier(), " ") != "" {
 		parts := strings.Split(season.Identifier(), "|")
 		idPart := strings.ToLower(parts[1])

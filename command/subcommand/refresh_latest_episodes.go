@@ -7,17 +7,16 @@ import (
 	"schoperation/crunchyrollanimestatus/domain/crunchyroll"
 )
 
-type GetLatestEpisodesSubCommandInput struct {
+type RefreshLatestEpisodesSubCommandInput struct {
 	NewCrAnime     []crunchyroll.Anime
 	UpdatedCrAnime []crunchyroll.Anime
 	LocalAnime     map[core.SeriesId]anime.Anime
 	Locales        []core.Locale
 }
 
-type GetLatestEpisodesSubCommandOutput struct {
+type RefreshLatestEpisodesSubCommandOutput struct {
 	UpdatedLocalAnime     map[core.SeriesId]anime.Anime
 	NewEpisodeCollections map[core.SeriesId]anime.EpisodeCollection
-	Errors                map[core.SeriesId]error
 }
 
 type seriesSeasonsFetcher interface {
@@ -32,62 +31,72 @@ type encodedThumbnailFetcher interface {
 	GetEncodedImageByURL(url string) (string, error)
 }
 
-type GetLatestEpisodesSubCommand struct {
+type RefreshLatestEpisodesSubCommand struct {
 	seriesSeasonsFetcher    seriesSeasonsFetcher
 	seasonEpisodesFetcher   seasonEpisodesFetcher
 	encodedThumbnailFetcher encodedThumbnailFetcher
 }
 
-func NewGetLatestEpisodesSubCommand(
+func NewRefreshLatestEpisodesSubCommand(
 	seriesSeasonsFetcher seriesSeasonsFetcher,
 	seasonEpisodesFetcher seasonEpisodesFetcher,
 	encodedThumbnailFetcher encodedThumbnailFetcher,
-) GetLatestEpisodesSubCommand {
-	return GetLatestEpisodesSubCommand{
+) RefreshLatestEpisodesSubCommand {
+	return RefreshLatestEpisodesSubCommand{
 		seriesSeasonsFetcher:    seriesSeasonsFetcher,
 		seasonEpisodesFetcher:   seasonEpisodesFetcher,
 		encodedThumbnailFetcher: encodedThumbnailFetcher,
 	}
 }
 
-func (subcmd GetLatestEpisodesSubCommand) Run(input GetLatestEpisodesSubCommandInput) (GetLatestEpisodesSubCommandOutput, error) {
+func (subcmd RefreshLatestEpisodesSubCommand) Run(input RefreshLatestEpisodesSubCommandInput) (RefreshLatestEpisodesSubCommandOutput, map[core.SeriesId]error) {
 	errors := map[core.SeriesId]error{}
+
 	for _, updatedCrAnime := range input.UpdatedCrAnime {
 		localAnime, exists := input.LocalAnime[updatedCrAnime.SeriesId()]
 		if !exists {
-			return GetLatestEpisodesSubCommandOutput{}, fmt.Errorf("no local anime with series ID %s", updatedCrAnime.SeriesId())
+			errors[updatedCrAnime.SeriesId()] = fmt.Errorf("no local anime found")
+			continue
 		}
 
 		crSeasons, err := subcmd.seriesSeasonsFetcher.GetAllSeasonsBySeriesId(updatedCrAnime.SeriesId())
 		if err != nil {
-			return GetLatestEpisodesSubCommandOutput{}, err
+			errors[updatedCrAnime.SeriesId()] = err
+			continue
 		}
 
 		for _, locale := range input.Locales {
-			localLatestEpisodes := localAnime.Episodes().GetLatestEpisodesForLocale(locale)
+			localLatestEpisodes, err := localAnime.Episodes().GetLatestEpisodesForLocale(locale)
+			if err != nil {
+				localLatestEpisodes = anime.ReformLatestEpisodes(anime.LatestEpisodesDto{})
+			}
 
 			latestSubSeason, subExists := crSeasons.LatestSub(locale)
 			if subExists {
 				crEpisodes, err := subcmd.seasonEpisodesFetcher.GetAllEpisodesBySeasonId(locale, latestSubSeason.Id())
 				if err != nil {
-					return GetLatestEpisodesSubCommandOutput{}, err
+					errors[updatedCrAnime.SeriesId()] = err
+					break
 				}
 
 				latestCrSub, exists := crEpisodes.LatestSub(locale)
 				if !exists {
-					return GetLatestEpisodesSubCommandOutput{}, fmt.Errorf("could not find latest episode in season that should have sub")
+					errors[updatedCrAnime.SeriesId()] = fmt.Errorf("could not find latest episode in season that should have sub")
+					break
 				}
 
 				latestLocalSub := localLatestEpisodes.LatestSub()
 				if !subcmd.areEpisodesTheSame(latestCrSub, latestLocalSub) {
 					newSub, newSubThumbnail, err := subcmd.generateNewEpisode(localAnime.AnimeId(), latestCrSub)
 					if err != nil {
-						return GetLatestEpisodesSubCommandOutput{}, err
+						errors[updatedCrAnime.SeriesId()] = err
+						break
 					}
 
 					err = localAnime.Episodes().AddSubForLocale(locale, newSub, newSubThumbnail)
 					if err != nil {
-						return GetLatestEpisodesSubCommandOutput{}, err
+						errors[updatedCrAnime.SeriesId()] = err
+						break
 					}
 				}
 			}
@@ -96,44 +105,43 @@ func (subcmd GetLatestEpisodesSubCommand) Run(input GetLatestEpisodesSubCommandI
 			if dubExists {
 				crEpisodes, err := subcmd.seasonEpisodesFetcher.GetAllEpisodesBySeasonId(locale, latestDubSeason.Id())
 				if err != nil {
-					return GetLatestEpisodesSubCommandOutput{}, err
+					errors[updatedCrAnime.SeriesId()] = err
+					break
 				}
 
 				latestCrDub, exists := crEpisodes.LatestDub(locale)
 				if !exists {
-					return GetLatestEpisodesSubCommandOutput{}, fmt.Errorf("could not find latest episode in season that should have dub")
+					errors[updatedCrAnime.SeriesId()] = fmt.Errorf("could not find latest episode in season that should have dub")
+					break
 				}
 
 				latestLocalDub := localLatestEpisodes.LatestDub()
 				if !subcmd.areEpisodesTheSame(latestCrDub, latestLocalDub) {
 					newDub, newDubThumbnail, err := subcmd.generateNewEpisode(localAnime.AnimeId(), latestCrDub)
 					if err != nil {
-						return GetLatestEpisodesSubCommandOutput{}, err
+						errors[updatedCrAnime.SeriesId()] = err
+						break
 					}
 
 					err = localAnime.Episodes().AddDubForLocale(locale, newDub, newDubThumbnail)
 					if err != nil {
-						return GetLatestEpisodesSubCommandOutput{}, err
+						errors[updatedCrAnime.SeriesId()] = err
+						break
 					}
 				}
 			}
 		}
 
-		localAnime.Episodes().CleanEpisodes()
+		if _, errored := errors[updatedCrAnime.SeriesId()]; errored {
+			continue
+		}
+
 		localAnime.SetDirty()
 		input.LocalAnime[updatedCrAnime.SeriesId()] = localAnime
 	}
 
 	newEpisodeCollections := make(map[core.SeriesId]anime.EpisodeCollection, len(input.NewCrAnime))
 	for _, newCrAnime := range input.NewCrAnime {
-
-		// TODO temp testing
-		if newCrAnime.SeriesId().String() != "G1XHJV0KV" {
-			continue
-		}
-
-		fmt.Printf("%s - %s\n", newCrAnime.SeriesId(), newCrAnime.SlugTitle())
-
 		crSeasons, err := subcmd.seriesSeasonsFetcher.GetAllSeasonsBySeriesId(newCrAnime.SeriesId())
 		if err != nil {
 			errors[newCrAnime.SeriesId()] = err
@@ -202,28 +210,33 @@ func (subcmd GetLatestEpisodesSubCommand) Run(input GetLatestEpisodesSubCommandI
 			}
 
 			// Temp code to debug blank english anime because CR's API is an inconsistent POS
-			// TODO remove
+			// TODO temp testing
 			if !subExists && !dubExists {
 				errors[newCrAnime.SeriesId()] = fmt.Errorf("could not find sub or dub")
 			}
 
 		}
 
+		if _, errored := errors[newCrAnime.SeriesId()]; errored {
+			continue
+		}
+
 		newEpisodeCollections[newCrAnime.SeriesId()] = newEpisodeCollection
 	}
 
-	return GetLatestEpisodesSubCommandOutput{
+	return RefreshLatestEpisodesSubCommandOutput{
 		UpdatedLocalAnime:     input.LocalAnime,
 		NewEpisodeCollections: newEpisodeCollections,
-		Errors:                errors,
-	}, nil
+	}, errors
 }
 
-func (subcmd GetLatestEpisodesSubCommand) areEpisodesTheSame(crEp crunchyroll.Episode, savedEp anime.MinimalEpisode) bool {
-	return crEp.Number() == savedEp.Number() && crEp.Season() == savedEp.Season()
+func (subcmd RefreshLatestEpisodesSubCommand) areEpisodesTheSame(crEp crunchyroll.Episode, localEp anime.MinimalEpisode) bool {
+	return crEp.Number() == localEp.Number() &&
+		crEp.Season() == localEp.Season() &&
+		crEp.Title() == localEp.Title()
 }
 
-func (subcmd GetLatestEpisodesSubCommand) generateNewEpisode(animeId anime.AnimeId, crEpisode crunchyroll.Episode) (anime.MinimalEpisode, anime.Image, error) {
+func (subcmd RefreshLatestEpisodesSubCommand) generateNewEpisode(animeId anime.AnimeId, crEpisode crunchyroll.Episode) (anime.MinimalEpisode, anime.Image, error) {
 	newEpisode, err := anime.NewMinimalEpisode(crEpisode.Season(), crEpisode.Number(), crEpisode.Title())
 	if err != nil {
 		return anime.MinimalEpisode{}, anime.Image{}, err

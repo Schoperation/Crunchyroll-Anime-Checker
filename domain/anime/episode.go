@@ -2,7 +2,6 @@ package anime
 
 import (
 	"fmt"
-	"time"
 )
 
 type NewEpisodeArgs struct {
@@ -10,7 +9,6 @@ type NewEpisodeArgs struct {
 	SeasonNumber int
 	Thumbnail    Image
 	Titles       []TitleDto
-	LastUpdated  time.Time
 }
 
 // Episode represents a single episode that may be the latest sub/dub for multiple locales.
@@ -19,7 +17,6 @@ type Episode struct {
 	seasonNumber int
 	thumbnail    Image
 	titles       TitleCollection
-	lastUpdated  time.Time
 }
 
 func newEpisode(args NewEpisodeArgs) (Episode, error) {
@@ -41,7 +38,6 @@ func newEpisode(args NewEpisodeArgs) (Episode, error) {
 		seasonNumber: args.SeasonNumber,
 		thumbnail:    args.Thumbnail,
 		titles:       titles,
-		lastUpdated:  time.Now().UTC(),
 	}, nil
 }
 
@@ -51,7 +47,6 @@ func ReformEpisode(args NewEpisodeArgs) Episode {
 		seasonNumber: args.SeasonNumber,
 		thumbnail:    args.Thumbnail,
 		titles:       ReformTitleCollection(args.Titles),
-		lastUpdated:  args.LastUpdated,
 	}
 }
 

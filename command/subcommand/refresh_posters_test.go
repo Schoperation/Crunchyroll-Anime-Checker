@@ -1,7 +1,7 @@
 package subcommand
 
 import (
-	"errors"
+	"fmt"
 	"schoperation/crunchyrollanimestatus/domain/anime"
 	"schoperation/crunchyrollanimestatus/domain/core"
 	"schoperation/crunchyrollanimestatus/domain/crunchyroll"
@@ -24,7 +24,7 @@ func TestRefreshPostersSubCommand(t *testing.T) {
 		name           string
 		input          RefreshPostersSubCommandInput
 		expectedOutput RefreshPostersSubCommandOutput
-		expectedError  error
+		expectedErrors map[core.SeriesId]error
 	}{
 		{
 			name: "with_updated_posters_returns_success",
@@ -43,6 +43,24 @@ func TestRefreshPostersSubCommand(t *testing.T) {
 				},
 				NewPosters: map[core.SeriesId][]anime.Image{},
 			},
+			expectedErrors: map[core.SeriesId]error{},
+		},
+		{
+			name: "with_no_local_anime_found_returns_error",
+			input: RefreshPostersSubCommandInput{
+				NewCrAnime: nil,
+				UpdatedCrAnime: []crunchyroll.Anime{
+					testResources.getDummyCrunchyrollAnime("updated_posters"),
+				},
+				LocalAnime: map[core.SeriesId]anime.Anime{},
+			},
+			expectedOutput: RefreshPostersSubCommandOutput{
+				UpdatedLocalAnime: map[core.SeriesId]anime.Anime{},
+				NewPosters:        map[core.SeriesId][]anime.Image{},
+			},
+			expectedErrors: map[core.SeriesId]error{
+				seriesId: fmt.Errorf("no local anime found"),
+			},
 		},
 	}
 
@@ -51,9 +69,9 @@ func TestRefreshPostersSubCommand(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			output, err := subCommand.Run(tc.input)
+			output, errs := subCommand.Run(tc.input)
 
-			require.ErrorIs(t, errors.Unwrap(err), errors.Unwrap(tc.expectedError))
+			require.EqualValues(t, tc.expectedErrors, errs)
 			require.EqualValues(t, tc.expectedOutput.NewPosters, output.NewPosters)
 			require.EqualValues(t, tc.expectedOutput.UpdatedLocalAnime, output.UpdatedLocalAnime)
 		})

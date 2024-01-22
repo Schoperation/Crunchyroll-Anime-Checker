@@ -19,9 +19,9 @@ func NewThumbnailDao(db *goqu.Database) ThumbnailDao {
 }
 
 type thumbnailModel struct {
-	AnimeId       int    `db:"anime_id"`
-	SeasonNumber  int    `db:"season_number"`
-	EpisodeNumber int    `db:"episode_number"`
+	AnimeId       int    `db:"anime_id" goqu:"skipupdate"`
+	SeasonNumber  int    `db:"season_number" goqu:"skipupdate"`
+	EpisodeNumber int    `db:"episode_number" goqu:"skipupdate"`
 	Url           string `db:"url"`
 	Encoded       string `db:"encoded"`
 }
@@ -52,7 +52,7 @@ func (dao ThumbnailDao) GetAllByAnimeIds(animeIds []int) ([]anime.ImageDto, erro
 			AnimeId:       model.AnimeId,
 			ImageType:     core.ImageTypeThumbnail.Int(),
 			SeasonNumber:  model.SeasonNumber,
-			EpisodeNumber: model.SeasonNumber,
+			EpisodeNumber: model.EpisodeNumber,
 			Url:           model.Url,
 			Encoded:       model.Encoded,
 		}
@@ -74,6 +74,7 @@ func (dao ThumbnailDao) InsertAll(dtos []anime.ImageDto) error {
 	_, err := dao.db.
 		Insert("thumbnail").
 		Rows(models).
+		OnConflict(goqu.DoNothing()).
 		WithDialect(Dialect).
 		Prepared(false).
 		Executor().
@@ -85,22 +86,17 @@ func (dao ThumbnailDao) InsertAll(dtos []anime.ImageDto) error {
 	return nil
 }
 
-func (dao ThumbnailDao) Delete(dto anime.ImageDto) error {
-	sql, args, err := goqu.
+func (dao ThumbnailDao) DeleteAll(animeIds, seasonNumbers, episodeNumbers []int) error {
+	_, err := dao.db.
 		Delete("thumbnail").
 		Where(
-			goqu.C("anime_id").Eq(dto.AnimeId),
-			goqu.C("season_number").Eq(dto.SeasonNumber),
-			goqu.C("episode_number").Eq(dto.EpisodeNumber),
+			goqu.C("anime_id").In(animeIds),
+			goqu.C("season_number").In(seasonNumbers),
+			goqu.C("episode_number").In(episodeNumbers),
 		).
 		WithDialect(Dialect).
-		Prepared(false).
-		ToSQL()
-	if err != nil {
-		return sqlBuilderError("thumbnail", err)
-	}
-
-	_, err = dao.db.Exec(sql, args...)
+		Executor().
+		Exec()
 	if err != nil {
 		return couldNotDeleteError("thumbnail", err)
 	}

@@ -39,7 +39,6 @@ func (dao AnimeDao) GetAllMinimal() ([]anime.MinimalAnimeDto, error) {
 		Select(&minimalAnimeModel{}).
 		From("anime").
 		WithDialect(Dialect).
-		Prepared(true).
 		Executor().
 		ScanStructs(&models)
 	if err != nil {
@@ -71,7 +70,6 @@ func (dao AnimeDao) GetAllByAnimeIds(animeIds []int) ([]anime.AnimeDto, error) {
 			goqu.C("anime_id").In(animeIds),
 		).
 		WithDialect(Dialect).
-		Prepared(true).
 		Executor().
 		ScanStructs(&models)
 	if err != nil {
@@ -111,9 +109,9 @@ func (dao AnimeDao) InsertAll(dtos []anime.AnimeDto) ([]anime.MinimalAnimeDto, e
 	err := dao.db.
 		Insert("anime").
 		Rows(models).
+		OnConflict(goqu.DoNothing()).
 		Returning("anime_id", "series_id", "last_updated").
 		WithDialect(Dialect).
-		Prepared(false).
 		Executor().
 		ScanStructs(&minimalModels)
 	if err != nil {
@@ -137,20 +135,15 @@ func (dao AnimeDao) InsertAll(dtos []anime.AnimeDto) ([]anime.MinimalAnimeDto, e
 }
 
 func (dao AnimeDao) Update(dto anime.AnimeDto) error {
-	sql, args, err := goqu.
+	_, err := dao.db.
 		Update("anime").
 		Set(dao.animeDtoToModel(dto)).
 		Where(
 			goqu.C("anime_id").Eq(dto.AnimeId),
 		).
 		WithDialect(Dialect).
-		Prepared(false).
-		ToSQL()
-	if err != nil {
-		return sqlBuilderError("anime", err)
-	}
-
-	_, err = dao.db.Exec(sql, args...)
+		Executor().
+		Exec()
 	if err != nil {
 		return couldNotUpdateError("anime", err)
 	}

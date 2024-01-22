@@ -7,6 +7,7 @@ import (
 type thumbnailDao interface {
 	GetAllByAnimeIds(animeIds []int) ([]anime.ImageDto, error)
 	InsertAll(dtos []anime.ImageDto) error
+	DeleteAll(animeIds, seasonNumbers, episodeNumbers []int) error
 }
 
 type ThumbnailTranslator struct {
@@ -47,13 +48,27 @@ func (translator ThumbnailTranslator) GetAllByAnimeIds(animeIds []anime.AnimeId)
 	return thumbnailMap, nil
 }
 
-func (translator ThumbnailTranslator) SaveAll(newThumbnails []anime.Image, updatedThumbnails []anime.Image) error {
+func (translator ThumbnailTranslator) SaveAll(newThumbnails []anime.Image, deletedThumbnails []anime.Image) error {
 	newDtos := make([]anime.ImageDto, len(newThumbnails))
 	for i, thumbnail := range newThumbnails {
 		newDtos[i] = thumbnail.Dto()
 	}
 
 	err := translator.thumbnailDao.InsertAll(newDtos)
+	if err != nil {
+		return err
+	}
+
+	deletedAnimeIds := make([]int, len(deletedThumbnails))
+	deletedSeasonNumbers := make([]int, len(deletedThumbnails))
+	deletedEpisodeNumbers := make([]int, len(deletedThumbnails))
+	for j, thumbnail := range deletedThumbnails {
+		deletedAnimeIds[j] = thumbnail.AnimeId().Int()
+		deletedSeasonNumbers[j] = thumbnail.SeasonNumber()
+		deletedEpisodeNumbers[j] = thumbnail.EpisodeNumber()
+	}
+
+	err = translator.thumbnailDao.DeleteAll(deletedAnimeIds, deletedSeasonNumbers, deletedEpisodeNumbers)
 	if err != nil {
 		return err
 	}

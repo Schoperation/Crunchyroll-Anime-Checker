@@ -80,28 +80,33 @@ func shouldAddAnime(dto AnimeDto) bool {
 		return false
 	}
 
-	// Or... the slug ends in -movies
+	// Or... the slug ends in -movies.
 	if strings.HasSuffix(dto.SlugTitle, "-movies") || strings.HasSuffix(dto.SlugTitle, "-movie") {
 		return false
 	}
 
-	// Try not to include OVAs; since they're basically one-time
+	// Don't include OVAs since they're either one-time or aren't on a consistent schedule.
+	// Plus they're a bit broken in this program; may implement later on if requested.
 	if strings.HasSuffix(dto.SlugTitle, "-ova") {
 		return false
 	}
 
-	// These are busted anyway, at least for now
-	blacklistedAnime := []string{
-		"G6EXH7VKM", // anifile
-		"GRG5HJN5W", // otalku
-		"G6WE4W0N6", // chinese
-		"GRWEMGNER", // "
-		"GRP85E0MR", // "
-		"GRVND1G3Y", // "
-
+	// Specific exceptions that are either broken right now, or are pretty old and suck anyway.
+	animeInQuotationMarks := []string{
+		"G6EXH7VKM", // anifile (bruh)
+		"GRG5HJN5W", // otalku (double bruh)
+		"G6WE4W0N6", // chinese (acts weird with subtitles)
+		"GRWEMGNER", // ""
+		"GRP85E0MR", // ""
+		"GRVND1G3Y", // ""
+		"G1XHJV2PZ", // ""
+		"G5PHNM77K", // ovas that slipped through
+		"G5PHNM77K", // ""
+		"G79H23XN2", // ""
+		"G24H1NZXD", // ""
 	}
 
-	if slices.Contains(blacklistedAnime, dto.SeriesId) {
+	if slices.Contains(animeInQuotationMarks, dto.SeriesId) {
 		return false
 	}
 

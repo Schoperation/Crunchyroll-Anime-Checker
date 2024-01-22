@@ -39,17 +39,9 @@ func NewAnime(
 	posters []Image,
 	episodes EpisodeCollection,
 ) (Anime, error) {
-	seriesId, err := core.NewSeriesId(dto.SeriesId)
+	err := validateBasicInfo(dto)
 	if err != nil {
 		return Anime{}, err
-	}
-
-	if strings.Trim(dto.SlugTitle, " ") == "" {
-		return Anime{}, fmt.Errorf("anime slug title cannot be blank")
-	}
-
-	if strings.Trim(dto.Title, " ") == "" {
-		return Anime{}, fmt.Errorf("anime title cannot be blank")
 	}
 
 	err = validateAnimePosters(posters)
@@ -59,7 +51,7 @@ func NewAnime(
 
 	return Anime{
 		animeId:     NewBlankAnimeId(),
-		seriesId:    seriesId,
+		seriesId:    core.ReformSeriesId(dto.SeriesId),
 		slugTitle:   dto.SlugTitle,
 		title:       dto.Title,
 		isSimulcast: dto.IsSimulcast,
@@ -145,6 +137,25 @@ func (anime *Anime) AssignAnimeId(animeId AnimeId) error {
 	return nil
 }
 
+func (anime *Anime) UpdateBasicInfo(dto AnimeDto) error {
+	if dto.AnimeId != anime.animeId.Int() {
+		return fmt.Errorf("anime IDs must be the same")
+	}
+
+	err := validateBasicInfo(dto)
+	if err != nil {
+		return err
+	}
+
+	anime.seriesId = core.ReformSeriesId(dto.SeriesId)
+	anime.slugTitle = dto.SlugTitle
+	anime.title = dto.Title
+	anime.isSimulcast = dto.IsSimulcast
+
+	anime.SetDirty()
+	return nil
+}
+
 func (anime *Anime) UpdatePosters(newPosters []Image) error {
 	err := validateAnimePosters(newPosters)
 	if err != nil {
@@ -153,6 +164,23 @@ func (anime *Anime) UpdatePosters(newPosters []Image) error {
 
 	anime.posters = newPosters
 	anime.SetDirty()
+	return nil
+}
+
+func validateBasicInfo(dto AnimeDto) error {
+	_, err := core.NewSeriesId(dto.SeriesId)
+	if err != nil {
+		return err
+	}
+
+	if strings.Trim(dto.SlugTitle, " ") == "" {
+		return fmt.Errorf("anime slug title cannot be blank")
+	}
+
+	if strings.Trim(dto.Title, " ") == "" {
+		return fmt.Errorf("anime title cannot be blank")
+	}
+
 	return nil
 }
 

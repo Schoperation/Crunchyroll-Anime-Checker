@@ -34,11 +34,14 @@ func NewRefreshPostersSubCommand(
 	}
 }
 
-func (subcmd RefreshPostersSubCommand) Run(input RefreshPostersSubCommandInput) (RefreshPostersSubCommandOutput, error) {
+func (subcmd RefreshPostersSubCommand) Run(input RefreshPostersSubCommandInput) (RefreshPostersSubCommandOutput, map[core.SeriesId]error) {
+	errors := map[core.SeriesId]error{}
+
 	for _, updatedCrAnime := range input.UpdatedCrAnime {
 		localAnime, exists := input.LocalAnime[updatedCrAnime.SeriesId()]
 		if !exists {
-			return RefreshPostersSubCommandOutput{}, fmt.Errorf("no local anime with series ID %s", updatedCrAnime.SeriesId())
+			errors[updatedCrAnime.SeriesId()] = fmt.Errorf("no local anime found")
+			continue
 		}
 
 		newPosters := make([]anime.Image, anime.NumPostersPerAnime)
@@ -60,7 +63,8 @@ func (subcmd RefreshPostersSubCommand) Run(input RefreshPostersSubCommandInput) 
 
 			newEncodedImage, err := subcmd.encodedPosterFetcher.GetEncodedImageByURL(posterUrl)
 			if err != nil {
-				return RefreshPostersSubCommandOutput{}, err
+				errors[updatedCrAnime.SeriesId()] = err
+				break
 			}
 
 			newPoster, err := anime.NewImage(anime.ImageDto{
@@ -72,10 +76,15 @@ func (subcmd RefreshPostersSubCommand) Run(input RefreshPostersSubCommandInput) 
 				Encoded:       newEncodedImage,
 			})
 			if err != nil {
-				return RefreshPostersSubCommandOutput{}, err
+				errors[updatedCrAnime.SeriesId()] = err
+				break
 			}
 
 			newPosters[i] = newPoster
+		}
+
+		if _, errored := errors[updatedCrAnime.SeriesId()]; errored {
+			continue
 		}
 
 		localAnime.UpdatePosters(newPosters)
@@ -84,24 +93,18 @@ func (subcmd RefreshPostersSubCommand) Run(input RefreshPostersSubCommandInput) 
 
 	newPosters := make(map[core.SeriesId][]anime.Image, len(input.NewCrAnime))
 	for _, newCrAnime := range input.NewCrAnime {
-
-		// TODO temp testing
-		if newCrAnime.SeriesId().String() != "G1XHJV0KV" {
-			continue
-		}
-
-		fmt.Printf("%s - %s\n", newCrAnime.SeriesId(), newCrAnime.SlugTitle())
-
-		posters := make([]anime.Image, 2)
+		posters := make([]anime.Image, anime.NumPostersPerAnime)
 
 		encodedTallPoster, err := subcmd.encodedPosterFetcher.GetEncodedImageByURL(newCrAnime.TallPoster().Source())
 		if err != nil {
-			return RefreshPostersSubCommandOutput{}, err
+			errors[newCrAnime.SeriesId()] = err
+			continue
 		}
 
 		encodedWidePoster, err := subcmd.encodedPosterFetcher.GetEncodedImageByURL(newCrAnime.WidePoster().Source())
 		if err != nil {
-			return RefreshPostersSubCommandOutput{}, err
+			errors[newCrAnime.SeriesId()] = err
+			continue
 		}
 
 		posters[0], err = anime.NewImage(anime.ImageDto{
@@ -113,7 +116,8 @@ func (subcmd RefreshPostersSubCommand) Run(input RefreshPostersSubCommandInput) 
 			Encoded:       encodedTallPoster,
 		})
 		if err != nil {
-			return RefreshPostersSubCommandOutput{}, err
+			errors[newCrAnime.SeriesId()] = err
+			continue
 		}
 
 		posters[1], err = anime.NewImage(anime.ImageDto{
@@ -125,7 +129,8 @@ func (subcmd RefreshPostersSubCommand) Run(input RefreshPostersSubCommandInput) 
 			Encoded:       encodedWidePoster,
 		})
 		if err != nil {
-			return RefreshPostersSubCommandOutput{}, err
+			errors[newCrAnime.SeriesId()] = err
+			continue
 		}
 
 		newPosters[newCrAnime.SeriesId()] = posters
@@ -134,5 +139,5 @@ func (subcmd RefreshPostersSubCommand) Run(input RefreshPostersSubCommandInput) 
 	return RefreshPostersSubCommandOutput{
 		UpdatedLocalAnime: input.LocalAnime,
 		NewPosters:        newPosters,
-	}, nil
+	}, errors
 }

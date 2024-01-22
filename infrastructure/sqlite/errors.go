@@ -2,10 +2,6 @@ package sqlite
 
 import "fmt"
 
-func sqlBuilderError(subject string, err error) error {
-	return fmt.Errorf("could not build SQL for %s: %v", subject, err)
-}
-
 func couldNotRetrieveAllError(subject string, expectedNum, actualNum int) error {
 	return fmt.Errorf("could not retrieve all %s; expected %d, actual %d", subject, expectedNum, actualNum)
 }

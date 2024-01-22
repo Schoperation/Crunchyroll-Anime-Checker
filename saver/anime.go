@@ -5,46 +5,50 @@ import (
 	"schoperation/crunchyrollanimestatus/domain/core"
 )
 
-type animeTranslator interface {
+type animeSaver interface {
 	SaveAll(newAnime []anime.Anime, updatedAnime []anime.Anime) (map[core.SeriesId]anime.MinimalAnime, error)
 }
 
-type posterTranslator interface {
+type posterSaver interface {
 	SaveAll(newPosters []anime.Image, updatedPosters []anime.Image) error
 }
 
-type latestEpisodesTranslator interface {
+type latestEpisodesSaver interface {
 	SaveAll(newLatestEpisodes []anime.LatestEpisodes, updatedLatestEpisodes []anime.LatestEpisodes) error
 }
 
-type thumbnailTranslator interface {
-	SaveAll(newThumbnails []anime.Image, updatedThumbnails []anime.Image) error
+type thumbnailSaver interface {
+	SaveAll(newThumbnails []anime.Image, deletedThumbnails []anime.Image) error
 }
 
 type AnimeSaver struct {
-	animeTranslator          animeTranslator
-	posterTranslator         posterTranslator
-	latestEpisodesTranslator latestEpisodesTranslator
-	thumbnailTranslator      thumbnailTranslator
+	animeSaver          animeSaver
+	posterSaver         posterSaver
+	latestEpisodesSaver latestEpisodesSaver
+	thumbnailSaver      thumbnailSaver
 }
 
 func NewAnimeSaver(
-	animeTranslator animeTranslator,
-	posterTranslator posterTranslator,
-	latestEpisodesTranslator latestEpisodesTranslator,
-	thumbnailTranslator thumbnailTranslator,
+	animeSaver animeSaver,
+	posterSaver posterSaver,
+	latestEpisodesSaver latestEpisodesSaver,
+	thumbnailSaver thumbnailSaver,
 ) AnimeSaver {
 	return AnimeSaver{
-		animeTranslator:          animeTranslator,
-		posterTranslator:         posterTranslator,
-		latestEpisodesTranslator: latestEpisodesTranslator,
-		thumbnailTranslator:      thumbnailTranslator,
+		animeSaver:          animeSaver,
+		posterSaver:         posterSaver,
+		latestEpisodesSaver: latestEpisodesSaver,
+		thumbnailSaver:      thumbnailSaver,
 	}
 }
 
-// TODO take in updated anime
-func (saver AnimeSaver) SaveAll(locales []core.Locale, newAnimes []anime.Anime, updatedAnimes []anime.Anime) error {
-	newMinimalAnime, err := saver.animeTranslator.SaveAll(newAnimes, updatedAnimes)
+func (saver AnimeSaver) SaveAll(
+	locales []core.Locale,
+	newAnimes []anime.Anime,
+	updatedAnimes []anime.Anime,
+	originalLocalAnimes map[core.SeriesId]anime.Anime,
+) error {
+	newMinimalAnime, err := saver.animeSaver.SaveAll(newAnimes, updatedAnimes)
 	if err != nil {
 		return err
 	}
@@ -63,27 +67,62 @@ func (saver AnimeSaver) SaveAll(locales []core.Locale, newAnimes []anime.Anime, 
 
 		newPosters = append(newPosters, newAnime.Posters()...)
 
-		var leToAdd []anime.LatestEpisodes
 		for _, locale := range locales {
-			leToAdd = append(leToAdd, newAnime.Episodes().GetLatestEpisodesForLocale(locale))
-		}
+			le, err := newAnime.Episodes().GetLatestEpisodesForLocale(locale)
+			if err != nil {
+				return err
+			}
 
-		newLatestEpisodes = append(newLatestEpisodes, leToAdd...)
+			newLatestEpisodes = append(newLatestEpisodes, le)
+		}
 
 		newThumbnails = append(newThumbnails, newAnime.Episodes().Thumbnails()...)
 	}
 
-	err = saver.posterTranslator.SaveAll(newPosters, nil)
+	var updatedPosters []anime.Image
+	var updatedLatestEpisodes []anime.LatestEpisodes
+	var deletedThumbnails []anime.Image
+
+	for _, updatedAnime := range updatedAnimes {
+		originalAnime := originalLocalAnimes[updatedAnime.SeriesId()]
+
+		updatedPosters = append(updatedPosters, updatedAnime.Posters()...)
+
+		// TODO allow removed locales for latest episodes?
+		for _, locale := range updatedAnime.Episodes().Locales() {
+			_, err := originalAnime.Episodes().GetLatestEpisodesForLocale(locale)
+			if err != nil {
+				newLe, err := updatedAnime.Episodes().GetLatestEpisodesForLocale(locale)
+				if err != nil {
+					return err
+				}
+
+				newLatestEpisodes = append(newLatestEpisodes, newLe)
+				continue
+			}
+
+			updatedLe, err := updatedAnime.Episodes().GetLatestEpisodesForLocale(locale)
+			if err != nil {
+				return err
+			}
+
+			updatedLatestEpisodes = append(updatedLatestEpisodes, updatedLe)
+		}
+
+		deletedThumbnails = append(deletedThumbnails, updatedAnime.Episodes().CleanEpisodes()...)
+	}
+
+	err = saver.posterSaver.SaveAll(newPosters, updatedPosters)
 	if err != nil {
 		return err
 	}
 
-	err = saver.latestEpisodesTranslator.SaveAll(newLatestEpisodes, nil)
+	err = saver.latestEpisodesSaver.SaveAll(newLatestEpisodes, updatedLatestEpisodes)
 	if err != nil {
 		return err
 	}
 
-	err = saver.thumbnailTranslator.SaveAll(newThumbnails, nil)
+	err = saver.thumbnailSaver.SaveAll(newThumbnails, deletedThumbnails)
 	if err != nil {
 		return err
 	}

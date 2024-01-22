@@ -5,6 +5,7 @@ import "schoperation/crunchyrollanimestatus/domain/anime"
 type posterDao interface {
 	GetAllByAnimeIds(animeIds []int) ([]anime.ImageDto, error)
 	InsertAll(dtos []anime.ImageDto) error
+	Update(dto anime.ImageDto) error
 }
 
 type PosterTranslator struct {
@@ -52,6 +53,13 @@ func (translator PosterTranslator) SaveAll(newPosters []anime.Image, updatedPost
 	err := translator.posterDao.InsertAll(newDtos)
 	if err != nil {
 		return err
+	}
+
+	for _, poster := range updatedPosters {
+		err := translator.posterDao.Update(poster.Dto())
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
