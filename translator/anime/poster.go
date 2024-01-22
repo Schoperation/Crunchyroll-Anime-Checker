@@ -1,6 +1,6 @@
 package anime
 
-import "schoperation/crunchyrollanimestatus/domain/anime"
+import "schoperation/crunchyroll-anime-checker/domain/anime"
 
 type posterDao interface {
 	GetAllByAnimeIds(animeIds []int) ([]anime.ImageDto, error)

@@ -1,6 +1,6 @@
 package crunchyroll
 
-import "schoperation/crunchyrollanimestatus/domain/core"
+import "schoperation/crunchyroll-anime-checker/domain/core"
 
 // Representation of a "version" from Crunchyroll, primarily used to store dub info.
 type DubDto struct {

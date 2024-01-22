@@ -1,8 +1,8 @@
 package crunchyroll
 
 import (
-	"schoperation/crunchyrollanimestatus/domain/core"
-	"schoperation/crunchyrollanimestatus/domain/crunchyroll"
+	"schoperation/crunchyroll-anime-checker/domain/core"
+	"schoperation/crunchyroll-anime-checker/domain/crunchyroll"
 )
 
 type crunchyrollAnimeSeasonClient interface {

@@ -1,7 +1,7 @@
 package sqlite
 
 import (
-	"schoperation/crunchyrollanimestatus/domain/anime"
+	"schoperation/crunchyroll-anime-checker/domain/anime"
 	"time"
 
 	"github.com/doug-martin/goqu/v9"

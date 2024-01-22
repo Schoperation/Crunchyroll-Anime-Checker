@@ -1,4 +1,4 @@
-module schoperation/crunchyrollanimestatus
+module schoperation/crunchyroll-anime-checker
 
 go 1.21
 

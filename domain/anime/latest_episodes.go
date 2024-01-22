@@ -2,7 +2,7 @@ package anime
 
 import (
 	"fmt"
-	"schoperation/crunchyrollanimestatus/domain/core"
+	"schoperation/crunchyroll-anime-checker/domain/core"
 )
 
 type LatestEpisodesDto struct {

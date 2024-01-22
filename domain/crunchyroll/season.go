@@ -1,6 +1,6 @@
 package crunchyroll
 
-import "schoperation/crunchyrollanimestatus/domain/core"
+import "schoperation/crunchyroll-anime-checker/domain/core"
 
 type SeasonDto struct {
 	Id              string

@@ -1,8 +1,8 @@
 package anime
 
 import (
-	"schoperation/crunchyrollanimestatus/domain/anime"
-	"schoperation/crunchyrollanimestatus/domain/core"
+	"schoperation/crunchyroll-anime-checker/domain/anime"
+	"schoperation/crunchyroll-anime-checker/domain/core"
 )
 
 type animeDao interface {

@@ -3,7 +3,7 @@ package crunchyroll
 import (
 	"cmp"
 	"fmt"
-	"schoperation/crunchyrollanimestatus/domain/core"
+	"schoperation/crunchyroll-anime-checker/domain/core"
 	"slices"
 	"strings"
 )

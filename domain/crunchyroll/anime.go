@@ -1,7 +1,7 @@
 package crunchyroll
 
 import (
-	"schoperation/crunchyrollanimestatus/domain/core"
+	"schoperation/crunchyroll-anime-checker/domain/core"
 	"slices"
 	"strings"
 	"time"

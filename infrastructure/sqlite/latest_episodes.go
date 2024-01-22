@@ -1,7 +1,7 @@
 package sqlite
 
 import (
-	"schoperation/crunchyrollanimestatus/domain/anime"
+	"schoperation/crunchyroll-anime-checker/domain/anime"
 
 	"github.com/doug-martin/goqu/v9"
 	_ "github.com/doug-martin/goqu/v9/dialect/sqlite3"

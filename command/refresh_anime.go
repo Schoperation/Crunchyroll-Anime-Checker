@@ -2,10 +2,10 @@ package command
 
 import (
 	"fmt"
-	"schoperation/crunchyrollanimestatus/command/subcommand"
-	"schoperation/crunchyrollanimestatus/domain/anime"
-	"schoperation/crunchyrollanimestatus/domain/core"
-	"schoperation/crunchyrollanimestatus/domain/crunchyroll"
+	"schoperation/crunchyroll-anime-checker/command/subcommand"
+	"schoperation/crunchyroll-anime-checker/domain/anime"
+	"schoperation/crunchyroll-anime-checker/domain/core"
+	"schoperation/crunchyroll-anime-checker/domain/crunchyroll"
 	"time"
 )
 

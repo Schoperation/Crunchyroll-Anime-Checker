@@ -3,7 +3,7 @@ package anime
 import (
 	"fmt"
 	"net/url"
-	"schoperation/crunchyrollanimestatus/domain/core"
+	"schoperation/crunchyroll-anime-checker/domain/core"
 	"strings"
 )
 

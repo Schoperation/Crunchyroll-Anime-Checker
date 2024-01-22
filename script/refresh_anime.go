@@ -9,7 +9,7 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"schoperation/crunchyrollanimestatus/domain/core"
+	"schoperation/crunchyroll-anime-checker/domain/core"
 	"strconv"
 	"strings"
 	"time"

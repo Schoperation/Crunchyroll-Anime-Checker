@@ -1,6 +1,6 @@
 package core
 
-import "schoperation/crunchyrollanimestatus/domain/core"
+import "schoperation/crunchyroll-anime-checker/domain/core"
 
 type getEncodedImageClient interface {
 	GetImageByURL(url string) ([]byte, error)
