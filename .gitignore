@@ -10,3 +10,4 @@ creds.json
 db.json
 *.db
 *.csv
+*.json
