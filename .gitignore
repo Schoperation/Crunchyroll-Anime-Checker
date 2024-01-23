@@ -9,3 +9,4 @@ temp_alphabetical.json
 creds.json
 db.json
 *.db
+*.csv

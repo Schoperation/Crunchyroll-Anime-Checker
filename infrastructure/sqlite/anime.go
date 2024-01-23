@@ -57,6 +57,33 @@ func (dao AnimeDao) GetAllMinimal() ([]anime.MinimalAnimeDto, error) {
 	return dtos, nil
 }
 
+func (dao AnimeDao) GetAll() ([]anime.AnimeDto, error) {
+	var models []animeModel
+	err := dao.db.
+		Select(&animeModel{}).
+		From("anime").
+		WithDialect(Dialect).
+		Executor().
+		ScanStructs(&models)
+	if err != nil {
+		return nil, couldNotRetrieveError("anime", err)
+	}
+
+	dtos := make([]anime.AnimeDto, len(models))
+	for i, model := range models {
+		dtos[i] = anime.AnimeDto{
+			AnimeId:     model.AnimeId,
+			SeriesId:    model.SeriesId,
+			SlugTitle:   model.SlugTitle,
+			Title:       model.Title,
+			IsSimulcast: model.IsSimulcast,
+			LastUpdated: model.LastUpdated,
+		}
+	}
+
+	return dtos, nil
+}
+
 func (dao AnimeDao) GetAllByAnimeIds(animeIds []int) ([]anime.AnimeDto, error) {
 	if len(animeIds) == 0 {
 		return nil, nil

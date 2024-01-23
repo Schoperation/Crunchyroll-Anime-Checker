@@ -88,6 +88,14 @@ func (anime *Anime) SeriesId() core.SeriesId {
 	return anime.seriesId
 }
 
+func (anime *Anime) SlugTitle() string {
+	return anime.slugTitle
+}
+
+func (anime *Anime) Title() string {
+	return anime.title
+}
+
 func (anime *Anime) Posters() []Image {
 	return anime.posters
 }

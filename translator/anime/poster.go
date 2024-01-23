@@ -1,6 +1,10 @@
 package anime
 
-import "schoperation/crunchyroll-anime-checker/domain/anime"
+import (
+	"fmt"
+	"schoperation/crunchyroll-anime-checker/domain/anime"
+	"schoperation/crunchyroll-anime-checker/domain/core"
+)
 
 type posterDao interface {
 	GetAllByAnimeIds(animeIds []int) ([]anime.ImageDto, error)
@@ -8,13 +12,19 @@ type posterDao interface {
 	Update(dto anime.ImageDto) error
 }
 
-type PosterTranslator struct {
-	posterDao posterDao
+type posterFileWriter interface {
+	WriteAllWithIdentifier(identifier string, dtos []anime.PostersDto) error
 }
 
-func NewPosterTranslator(posterDao posterDao) PosterTranslator {
+type PosterTranslator struct {
+	posterDao        posterDao
+	posterFileWriter posterFileWriter
+}
+
+func NewPosterTranslator(posterDao posterDao, posterFileWriter posterFileWriter) PosterTranslator {
 	return PosterTranslator{
-		posterDao: posterDao,
+		posterDao:        posterDao,
+		posterFileWriter: posterFileWriter,
 	}
 }
 
@@ -64,3 +74,62 @@ func (translator PosterTranslator) SaveAll(newPosters []anime.Image, updatedPost
 
 	return nil
 }
+
+func (translator PosterTranslator) CreatePosterFiles(posters []anime.Image, slugTitles map[anime.AnimeId]string) error {
+	posterDtoMap := make(map[anime.AnimeId]anime.PostersDto, len(slugTitles))
+	for _, poster := range posters {
+		slugTitle, exists := slugTitles[poster.AnimeId()]
+		if !exists {
+			return fmt.Errorf("missing slug title for anime ID %d", poster.AnimeId())
+		}
+
+		dto := anime.PostersDto{
+			SlugTitle: slugTitle,
+		}
+
+		savedDto, exists := posterDtoMap[poster.AnimeId()]
+		if exists {
+			dto = savedDto
+		}
+
+		switch poster.ImageType() {
+		case core.ImageTypePosterTall:
+			dto.PosterTallUrl = poster.Url()
+			dto.PosterTallEncoded = poster.Encoded()
+		case core.ImageTypePosterWide:
+			dto.PosterWideUrl = poster.Url()
+			dto.PosterWideEncoded = poster.Encoded()
+		}
+	}
+
+	posterDtos := make([]anime.PostersDto, len(posterDtoMap))
+	i := 0
+	for _, dto := range posterDtoMap {
+		posterDtos[i] = dto
+		i++
+	}
+
+	// TODO move identifier responsibility to infra level?
+	err := translator.posterFileWriter.WriteAllWithIdentifier()
+}
+
+/*
+func (anime *Anime) PostersDto() PostersDto {
+	postersDto := PostersDto{
+		SlugTitle: anime.slugTitle,
+	}
+
+	for _, poster := range anime.posters {
+		switch poster.ImageType() {
+		case core.ImageTypePosterTall:
+			postersDto.PosterTallUrl = poster.Url()
+			postersDto.PosterTallEncoded = poster.Encoded()
+		case core.ImageTypePosterWide:
+			postersDto.PosterWideUrl = poster.Url()
+			postersDto.PosterWideEncoded = poster.Encoded()
+		}
+	}
+
+	return postersDto
+}
+*/

@@ -1,7 +1,9 @@
 package anime
 
 import (
+	"fmt"
 	"schoperation/crunchyroll-anime-checker/domain/anime"
+	"schoperation/crunchyroll-anime-checker/domain/core"
 )
 
 type latestEpisodesDao interface {
@@ -10,13 +12,19 @@ type latestEpisodesDao interface {
 	Update(dto anime.LatestEpisodesDto) error
 }
 
-type LatestEpisodesTranslator struct {
-	latestEpisodesDao latestEpisodesDao
+type latestEpisodesFileWriter interface {
+	WriteAllByLocale(localeName string, dtos []anime.LatestEpisodesDto) error
 }
 
-func NewLatestEpisodesTranslator(latestEpisodesDao latestEpisodesDao) LatestEpisodesTranslator {
+type LatestEpisodesTranslator struct {
+	latestEpisodesDao        latestEpisodesDao
+	latestEpisodesFileWriter latestEpisodesFileWriter
+}
+
+func NewLatestEpisodesTranslator(latestEpisodesDao latestEpisodesDao, latestEpisodesFileWriter latestEpisodesFileWriter) LatestEpisodesTranslator {
 	return LatestEpisodesTranslator{
-		latestEpisodesDao: latestEpisodesDao,
+		latestEpisodesDao:        latestEpisodesDao,
+		latestEpisodesFileWriter: latestEpisodesFileWriter,
 	}
 }
 
@@ -62,6 +70,27 @@ func (translator LatestEpisodesTranslator) SaveAll(newLatestEpisodes []anime.Lat
 		if err != nil {
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (translator LatestEpisodesTranslator) CreateFileForLocale(locale core.Locale, latestEpisodes []anime.LatestEpisodes, slugTitles map[anime.AnimeId]string) error {
+	dtos := make([]anime.LatestEpisodesDto, len(latestEpisodes))
+	for i, le := range latestEpisodes {
+		slugTitle, exists := slugTitles[le.AnimeId()]
+		if !exists {
+			return fmt.Errorf("missing slug title for anime ID %d", le.AnimeId())
+		}
+
+		dto := le.Dto()
+		dto.SlugTitle = slugTitle
+		dtos[i] = dto
+	}
+
+	err := translator.latestEpisodesFileWriter.WriteAllByLocale(locale.Name(), dtos)
+	if err != nil {
+		return err
 	}
 
 	return nil

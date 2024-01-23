@@ -57,7 +57,7 @@ func (factory AnimeFactory) ReformAll(dtos []anime.AnimeDto) (map[core.SeriesId]
 		return nil, nil, err
 	}
 
-	// Create and return a copy of the map here so we don't have to do any funky pointer logic...
+	// Create and return a copy of the map here so we don't run into weird pointer behavior when saving back to DB...
 	animes := make(map[core.SeriesId]anime.Anime, len(dtos))
 	originalAnime := make(map[core.SeriesId]anime.Anime, len(dtos))
 

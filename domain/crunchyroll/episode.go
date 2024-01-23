@@ -67,7 +67,7 @@ func ReformEpisode(dto EpisodeDto) Episode {
 	}
 
 	if strings.Trim(smallestThumbnail.Source, " ") == "" {
-		smallestThumbnail.Source = "https://static.crunchyroll.com/assets/avatar/170x170/0008-cr-orange-black.png"
+		smallestThumbnail.Source = core.DefaultPosterUrl
 		smallestThumbnail.ImageType = core.ImageTypeThumbnail.Name()
 	}
 

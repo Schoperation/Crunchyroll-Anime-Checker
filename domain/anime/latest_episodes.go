@@ -14,6 +14,9 @@ type LatestEpisodesDto struct {
 	LatestDubSeason  int
 	LatestDubEpisode int
 	LatestDubTitle   string
+
+	// Used in generating json files
+	SlugTitle string
 }
 
 // LatestEpisodes holds the latest sub and dub episodes for a specified anime and locale.

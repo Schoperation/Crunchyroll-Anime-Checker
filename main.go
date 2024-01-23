@@ -7,6 +7,7 @@ import (
 	"schoperation/crunchyroll-anime-checker/command"
 	"schoperation/crunchyroll-anime-checker/command/subcommand"
 	"schoperation/crunchyroll-anime-checker/factory"
+	"schoperation/crunchyroll-anime-checker/infrastructure/file"
 	"schoperation/crunchyroll-anime-checker/infrastructure/rest"
 	"schoperation/crunchyroll-anime-checker/infrastructure/sqlite"
 	"schoperation/crunchyroll-anime-checker/saver"
@@ -35,7 +36,8 @@ func main() {
 	}
 
 	cmds := map[string]bool{
-		"refresh-anime": true,
+		"refresh-anime":        true,
+		"generate-anime-files": true,
 	}
 	_, ok := cmds[args.cmd]
 	if !ok {
@@ -57,6 +59,9 @@ func main() {
 	goqu.RegisterDialect(sqlite.Dialect, goquDialectOpts)
 	goquDb := goqu.New(sqlite.Dialect, db)
 
+	animeSenseiListWriter := file.NewAnimeSenseiListWriter(args.listsPath)
+	latestEpisodesWriter := file.NewLatestEpisodesWriter(args.listsPath)
+
 	animeDao := sqlite.NewAnimeDao(goquDb)
 	latestEpisodesDao := sqlite.NewLatestEpisodesDao(goquDb)
 	posterDao := sqlite.NewPosterDao(goquDb)
@@ -65,7 +70,7 @@ func main() {
 	crunchyrollClient := rest.NewCrunchyrollClient(args.credFilePath)
 	imageClient := rest.NewImageClient()
 
-	latestEpisodesTranslator := anime_translator.NewLatestEpisodesTranslator(latestEpisodesDao)
+	latestEpisodesTranslator := anime_translator.NewLatestEpisodesTranslator(latestEpisodesDao, latestEpisodesWriter)
 	posterTranslator := anime_translator.NewPosterTranslator(posterDao)
 	thumbnailTranslator := anime_translator.NewThumbnailTranslator(thumbnailDao)
 
@@ -76,7 +81,7 @@ func main() {
 	crunchyrollEpisodeTranslator := crunchyroll_translator.NewEpisodeTranslator(&crunchyrollClient)
 
 	animeFactory := factory.NewAnimeFactory(posterTranslator, latestEpisodesTranslator, thumbnailTranslator)
-	animeTranslator := anime_translator.NewAnimeTranslator(animeDao, animeFactory)
+	animeTranslator := anime_translator.NewAnimeTranslator(animeDao, animeSenseiListWriter, animeFactory)
 	animeSaver := saver.NewAnimeSaver(animeTranslator, posterTranslator, latestEpisodesTranslator, thumbnailTranslator)
 
 	refreshBasicInfoSubCommand := subcommand.NewRefreshBasicInfoSubCommand()
@@ -84,15 +89,26 @@ func main() {
 	refreshLatestEpisodesSubCommand := subcommand.NewRefreshLatestEpisodesSubCommand(crunchyrollSeasonTranslator, crunchyrollEpisodeTranslator, imageTranslator)
 
 	refreshAnimeCommand := command.NewRefreshAnimeCommand(crunchyrollAnimeTranslator, animeTranslator, refreshBasicInfoSubCommand, refreshPostersSubCommand, refreshLatestEpisodesSubCommand, animeSaver)
+	generateAnimeFilesCommand := command.NewGenerateAnimeFilesCommand(animeTranslator, animeTranslator, latestEpisodesTranslator)
 
-	output, err := refreshAnimeCommand.Run(command.RefreshAnimeCommandInput{})
-	if err != nil {
-		fmt.Println(err)
-		return
+	switch args.cmd {
+	case "refresh-anime":
+		output, err := refreshAnimeCommand.Run(command.RefreshAnimeCommandInput{})
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		fmt.Println("new anime: ", output.NewAnimeCount)
+		fmt.Println("updated anime: ", output.UpdatedAnimeCount)
+	case "generate-anime-files":
+		_, err := generateAnimeFilesCommand.Run(command.GenerateAnimeFilesCommandInput{})
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 	}
 
-	fmt.Println("new anime: ", output.NewAnimeCount)
-	fmt.Println("updated anime: ", output.UpdatedAnimeCount)
 }
 
 func parseArgs() (arguments, error) {
