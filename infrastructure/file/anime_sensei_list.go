@@ -24,6 +24,7 @@ func (writer AnimeSenseiListWriter) WriteAll(seriesIds, slugTitles, titles []str
 	data := make([][]string, len(seriesIds))
 	for i := range seriesIds {
 		data[i] = []string{
+			fileId(slugTitles[i]),
 			seriesIds[i],
 			slugTitles[i],
 			titles[i],
@@ -37,7 +38,7 @@ func (writer AnimeSenseiListWriter) WriteAll(seriesIds, slugTitles, titles []str
 
 	newListAsCsv := csv.NewWriter(newAnimeSenseiList)
 	newListAsCsv.Comma = '|'
-	newListAsCsv.Write([]string{"series_id", "slug_title", "title"})
+	newListAsCsv.Write([]string{"file_id", "series_id", "slug_title", "title"})
 	newListAsCsv.WriteAll(data)
 	newAnimeSenseiList.Close()
 

@@ -23,21 +23,35 @@ type latestEpisodesFileCreator interface {
 	CreateFileForLocale(locale core.Locale, latestEpisodes []anime.LatestEpisodes, slugTitles map[anime.AnimeId]string) error
 }
 
+type posterFileCreator interface {
+	CreatePosterFiles(posters []anime.Image, slugTitles map[anime.AnimeId]string) error
+}
+
+type thumbnailFileCreator interface {
+	CreateThumbnailFiles(thumbnails []anime.Image, slugTitles map[anime.AnimeId]string) error
+}
+
 type GenerateAnimeFilesCommand struct {
 	allAnimeFetcher           allAnimeFetcher
 	senseiListCreator         senseiListCreator
 	latestEpisodesFileCreator latestEpisodesFileCreator
+	posterFileCreator         posterFileCreator
+	thumbnailFileCreator      thumbnailFileCreator
 }
 
 func NewGenerateAnimeFilesCommand(
 	allAnimeFetcher allAnimeFetcher,
 	senseiListCreator senseiListCreator,
 	latestEpisodesFileCreator latestEpisodesFileCreator,
+	posterFileCreator posterFileCreator,
+	thumbnailFileCreator thumbnailFileCreator,
 ) GenerateAnimeFilesCommand {
 	return GenerateAnimeFilesCommand{
 		allAnimeFetcher:           allAnimeFetcher,
 		senseiListCreator:         senseiListCreator,
 		latestEpisodesFileCreator: latestEpisodesFileCreator,
+		posterFileCreator:         posterFileCreator,
+		thumbnailFileCreator:      thumbnailFileCreator,
 	}
 }
 
@@ -75,6 +89,23 @@ func (cmd GenerateAnimeFilesCommand) Run(input GenerateAnimeFilesCommandInput) (
 		if err != nil {
 			return GenerateAnimeFilesCommandOutput{}, err
 		}
+	}
+
+	var posters []anime.Image
+	var thumbnails []anime.Image
+	for _, localAnime := range animes {
+		posters = append(posters, localAnime.Posters()...)
+		thumbnails = append(thumbnails, localAnime.Episodes().Thumbnails()...)
+	}
+
+	err = cmd.posterFileCreator.CreatePosterFiles(posters, slugTitles)
+	if err != nil {
+		return GenerateAnimeFilesCommandOutput{}, err
+	}
+
+	err = cmd.thumbnailFileCreator.CreateThumbnailFiles(thumbnails, slugTitles)
+	if err != nil {
+		return GenerateAnimeFilesCommandOutput{}, err
 	}
 
 	return GenerateAnimeFilesCommandOutput{}, nil

@@ -61,6 +61,8 @@ func main() {
 
 	animeSenseiListWriter := file.NewAnimeSenseiListWriter(args.listsPath)
 	latestEpisodesWriter := file.NewLatestEpisodesWriter(args.listsPath)
+	posterWriter := file.NewPosterWriter(args.listsPath)
+	thumbnailWriter := file.NewThumbnailWriter(args.listsPath)
 
 	animeDao := sqlite.NewAnimeDao(goquDb)
 	latestEpisodesDao := sqlite.NewLatestEpisodesDao(goquDb)
@@ -71,8 +73,8 @@ func main() {
 	imageClient := rest.NewImageClient()
 
 	latestEpisodesTranslator := anime_translator.NewLatestEpisodesTranslator(latestEpisodesDao, latestEpisodesWriter)
-	posterTranslator := anime_translator.NewPosterTranslator(posterDao)
-	thumbnailTranslator := anime_translator.NewThumbnailTranslator(thumbnailDao)
+	posterTranslator := anime_translator.NewPosterTranslator(posterDao, posterWriter)
+	thumbnailTranslator := anime_translator.NewThumbnailTranslator(thumbnailDao, thumbnailWriter)
 
 	imageTranslator := core_translator.NewImageTranslator(imageClient)
 
@@ -89,7 +91,7 @@ func main() {
 	refreshLatestEpisodesSubCommand := subcommand.NewRefreshLatestEpisodesSubCommand(crunchyrollSeasonTranslator, crunchyrollEpisodeTranslator, imageTranslator)
 
 	refreshAnimeCommand := command.NewRefreshAnimeCommand(crunchyrollAnimeTranslator, animeTranslator, refreshBasicInfoSubCommand, refreshPostersSubCommand, refreshLatestEpisodesSubCommand, animeSaver)
-	generateAnimeFilesCommand := command.NewGenerateAnimeFilesCommand(animeTranslator, animeTranslator, latestEpisodesTranslator)
+	generateAnimeFilesCommand := command.NewGenerateAnimeFilesCommand(animeTranslator, animeTranslator, latestEpisodesTranslator, posterTranslator, thumbnailTranslator)
 
 	switch args.cmd {
 	case "refresh-anime":

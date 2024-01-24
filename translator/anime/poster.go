@@ -13,7 +13,7 @@ type posterDao interface {
 }
 
 type posterFileWriter interface {
-	WriteAllWithIdentifier(identifier string, dtos []anime.PostersDto) error
+	WriteAll(dtos []anime.PostersDto) error
 }
 
 type PosterTranslator struct {
@@ -100,6 +100,8 @@ func (translator PosterTranslator) CreatePosterFiles(posters []anime.Image, slug
 			dto.PosterWideUrl = poster.Url()
 			dto.PosterWideEncoded = poster.Encoded()
 		}
+
+		posterDtoMap[poster.AnimeId()] = dto
 	}
 
 	posterDtos := make([]anime.PostersDto, len(posterDtoMap))
@@ -109,27 +111,10 @@ func (translator PosterTranslator) CreatePosterFiles(posters []anime.Image, slug
 		i++
 	}
 
-	// TODO move identifier responsibility to infra level?
-	err := translator.posterFileWriter.WriteAllWithIdentifier()
-}
-
-/*
-func (anime *Anime) PostersDto() PostersDto {
-	postersDto := PostersDto{
-		SlugTitle: anime.slugTitle,
+	err := translator.posterFileWriter.WriteAll(posterDtos)
+	if err != nil {
+		return err
 	}
 
-	for _, poster := range anime.posters {
-		switch poster.ImageType() {
-		case core.ImageTypePosterTall:
-			postersDto.PosterTallUrl = poster.Url()
-			postersDto.PosterTallEncoded = poster.Encoded()
-		case core.ImageTypePosterWide:
-			postersDto.PosterWideUrl = poster.Url()
-			postersDto.PosterWideEncoded = poster.Encoded()
-		}
-	}
-
-	return postersDto
+	return nil
 }
-*/

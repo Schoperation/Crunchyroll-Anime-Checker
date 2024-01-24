@@ -14,6 +14,9 @@ type ImageDto struct {
 	EpisodeNumber int
 	Url           string
 	Encoded       string
+
+	// Used for generating files
+	SlugTitle string
 }
 
 type Image struct {

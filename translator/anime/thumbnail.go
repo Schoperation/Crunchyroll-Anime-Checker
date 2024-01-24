@@ -1,6 +1,7 @@
 package anime
 
 import (
+	"fmt"
 	"schoperation/crunchyroll-anime-checker/domain/anime"
 )
 
@@ -10,13 +11,19 @@ type thumbnailDao interface {
 	DeleteAll(animeIds, seasonNumbers, episodeNumbers []int) error
 }
 
-type ThumbnailTranslator struct {
-	thumbnailDao thumbnailDao
+type thumbnailFileWriter interface {
+	WriteAll(dtos []anime.ImageDto) error
 }
 
-func NewThumbnailTranslator(thumbnailDao thumbnailDao) ThumbnailTranslator {
+type ThumbnailTranslator struct {
+	thumbnailDao        thumbnailDao
+	thumbnailFileWriter thumbnailFileWriter
+}
+
+func NewThumbnailTranslator(thumbnailDao thumbnailDao, thumbnailFileWriter thumbnailFileWriter) ThumbnailTranslator {
 	return ThumbnailTranslator{
-		thumbnailDao: thumbnailDao,
+		thumbnailDao:        thumbnailDao,
+		thumbnailFileWriter: thumbnailFileWriter,
 	}
 }
 
@@ -69,6 +76,27 @@ func (translator ThumbnailTranslator) SaveAll(newThumbnails []anime.Image, delet
 	}
 
 	err = translator.thumbnailDao.DeleteAll(deletedAnimeIds, deletedSeasonNumbers, deletedEpisodeNumbers)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (translator ThumbnailTranslator) CreateThumbnailFiles(thumbnails []anime.Image, slugTitles map[anime.AnimeId]string) error {
+	dtos := make([]anime.ImageDto, len(thumbnails))
+	for i, thumbnail := range thumbnails {
+		slugTitle, exists := slugTitles[thumbnail.AnimeId()]
+		if !exists {
+			return fmt.Errorf("missing slug title for anime ID %d", thumbnail.AnimeId())
+		}
+
+		dto := thumbnail.Dto()
+		dto.SlugTitle = slugTitle
+		dtos[i] = dto
+	}
+
+	err := translator.thumbnailFileWriter.WriteAll(dtos)
 	if err != nil {
 		return err
 	}

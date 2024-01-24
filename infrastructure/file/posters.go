@@ -32,23 +32,27 @@ type postersModel struct {
 	PosterWideEncoded string `json:"poster_wide_encoded"`
 }
 
-func (writer PosterWriter) WriteAllWithIdentifier(identifier string, dtos []anime.PostersDto) error {
-	posters := make(map[string]postersModel, len(dtos))
+func (writer PosterWriter) WriteAll(dtos []anime.PostersDto) error {
+	fileIds := getFileIds()
+
+	posterMaps := make(map[string]map[string]postersModel, len(fileIds))
+	for _, id := range fileIds {
+		posterMaps[id] = make(map[string]postersModel)
+	}
 
 	for _, dto := range dtos {
+		id := fileId(dto.SlugTitle)
+
+		posters := posterMaps[id]
+
 		posters[dto.SlugTitle] = postersModel{
 			PosterTallUrl:     dto.PosterTallUrl,
 			PosterTallEncoded: dto.PosterTallEncoded,
 			PosterWideUrl:     dto.PosterWideUrl,
 			PosterWideEncoded: dto.PosterWideEncoded,
 		}
-	}
 
-	fileModel := postersFileModel{
-		TotalCount:           len(dtos),
-		DefaultPosterUrl:     core.DefaultPosterUrl,
-		DefaultPosterEncoded: core.DefaultPosterEncoded,
-		Posters:              posters,
+		posterMaps[id] = posters
 	}
 
 	err := os.Mkdir(fmt.Sprintf("%s/posters", writer.path), 0770)
@@ -56,24 +60,33 @@ func (writer PosterWriter) WriteAllWithIdentifier(identifier string, dtos []anim
 		return err
 	}
 
-	newFile, err := os.Create(fmt.Sprintf("%s/posters/%s_new.json", writer.path, identifier))
-	if err != nil {
-		return err
-	}
+	for _, id := range fileIds {
+		fileModel := postersFileModel{
+			TotalCount:           len(posterMaps[id]),
+			DefaultPosterUrl:     core.DefaultPosterUrl,
+			DefaultPosterEncoded: core.DefaultPosterEncoded,
+			Posters:              posterMaps[id],
+		}
 
-	bytes, err := json.MarshalIndent(fileModel, "", "    ")
-	if err != nil {
-		return err
-	}
+		newFile, err := os.Create(fmt.Sprintf("%s/posters/%s_new.json", writer.path, id))
+		if err != nil {
+			return err
+		}
 
-	_, err = newFile.Write(bytes)
-	if err != nil {
-		return err
-	}
+		bytes, err := json.MarshalIndent(fileModel, "", "    ")
+		if err != nil {
+			return err
+		}
 
-	err = os.Rename(fmt.Sprintf("%s/posters/%s_new.json", writer.path, identifier), fmt.Sprintf("%s/posters/%s.json", writer.path, identifier))
-	if err != nil {
-		return err
+		_, err = newFile.Write(bytes)
+		if err != nil {
+			return err
+		}
+
+		err = os.Rename(fmt.Sprintf("%s/posters/%s_new.json", writer.path, id), fmt.Sprintf("%s/posters/%s.json", writer.path, id))
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
