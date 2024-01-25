@@ -8,7 +8,7 @@ import (
 type thumbnailDao interface {
 	GetAllByAnimeIds(animeIds []int) ([]anime.ImageDto, error)
 	InsertAll(dtos []anime.ImageDto) error
-	DeleteAll(animeIds, seasonNumbers, episodeNumbers []int) error
+	Delete(animeId, seasonNumber, episodeNumber int) error
 }
 
 type thumbnailFileWriter interface {
@@ -66,18 +66,11 @@ func (translator ThumbnailTranslator) SaveAll(newThumbnails []anime.Image, delet
 		return err
 	}
 
-	deletedAnimeIds := make([]int, len(deletedThumbnails))
-	deletedSeasonNumbers := make([]int, len(deletedThumbnails))
-	deletedEpisodeNumbers := make([]int, len(deletedThumbnails))
-	for j, thumbnail := range deletedThumbnails {
-		deletedAnimeIds[j] = thumbnail.AnimeId().Int()
-		deletedSeasonNumbers[j] = thumbnail.SeasonNumber()
-		deletedEpisodeNumbers[j] = thumbnail.EpisodeNumber()
-	}
-
-	err = translator.thumbnailDao.DeleteAll(deletedAnimeIds, deletedSeasonNumbers, deletedEpisodeNumbers)
-	if err != nil {
-		return err
+	for _, thumbnail := range deletedThumbnails {
+		err := translator.thumbnailDao.Delete(thumbnail.AnimeId().Int(), thumbnail.SeasonNumber(), thumbnail.EpisodeNumber())
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

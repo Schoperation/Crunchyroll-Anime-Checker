@@ -86,13 +86,13 @@ func (dao ThumbnailDao) InsertAll(dtos []anime.ImageDto) error {
 	return nil
 }
 
-func (dao ThumbnailDao) DeleteAll(animeIds, seasonNumbers, episodeNumbers []int) error {
+func (dao ThumbnailDao) Delete(animeId, seasonNumber, episodeNumber int) error {
 	_, err := dao.db.
 		Delete("thumbnail").
 		Where(
-			goqu.C("anime_id").In(animeIds),
-			goqu.C("season_number").In(seasonNumbers),
-			goqu.C("episode_number").In(episodeNumbers),
+			goqu.C("anime_id").Eq(animeId),
+			goqu.C("season_number").Eq(seasonNumber),
+			goqu.C("episode_number").Eq(episodeNumber),
 		).
 		WithDialect(Dialect).
 		Executor().

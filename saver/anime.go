@@ -109,6 +109,19 @@ func (saver AnimeSaver) SaveAll(
 			updatedLatestEpisodes = append(updatedLatestEpisodes, updatedLe)
 		}
 
+		existingThumbnails := make(map[string]anime.Image)
+		for _, origThumbnail := range originalAnime.Episodes().Thumbnails() {
+			existingThumbnails[origThumbnail.Key()] = origThumbnail
+		}
+
+		for _, newThumbnail := range updatedAnime.Episodes().Thumbnails() {
+			if _, existing := existingThumbnails[newThumbnail.Key()]; existing {
+				continue
+			}
+
+			newThumbnails = append(newThumbnails, newThumbnail)
+		}
+
 		deletedThumbnails = append(deletedThumbnails, updatedAnime.Episodes().CleanEpisodes()...)
 	}
 
