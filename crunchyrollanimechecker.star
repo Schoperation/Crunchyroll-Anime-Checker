@@ -1,7 +1,7 @@
 """
-Applet: Crunchyroll Anime Status
-Summary: test
-Description: test
+Applet: Crunchyroll Anime Checker
+Summary: Check anime status on Crunchyroll
+Description: Checks for the lastest episodes (subs and dubs) for an anime on Crunchyroll.
 Author: Schoperation
 """
 
@@ -12,59 +12,37 @@ load("encoding/json.star", "json")
 load("encoding/csv.star", "csv")
 load("encoding/base64.star", "base64")
 
+DEFAULT_LANG = "en-US"
+DEFAULT_ANIME = "one-piece" # It'll go on forever as far as I can tell...
+DEFAULT_IMAGE_TYPE = "poster_full"
+DEFAULT_TITLE_COLOR = "#ffc266"
+DEFAULT_SUB_ID_COLOR = "#a6a6a6"
+DEFAULT_DUB_ID_COLOR = "#a6a6a6"
+
 def main(config):
-    lang_cfg = config.str("lang", "en-US")
-    anime_cfg = config.str("anime", "bocchi-the-rock") # Heh
-    title_color_cfg = config.str("title_color", "#ffc266")
-    sub_id_color_cfg = config.str("sub_id_color", "#a6a6a6")
-    dub_id_color_cfg = config.str("dub_id_color", "#a6a6a6")
-
-    anime_atlas_url = "https://raw.githubusercontent.com/Schoperation/Crunchyroll-Anime-Checker/master/lists/anime_atlas_{}.json".format(lang_cfg)
-    anime_posters_url = "https://raw.githubusercontent.com/Schoperation/Crunchyroll-Anime-Checker/master/lists/anime_posters.json"
-    anime_episode_thumbnails_url = "https://raw.githubusercontent.com/Schoperation/Crunchyroll-Anime-Checker/master/lists/anime_episode_thumbnails.json"
+    lang_cfg = config.str("lang", DEFAULT_LANG)
+    anime_cfg = config.str("anime", DEFAULT_ANIME)
+    image_cfg = config.str("image_type", DEFAULT_IMAGE_TYPE)
+    title_color_cfg = config.str("title_color", DEFAULT_TITLE_COLOR)
+    sub_id_color_cfg = config.str("sub_id_color", DEFAULT_SUB_ID_COLOR)
+    dub_id_color_cfg = config.str("dub_id_color", DEFAULT_DUB_ID_COLOR)
     
-    # Get anime itself...
-    resp = http.get(url = anime_atlas_url, headers = {"Accept": "application/json", "User-Agent": "Tidbyt - Crunchyroll Anime Status - Schoperation"}, ttl_seconds = 300)
-    if resp.status_code != 200:
-        return loading_error("anime atlas", resp.status_code, "Couldn't load anime master file :(")
+    file_id, anime_name = get_file_id_and_name(anime_cfg)
+    if file_id == None:
+        return show_error("Couldn't figure out which files to load :(")
 
-    anime_atlas = json.decode(resp.body())["anime"]
+    latest_episodes = get_latest_episodes(lang_cfg, anime_cfg)
+    if latest_episodes == None:
+        return show_error("Couldn't load latest episodes :(")
 
-    if anime_cfg not in anime_atlas:
-        return loading_error("anime atlas", 1, "Anime not in master file :(")
-
-    anime = anime_atlas[anime_cfg]
-
-    # Load necessary images...
-    image_cfg = config.str("anime_image", "poster_full")
     anime_image = ""
-    if image_cfg == "sub_thumb" or image_cfg == "dub_thumb":
-        image_resp = http.get(url = anime_episode_thumbnails_url, headers = {"Accept": "application/json", "User-Agent": "Tidbyt - Crunchyroll Anime Status - Schoperation"}, ttl_seconds = 300)
-        if image_resp.status_code != 200:
-            return loading_error("anime episode thumbnails", image_resp.status_code, "Couldn't load anime thumbnail file :(")
-
-        anime_episode_thumbnails = json.decode(image_resp.body())["episode_thumbnails"]
-
-        if anime_cfg not in anime_episode_thumbnails:
-            anime_image = json.decode(image_resp.body())["default_thumbnail_encoded"]
-        elif image_cfg == "sub_thumb":
-            anime_image = anime_episode_thumbnails[anime_cfg]["{s}-{e}".format(s=anime["sub"]["season"], e=anime["sub"]["episode"])]["encoded"]
-        else:
-            anime_image = anime_episode_thumbnails[anime_cfg]["{s}-{e}".format(s=anime["dub"]["season"], e=anime["dub"]["episode"])]["encoded"]
+    if image_cfg.count("poster") > 0:
+        anime_image = get_poster(file_id, anime_cfg, image_cfg)
     else:
-        image_resp = http.get(url = anime_posters_url, headers = {"Accept": "application/json", "User-Agent": "Tidbyt - Crunchyroll Anime Status - Schoperation"}, ttl_seconds = 300)
-        if image_resp.status_code != 200:
-            return loading_error("anime posters", image_resp.status_code, "Couldn't load anime poster file :(")
-
-        anime_posters = json.decode(image_resp.body())["posters"]
-
-        if anime_cfg not in anime_posters:
-            anime_image = json.decode(image_resp.body())["default_poster_encoded"]
-        else:
-            # TODO allow wide ones too
-            anime_image = anime_posters[anime_cfg]["poster_tall_encoded"]
-
-    anime_image = base64.decode(anime_image)
+        anime_image = get_thumbnail(file_id, anime_cfg, image_cfg, latest_episodes)
+    
+    if anime_image == None:
+        return show_error("Couldn't load image :(")
 
     return render.Root(
         child = render.Column(
@@ -75,7 +53,7 @@ def main(config):
                     child = render.Text(
                         font = "CG-pixel-3x5-mono",
                         color = title_color_cfg,
-                        content = anime["name"],
+                        content = anime_name,
                     ),
                 ),
                 render.Row(
@@ -101,7 +79,7 @@ def main(config):
                                     child = render.Text(
                                         font = "CG-pixel-3x5-mono",
                                         color = sub_id_color_cfg,
-                                        content = "S:S{s}E{e}".format(s=anime["sub"]["season"], e=anime["sub"]["episode"]),
+                                        content = "S:S{s}E{e}".format(s=latest_episodes["sub"]["season"], e=latest_episodes["sub"]["episode"]),
                                     ),
                                 ),
                                 render.Marquee(
@@ -110,7 +88,7 @@ def main(config):
                                     offset_start = 10,
                                     child = render.Text(
                                         font = "CG-pixel-3x5-mono",
-                                        content = anime["sub"]["title"],
+                                        content = latest_episodes["sub"]["title"],
                                     ),
                                 ),
                                 render.Marquee(
@@ -119,7 +97,7 @@ def main(config):
                                     child = render.Text(
                                         font = "CG-pixel-3x5-mono",
                                         color = dub_id_color_cfg,
-                                        content = "D:S{s}E{e}".format(s=anime["dub"]["season"], e=anime["dub"]["episode"]),
+                                        content = "D:S{s}E{e}".format(s=latest_episodes["dub"]["season"], e=latest_episodes["dub"]["episode"]),
                                     ),
                                 ),
                                 render.Marquee(
@@ -128,7 +106,7 @@ def main(config):
                                     offset_start = 10,
                                     child = render.Text(
                                         font = "CG-pixel-3x5-mono",
-                                        content = anime["dub"]["title"],
+                                        content = latest_episodes["dub"]["title"],
                                     ),
                                 ),
                             ],
@@ -139,34 +117,103 @@ def main(config):
         ),
     )
 
-def loading_error(anime_list, status_code, message):
-    print("Failed to load %s with status %d", anime_list, status_code)
-    return render.Root(
-        child = render.WrappedText(
-            content = message
-        )
-    )
+def get_file_id_and_name(anime_cfg):
+    anime_csv = get_sensei_list()
+    if anime_csv == None:
+        return None, None
+
+    for anime in anime_csv:
+        if anime[2] != anime_cfg:
+            continue
+
+        return anime[0], anime[3]
+
+
+def get_latest_episodes(lang_cfg, anime_cfg):
+    url = "https://raw.githubusercontent.com/Schoperation/Tidbyt-Anime-Files/sensei/latest_episodes/{}.json".format(lang_cfg)
+    resp = http.get(url = url, headers = {"Accept": "application/json", "User-Agent": "Crunchyroll Anime Checker - Tidbyt App"}, ttl_seconds = 300)
+    if resp.status_code != 200:
+        return None
+
+    latest_episodes = json.decode(resp.body())["latest_episodes"]
+
+    if anime_cfg not in latest_episodes:
+        return None
+
+    return latest_episodes[anime_cfg]
+
+
+def get_poster(file_id, anime_cfg, image_cfg):
+    url = "https://raw.githubusercontent.com/Schoperation/Tidbyt-Anime-Files/sensei/posters/{}.json".format(file_id)
+    resp = http.get(url = url, headers = {"Accept": "application/json", "User-Agent": "Crunchyroll Anime Checker - Tidbyt App"}, ttl_seconds = 300)
+    if resp.status_code != 200:
+        return None
+
+    posters = json.decode(resp.body())["posters"]
+
+    poster = ""
+    if anime_cfg not in posters:
+        poster = json.decode(resp.body())["default_poster_encoded"]
+    else:
+        # TODO allow more
+        poster = posters[anime_cfg]["poster_tall_encoded"]
+
+    return base64.decode(poster)
+
+
+def get_thumbnail(file_id, anime_cfg, image_cfg, latest_episodes):
+    url = "https://raw.githubusercontent.com/Schoperation/Tidbyt-Anime-Files/sensei/thumbnails/{}.json".format(file_id)
+    resp = http.get(url = url, headers = {"Accept": "application/json", "User-Agent": "Crunchyroll Anime Checker - Tidbyt App"}, ttl_seconds = 300)
+    if resp.status_code != 200:
+        return None
+
+    thumbnails = json.decode(resp.body())["thumbnails"]
+
+    thumbnail = ""
+    if anime_cfg not in thumbnails:
+        thumbnail = json.decode(resp.body())["default_thumbnail_encoded"]
+        return base64.decode(thumbnail)
+    
+    key = ""
+    if image_cfg == "thumb_sub":
+        key = "{s}-{e}".format(s=latest_episodes["sub"]["season"], e=latest_episodes["sub"]["episode"])
+    else:
+        key = "{s}-{e}".format(s=latest_episodes["dub"]["season"], e=latest_episodes["dub"]["episode"])
+
+    if key == "0-0":
+        thumbnail = json.decode(resp.body())["default_thumbnail_encoded"]
+    else:
+        thumbnail = thumbnails[anime_cfg][key]["encoded"]
+
+    return base64.decode(thumbnail)
+
+    
+def get_sensei_list():
+    anime_sensei_list_url = "https://raw.githubusercontent.com/Schoperation/Tidbyt-Anime-Files/sensei/anime_sensei_list.csv"
+    resp = http.get(url = anime_sensei_list_url, headers = {"Accept": "application/json", "User-Agent": "Crunchyroll Anime Checker - Tidbyt App"}, ttl_seconds = 300)
+    if resp.status_code != 200:
+        return None
+
+    return csv.read_all(source = resp.body(), skip = 1, comma = "|")
+
 
 def get_schema():
-    anime_sensei_list_url = "https://raw.githubusercontent.com/Schoperation/Crunchyroll-Anime-Checker/master/lists/anime_sensei_list.csv"
-    resp = http.get(url = anime_sensei_list_url, headers = {"Accept": "application/json", "User-Agent": "Tidbyt - Crunchyroll Anime Status - Schoperation"}, ttl_seconds = 300)
-    if resp.status_code != 200:
-        print("Failed to load anime sensei list with status %d", resp.status_code)
+    anime_csv = get_sensei_list()
+    if anime_csv == None:
         return schema.Schema(
             version = "1",
             fields = [],
         )
 
-    anime_csv = csv.read_all(source = resp.body(), skip = 1, comma = "|")
     anime_options = [anime_to_schema_option(anime) for anime in anime_csv]
 
     config_fields = [
         schema.Dropdown(
             id = "lang",
             name = "Language",
-            desc = "Language of subs and dubs to search for.",
+            desc = "Language of subs and dubs to search for. More coming soon.",
             icon = "language",
-            default = "en-US",
+            default = DEFAULT_LANG,
             options = [
                 schema.Option(
                     display = "English (US)",
@@ -179,15 +226,15 @@ def get_schema():
             name = "Anime",
             desc = "The anime you want to check!",
             icon = "tv",
-            default = "spy-x-family", # Heh
+            default = DEFAULT_ANIME,
             options = anime_options,
         ),
         schema.Dropdown(
-            id = "anime_image",
+            id = "image_type",
             name = "Image",
-            desc = "The image to show besides the info.",
+            desc = "The image to show with the info.",
             icon = "image",
-            default = "poster_full",
+            default = DEFAULT_IMAGE_TYPE,
             options = [
                 schema.Option(
                     display = "Poster (Full)",
@@ -195,11 +242,11 @@ def get_schema():
                 ),
                 schema.Option(
                     display = "Latest Episode Thumbnail (Sub)",
-                    value = "sub_thumb",
+                    value = "thumb_sub",
                 ),
                 schema.Option(
                     display = "Latest Episode Thumbnail (Dub)",
-                    value = "dub_thumb"
+                    value = "thumb_dub"
                 )
             ]
         ),
@@ -208,21 +255,21 @@ def get_schema():
             name = "Anime Title Color",
             desc = "Color of the anime's title at the top.",
             icon = "brush",
-            default = "#ffc266"
+            default = DEFAULT_TITLE_COLOR
         ),
         schema.Color(
             id = "sub_id_color",
             name = "Sub Identifier Color",
             desc = "Color of the latest sub's identifier (S:S1E2).",
             icon = "brush",
-            default = "#a6a6a6"
+            default = DEFAULT_SUB_ID_COLOR
         ),
         schema.Color(
             id = "dub_id_color",
             name = "Dub Identifier Color",
             desc = "Color of the latest dub's identifier (D:S1E2).",
             icon = "brush",
-            default = "#a6a6a6"
+            default = DEFAULT_DUB_ID_COLOR
         ),
     ]
 
@@ -233,6 +280,15 @@ def get_schema():
 
 def anime_to_schema_option(anime):
     return schema.Option(
-        display = anime[2],
-        value = anime[1],
+        display = anime[3],
+        value = anime[2],
     )
+
+
+def show_error(message):
+    return render.Root(
+        child = render.WrappedText(
+            content = message
+        )
+    )
+

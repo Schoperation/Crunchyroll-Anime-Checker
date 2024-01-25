@@ -76,7 +76,7 @@ func (client *CrunchyrollClient) Login() error {
 
 	request.Header.Set("Authorization", fmt.Sprintf("Basic %s", creds.BasicAuthKey))
 	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	request.Header.Set("User-Agent", "Crunchyroll/3.41.1 Android/1.0 okhttp/4.11.0")
+	request.Header.Set("User-Agent", "Crunchyroll Anime Checker - Tidbyt App")
 
 	response, err := http.DefaultClient.Do(request)
 	if err != nil {
@@ -286,7 +286,7 @@ func (client *CrunchyrollClient) get(path string, responseStruct any, queryParam
 
 	request.Header.Set("Authorization", fmt.Sprintf("Bearer %s", client.accessToken))
 	request.Header.Set("Accept", "application/json")
-	request.Header.Set("User-Agent", "Crunchyroll/3.41.1 Android/1.0 okhttp/4.11.0")
+	request.Header.Set("User-Agent", "Crunchyroll Anime Checker - Tidbyt App")
 
 	values := url.Values{}
 	for key, value := range queryParams {
