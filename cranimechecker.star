@@ -1,21 +1,21 @@
 """
-Applet: Crunchyroll Anime Checker
-Summary: Check anime status on Crunchyroll
+Applet: CR Anime Checker
+Summary: Check anime on Crunchyroll
 Description: Checks for the lastest episodes (subs and dubs) for an anime on Crunchyroll.
 Author: Schoperation
 """
 
+load("encoding/base64.star", "base64")
+load("encoding/csv.star", "csv")
+load("encoding/json.star", "json")
+load("http.star", "http")
 load("render.star", "render")
 load("schema.star", "schema")
-load("http.star", "http")
-load("encoding/json.star", "json")
-load("encoding/csv.star", "csv")
-load("encoding/base64.star", "base64")
 
 DEFAULT_LANG = "en-US"
-DEFAULT_ANIME = "one-piece" # It'll go on forever as far as I can tell...
+DEFAULT_ANIME = "one-piece"  # It'll go on forever as far as I can tell...
 DEFAULT_SHOW_SUB = True
-DEFAULT_SHOW_DUB = True
+DEFAULT_SHOW_DUB = False
 DEFAULT_IMAGE_TYPE = "poster_full"
 
 DEFAULT_TITLE_COLOR = "#ffc266"
@@ -28,11 +28,11 @@ def main(config):
     show_sub_cfg = config.bool("show_sub", DEFAULT_SHOW_SUB)
     show_dub_cfg = config.bool("show_dub", DEFAULT_SHOW_DUB)
     image_cfg = config.str("image_type", DEFAULT_IMAGE_TYPE)
-    
+
     title_color_cfg = config.str("title_color", DEFAULT_TITLE_COLOR)
     sub_id_color_cfg = config.str("sub_id_color", DEFAULT_SUB_ID_COLOR)
     dub_id_color_cfg = config.str("dub_id_color", DEFAULT_DUB_ID_COLOR)
-    
+
     file_id, anime_name = get_file_id_and_anime_name(anime_cfg)
     if file_id == None:
         return show_error("Couldn't figure out which files to load :(")
@@ -62,7 +62,7 @@ def main(config):
                         ),
                     ],
                 ),
-            ]
+            ],
         ),
     )
 
@@ -75,13 +75,13 @@ def display_image(file_id, anime_cfg, image_cfg, latest_episodes):
         anime_image = get_poster(file_id, anime_cfg, image_cfg)
     else:
         anime_image = get_thumbnail(file_id, anime_cfg, image_cfg, latest_episodes)
-    
+
     if anime_image == None:
         return show_error("Couldn't load image :(")
 
     if image_cfg == "poster_top_half":
-        return render.Image( 
-            width = 26, 
+        return render.Image(
+            width = 26,
             height = 54,
             src = anime_image,
         )
@@ -91,13 +91,12 @@ def display_image(file_id, anime_cfg, image_cfg, latest_episodes):
             height = 26,
             src = anime_image,
         )
-    
-    return render.Image( 
-        width = 26, 
+
+    return render.Image(
+        width = 26,
         height = 26,
         src = anime_image,
     )
-
 
 def display_latest_episodes(image_cfg, show_sub_cfg, sub_id_color_cfg, show_dub_cfg, dub_id_color_cfg, latest_episodes):
     textObjs = [
@@ -120,25 +119,46 @@ def display_latest_episodes(image_cfg, show_sub_cfg, sub_id_color_cfg, show_dub_
 
     return textObjs
 
-
 def display_sub(image_cfg, show_dub_cfg, sub_id_color_cfg, latest_episodes):
     marquee_width = 36
     if image_cfg == "none":
         marquee_width = 64
 
     if not show_dub_cfg:
-        return (render.Text(
-            font = "CG-pixel-3x5-mono",
-            color = "#8A8A8A",
-            content = "Sub:",
-        ),
+        return (
+            render.Text(
+                font = "CG-pixel-3x5-mono",
+                color = "#8A8A8A",
+                content = "Sub:",
+            ),
+            render.Marquee(
+                width = marquee_width,
+                align = "center",
+                child = render.Text(
+                    font = "CG-pixel-3x5-mono",
+                    color = sub_id_color_cfg,
+                    content = "S{s}E{e}".format(s = latest_episodes["sub"]["season"], e = latest_episodes["sub"]["episode"]),
+                ),
+            ),
+            render.Marquee(
+                width = marquee_width,
+                align = "start",
+                offset_start = 10,
+                child = render.Text(
+                    font = "CG-pixel-3x5-mono",
+                    content = latest_episodes["sub"]["title"],
+                ),
+            ),
+        )
+
+    return (
         render.Marquee(
             width = marquee_width,
             align = "center",
             child = render.Text(
                 font = "CG-pixel-3x5-mono",
                 color = sub_id_color_cfg,
-                content = "S{s}E{e}".format(s=latest_episodes["sub"]["season"], e=latest_episodes["sub"]["episode"]),
+                content = "S:S{s}E{e}".format(s = latest_episodes["sub"]["season"], e = latest_episodes["sub"]["episode"]),
             ),
         ),
         render.Marquee(
@@ -149,27 +169,8 @@ def display_sub(image_cfg, show_dub_cfg, sub_id_color_cfg, latest_episodes):
                 font = "CG-pixel-3x5-mono",
                 content = latest_episodes["sub"]["title"],
             ),
-        ))
-
-    return (render.Marquee(
-        width = marquee_width,
-        align = "center",
-        child = render.Text(
-            font = "CG-pixel-3x5-mono",
-            color = sub_id_color_cfg,
-            content = "S:S{s}E{e}".format(s=latest_episodes["sub"]["season"], e=latest_episodes["sub"]["episode"]),
         ),
-    ),
-    render.Marquee(
-        width = marquee_width,
-        align = "start",
-        offset_start = 10,
-        child = render.Text(
-            font = "CG-pixel-3x5-mono",
-            content = latest_episodes["sub"]["title"],
-        ),
-    ))
-
+    )
 
 def display_dub(image_cfg, show_sub_cfg, dub_id_color_cfg, latest_episodes):
     marquee_width = 36
@@ -177,18 +178,40 @@ def display_dub(image_cfg, show_sub_cfg, dub_id_color_cfg, latest_episodes):
         marquee_width = 64
 
     if not show_sub_cfg:
-        return (render.Text(
-            font = "CG-pixel-3x5-mono",
-            color = "#8A8A8A",
-            content = "Dub:",
-        ),
+        return (
+            render.Text(
+                font = "CG-pixel-3x5-mono",
+                color = "#8A8A8A",
+                content = "Dub:",
+            ),
+            render.Marquee(
+                width = marquee_width,
+                align = "center",
+                child = render.Text(
+                    font = "CG-pixel-3x5-mono",
+                    color = dub_id_color_cfg,
+                    content = "S{s}E{e}".format(s = latest_episodes["dub"]["season"], e = latest_episodes["dub"]["episode"]),
+                ),
+            ),
+            render.Marquee(
+                width = marquee_width,
+                align = "start",
+                offset_start = 10,
+                child = render.Text(
+                    font = "CG-pixel-3x5-mono",
+                    content = latest_episodes["dub"]["title"],
+                ),
+            ),
+        )
+
+    return (
         render.Marquee(
             width = marquee_width,
             align = "center",
             child = render.Text(
                 font = "CG-pixel-3x5-mono",
                 color = dub_id_color_cfg,
-                content = "S{s}E{e}".format(s=latest_episodes["dub"]["season"], e=latest_episodes["dub"]["episode"]),
+                content = "D:S{s}E{e}".format(s = latest_episodes["dub"]["season"], e = latest_episodes["dub"]["episode"]),
             ),
         ),
         render.Marquee(
@@ -199,27 +222,8 @@ def display_dub(image_cfg, show_sub_cfg, dub_id_color_cfg, latest_episodes):
                 font = "CG-pixel-3x5-mono",
                 content = latest_episodes["dub"]["title"],
             ),
-        ))
-
-    return (render.Marquee(
-        width = marquee_width,
-        align = "center",
-        child = render.Text(
-            font = "CG-pixel-3x5-mono",
-            color = dub_id_color_cfg,
-            content = "D:S{s}E{e}".format(s=latest_episodes["dub"]["season"], e=latest_episodes["dub"]["episode"]),
         ),
-    ),
-    render.Marquee(
-        width = marquee_width,
-        align = "start",
-        offset_start = 10,
-        child = render.Text(
-            font = "CG-pixel-3x5-mono",
-            content = latest_episodes["dub"]["title"],
-        ),
-    ))
-    
+    )
 
 def get_file_id_and_anime_name(anime_cfg):
     anime_csv = get_sensei_list()
@@ -232,6 +236,7 @@ def get_file_id_and_anime_name(anime_cfg):
 
         return anime[0], anime[3]
 
+    return None, None
 
 def get_latest_episodes(lang_cfg, anime_cfg):
     url = "https://raw.githubusercontent.com/Schoperation/Tidbyt-Anime-Files/sensei/latest_episodes/{}.json".format(lang_cfg)
@@ -245,7 +250,6 @@ def get_latest_episodes(lang_cfg, anime_cfg):
         return None
 
     return latest_episodes[anime_cfg]
-
 
 def get_poster(file_id, anime_cfg, image_cfg):
     url = "https://raw.githubusercontent.com/Schoperation/Tidbyt-Anime-Files/sensei/posters/{}.json".format(file_id)
@@ -265,7 +269,6 @@ def get_poster(file_id, anime_cfg, image_cfg):
 
     return base64.decode(poster)
 
-
 def get_thumbnail(file_id, anime_cfg, image_cfg, latest_episodes):
     url = "https://raw.githubusercontent.com/Schoperation/Tidbyt-Anime-Files/sensei/thumbnails/{}.json".format(file_id)
     resp = http.get(url = url, headers = {"Accept": "application/json", "User-Agent": "Crunchyroll Anime Checker - Tidbyt App"}, ttl_seconds = 300)
@@ -278,12 +281,12 @@ def get_thumbnail(file_id, anime_cfg, image_cfg, latest_episodes):
     if anime_cfg not in thumbnails:
         thumbnail = json.decode(resp.body())["default_thumbnail_encoded"]
         return base64.decode(thumbnail)
-    
+
     key = ""
     if image_cfg == "thumb_sub":
-        key = "{s}-{e}".format(s=latest_episodes["sub"]["season"], e=latest_episodes["sub"]["episode"])
+        key = "{s}-{e}".format(s = latest_episodes["sub"]["season"], e = latest_episodes["sub"]["episode"])
     else:
-        key = "{s}-{e}".format(s=latest_episodes["dub"]["season"], e=latest_episodes["dub"]["episode"])
+        key = "{s}-{e}".format(s = latest_episodes["dub"]["season"], e = latest_episodes["dub"]["episode"])
 
     if key == "0-0":
         thumbnail = json.decode(resp.body())["default_thumbnail_encoded"]
@@ -292,7 +295,6 @@ def get_thumbnail(file_id, anime_cfg, image_cfg, latest_episodes):
 
     return base64.decode(thumbnail)
 
-    
 def get_sensei_list():
     anime_sensei_list_url = "https://raw.githubusercontent.com/Schoperation/Tidbyt-Anime-Files/sensei/anime_sensei_list.csv"
     resp = http.get(url = anime_sensei_list_url, headers = {"Accept": "application/json", "User-Agent": "Crunchyroll Anime Checker - Tidbyt App"}, ttl_seconds = 300)
@@ -300,7 +302,6 @@ def get_sensei_list():
         return None
 
     return csv.read_all(source = resp.body(), skip = 1, comma = "|")
-
 
 def get_schema():
     anime_csv = get_sensei_list()
@@ -322,7 +323,7 @@ def get_schema():
             options = [
                 schema.Option(
                     display = "English (US)",
-                    value = "en-US"
+                    value = "en-US",
                 ),
             ],
         ),
@@ -338,7 +339,7 @@ def get_schema():
             id = "show_sub",
             name = "Show Sub",
             desc = "Show the latest episode with subtitles in your language.",
-            icon = "closed_captioning",
+            icon = "list",
             default = DEFAULT_SHOW_SUB,
         ),
         schema.Toggle(
@@ -377,30 +378,30 @@ def get_schema():
                 ),
                 schema.Option(
                     display = "Latest Episode Thumbnail (Dub)",
-                    value = "thumb_dub"
-                )
-            ]
+                    value = "thumb_dub",
+                ),
+            ],
         ),
         schema.Color(
             id = "title_color",
             name = "Anime Title Color",
             desc = "Color of the anime's title at the top.",
             icon = "brush",
-            default = DEFAULT_TITLE_COLOR
+            default = DEFAULT_TITLE_COLOR,
         ),
         schema.Color(
             id = "sub_id_color",
             name = "Sub Identifier Color",
             desc = "Color of the latest sub's identifier (S:S1E2).",
             icon = "brush",
-            default = DEFAULT_SUB_ID_COLOR
+            default = DEFAULT_SUB_ID_COLOR,
         ),
         schema.Color(
             id = "dub_id_color",
             name = "Dub Identifier Color",
             desc = "Color of the latest dub's identifier (D:S1E2).",
             icon = "brush",
-            default = DEFAULT_DUB_ID_COLOR
+            default = DEFAULT_DUB_ID_COLOR,
         ),
     ]
 
@@ -415,11 +416,9 @@ def anime_to_schema_option(anime):
         value = anime[2],
     )
 
-
 def show_error(message):
     return render.Root(
         child = render.WrappedText(
-            content = message
-        )
+            content = message,
+        ),
     )
-
