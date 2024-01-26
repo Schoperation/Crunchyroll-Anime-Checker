@@ -14,7 +14,10 @@ load("encoding/base64.star", "base64")
 
 DEFAULT_LANG = "en-US"
 DEFAULT_ANIME = "one-piece" # It'll go on forever as far as I can tell...
+DEFAULT_SHOW_SUB = True
+DEFAULT_SHOW_DUB = True
 DEFAULT_IMAGE_TYPE = "poster_full"
+
 DEFAULT_TITLE_COLOR = "#ffc266"
 DEFAULT_SUB_ID_COLOR = "#a6a6a6"
 DEFAULT_DUB_ID_COLOR = "#a6a6a6"
@@ -22,18 +25,50 @@ DEFAULT_DUB_ID_COLOR = "#a6a6a6"
 def main(config):
     lang_cfg = config.str("lang", DEFAULT_LANG)
     anime_cfg = config.str("anime", DEFAULT_ANIME)
+    show_sub_cfg = config.bool("show_sub", DEFAULT_SHOW_SUB)
+    show_dub_cfg = config.bool("show_dub", DEFAULT_SHOW_DUB)
     image_cfg = config.str("image_type", DEFAULT_IMAGE_TYPE)
+    
     title_color_cfg = config.str("title_color", DEFAULT_TITLE_COLOR)
     sub_id_color_cfg = config.str("sub_id_color", DEFAULT_SUB_ID_COLOR)
     dub_id_color_cfg = config.str("dub_id_color", DEFAULT_DUB_ID_COLOR)
     
-    file_id, anime_name = get_file_id_and_name(anime_cfg)
+    file_id, anime_name = get_file_id_and_anime_name(anime_cfg)
     if file_id == None:
         return show_error("Couldn't figure out which files to load :(")
 
     latest_episodes = get_latest_episodes(lang_cfg, anime_cfg)
     if latest_episodes == None:
         return show_error("Couldn't load latest episodes :(")
+
+    return render.Root(
+        child = render.Column(
+            children = [
+                render.Marquee(
+                    width = 64,
+                    align = "center",
+                    child = render.Text(
+                        font = "tom-thumb",
+                        color = title_color_cfg,
+                        content = anime_name,
+                    ),
+                ),
+                render.Row(
+                    children = [
+                        display_image(file_id, anime_cfg, image_cfg, latest_episodes),
+                        render.Column(
+                            cross_align = "center",
+                            children = display_latest_episodes(image_cfg, show_sub_cfg, sub_id_color_cfg, show_dub_cfg, dub_id_color_cfg, latest_episodes),
+                        ),
+                    ],
+                ),
+            ]
+        ),
+    )
+
+def display_image(file_id, anime_cfg, image_cfg, latest_episodes):
+    if image_cfg == "none":
+        return None
 
     anime_image = ""
     if image_cfg.count("poster") > 0:
@@ -44,80 +79,149 @@ def main(config):
     if anime_image == None:
         return show_error("Couldn't load image :(")
 
-    return render.Root(
-        child = render.Column(
-            children = [
-                render.Marquee(
-                    width = 64,
-                    align = "center",
-                    child = render.Text(
-                        font = "CG-pixel-3x5-mono",
-                        color = title_color_cfg,
-                        content = anime_name,
-                    ),
-                ),
-                render.Row(
-                    children = [
-                        render.Image( 
-                            width = 27, 
-                            height = 27,
-                            src = anime_image,
-                        ),
-                        render.Column(
-                            children = [
-                                render.Marquee(
-                                    width = 36,
-                                    align = "center",
-                                    child = render.Text(
-                                        font = "CG-pixel-3x5-mono",
-                                        content = "",
-                                    ),
-                                ),
-                                render.Marquee(
-                                    width = 36,
-                                    align = "center",
-                                    child = render.Text(
-                                        font = "CG-pixel-3x5-mono",
-                                        color = sub_id_color_cfg,
-                                        content = "S:S{s}E{e}".format(s=latest_episodes["sub"]["season"], e=latest_episodes["sub"]["episode"]),
-                                    ),
-                                ),
-                                render.Marquee(
-                                    width = 36,
-                                    align = "start",
-                                    offset_start = 10,
-                                    child = render.Text(
-                                        font = "CG-pixel-3x5-mono",
-                                        content = latest_episodes["sub"]["title"],
-                                    ),
-                                ),
-                                render.Marquee(
-                                    width = 36,
-                                    align = "center",
-                                    child = render.Text(
-                                        font = "CG-pixel-3x5-mono",
-                                        color = dub_id_color_cfg,
-                                        content = "D:S{s}E{e}".format(s=latest_episodes["dub"]["season"], e=latest_episodes["dub"]["episode"]),
-                                    ),
-                                ),
-                                render.Marquee(
-                                    width = 36,
-                                    align = "start",
-                                    offset_start = 10,
-                                    child = render.Text(
-                                        font = "CG-pixel-3x5-mono",
-                                        content = latest_episodes["dub"]["title"],
-                                    ),
-                                ),
-                            ],
-                        ),
-                    ],
-                ),
-            ]
-        ),
+    if image_cfg == "poster_top_half":
+        return render.Image( 
+            width = 26, 
+            height = 54,
+            src = anime_image,
+        )
+    elif image_cfg == "poster_wide":
+        return render.Image(
+            width = 64,
+            height = 26,
+            src = anime_image,
+        )
+    
+    return render.Image( 
+        width = 26, 
+        height = 26,
+        src = anime_image,
     )
 
-def get_file_id_and_name(anime_cfg):
+
+def display_latest_episodes(image_cfg, show_sub_cfg, sub_id_color_cfg, show_dub_cfg, dub_id_color_cfg, latest_episodes):
+    textObjs = [
+        # Add blank line
+        render.Marquee(
+            width = 64,
+            align = "center",
+            child = render.Text(
+                font = "CG-pixel-3x5-mono",
+                content = "",
+            ),
+        ),
+    ]
+
+    if show_sub_cfg:
+        textObjs.extend(display_sub(image_cfg, show_dub_cfg, sub_id_color_cfg, latest_episodes))
+
+    if show_dub_cfg:
+        textObjs.extend(display_dub(image_cfg, show_sub_cfg, dub_id_color_cfg, latest_episodes))
+
+    return textObjs
+
+
+def display_sub(image_cfg, show_dub_cfg, sub_id_color_cfg, latest_episodes):
+    marquee_width = 36
+    if image_cfg == "none":
+        marquee_width = 64
+
+    if not show_dub_cfg:
+        return (render.Text(
+            font = "CG-pixel-3x5-mono",
+            color = "#8A8A8A",
+            content = "Sub:",
+        ),
+        render.Marquee(
+            width = marquee_width,
+            align = "center",
+            child = render.Text(
+                font = "CG-pixel-3x5-mono",
+                color = sub_id_color_cfg,
+                content = "S{s}E{e}".format(s=latest_episodes["sub"]["season"], e=latest_episodes["sub"]["episode"]),
+            ),
+        ),
+        render.Marquee(
+            width = marquee_width,
+            align = "start",
+            offset_start = 10,
+            child = render.Text(
+                font = "CG-pixel-3x5-mono",
+                content = latest_episodes["sub"]["title"],
+            ),
+        ))
+
+    return (render.Marquee(
+        width = marquee_width,
+        align = "center",
+        child = render.Text(
+            font = "CG-pixel-3x5-mono",
+            color = sub_id_color_cfg,
+            content = "S:S{s}E{e}".format(s=latest_episodes["sub"]["season"], e=latest_episodes["sub"]["episode"]),
+        ),
+    ),
+    render.Marquee(
+        width = marquee_width,
+        align = "start",
+        offset_start = 10,
+        child = render.Text(
+            font = "CG-pixel-3x5-mono",
+            content = latest_episodes["sub"]["title"],
+        ),
+    ))
+
+
+def display_dub(image_cfg, show_sub_cfg, dub_id_color_cfg, latest_episodes):
+    marquee_width = 36
+    if image_cfg == "none":
+        marquee_width = 64
+
+    if not show_sub_cfg:
+        return (render.Text(
+            font = "CG-pixel-3x5-mono",
+            color = "#8A8A8A",
+            content = "Dub:",
+        ),
+        render.Marquee(
+            width = marquee_width,
+            align = "center",
+            child = render.Text(
+                font = "CG-pixel-3x5-mono",
+                color = dub_id_color_cfg,
+                content = "S{s}E{e}".format(s=latest_episodes["dub"]["season"], e=latest_episodes["dub"]["episode"]),
+            ),
+        ),
+        render.Marquee(
+            width = marquee_width,
+            align = "start",
+            offset_start = 10,
+            child = render.Text(
+                font = "CG-pixel-3x5-mono",
+                content = latest_episodes["dub"]["title"],
+            ),
+        ))
+
+    return (render.Marquee(
+        width = marquee_width,
+        align = "center",
+        child = render.Text(
+            font = "CG-pixel-3x5-mono",
+            color = dub_id_color_cfg,
+            content = "D:S{s}E{e}".format(s=latest_episodes["dub"]["season"], e=latest_episodes["dub"]["episode"]),
+        ),
+    ),
+    render.Marquee(
+        width = marquee_width,
+        align = "start",
+        offset_start = 10,
+        child = render.Text(
+            font = "CG-pixel-3x5-mono",
+            content = latest_episodes["dub"]["title"],
+        ),
+    ))
+    
+
+def get_file_id_and_anime_name(anime_cfg):
     anime_csv = get_sensei_list()
     if anime_csv == None:
         return None, None
@@ -154,8 +258,9 @@ def get_poster(file_id, anime_cfg, image_cfg):
     poster = ""
     if anime_cfg not in posters:
         poster = json.decode(resp.body())["default_poster_encoded"]
+    elif image_cfg == "poster_wide":
+        poster = posters[anime_cfg]["poster_wide_encoded"]
     else:
-        # TODO allow more
         poster = posters[anime_cfg]["poster_tall_encoded"]
 
     return base64.decode(poster)
@@ -229,6 +334,20 @@ def get_schema():
             default = DEFAULT_ANIME,
             options = anime_options,
         ),
+        schema.Toggle(
+            id = "show_sub",
+            name = "Show Sub",
+            desc = "Show the latest episode with subtitles in your language.",
+            icon = "closed_captioning",
+            default = DEFAULT_SHOW_SUB,
+        ),
+        schema.Toggle(
+            id = "show_dub",
+            name = "Show Dub",
+            desc = "Show the latest episode dubbed in your language.",
+            icon = "comment",
+            default = DEFAULT_SHOW_DUB,
+        ),
         schema.Dropdown(
             id = "image_type",
             name = "Image",
@@ -237,8 +356,20 @@ def get_schema():
             default = DEFAULT_IMAGE_TYPE,
             options = [
                 schema.Option(
+                    display = "None",
+                    value = "none",
+                ),
+                schema.Option(
                     display = "Poster (Full)",
                     value = "poster_full",
+                ),
+                schema.Option(
+                    display = "Poster (Top Half)",
+                    value = "poster_top_half",
+                ),
+                schema.Option(
+                    display = "Poster (Wide)",
+                    value = "poster_wide",
                 ),
                 schema.Option(
                     display = "Latest Episode Thumbnail (Sub)",
