@@ -17,6 +17,7 @@ import (
 type CrunchyrollClient struct {
 	credFilePath string
 	accessToken  string
+	userAgent    string
 	lastLogin    time.Time
 	cache        crunchyrollCache
 }
@@ -25,12 +26,14 @@ type crunchyrollCreds struct {
 	Username     string `json:"username"`
 	Password     string `json:"password"`
 	BasicAuthKey string `json:"basic_auth_key"`
+	UserAgent    string `json:"user_agent"`
 }
 
 func NewCrunchyrollClient(credFilePath string) CrunchyrollClient {
 	return CrunchyrollClient{
 		credFilePath: credFilePath,
 		accessToken:  "",
+		userAgent:    "",
 		lastLogin:    time.Now().Add(time.Hour * -1),
 		cache:        newCrunchyrollCache(),
 	}
@@ -63,6 +66,8 @@ func (client *CrunchyrollClient) Login() error {
 		return err
 	}
 
+	client.userAgent = creds.UserAgent
+
 	formValues := url.Values{}
 	formValues.Set("username", creds.Username)
 	formValues.Set("password", creds.Password)
@@ -76,7 +81,7 @@ func (client *CrunchyrollClient) Login() error {
 
 	request.Header.Set("Authorization", fmt.Sprintf("Basic %s", creds.BasicAuthKey))
 	request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	request.Header.Set("User-Agent", "Crunchyroll Anime Checker - Tidbyt App")
+	request.Header.Set("User-Agent", client.userAgent)
 
 	response, err := http.DefaultClient.Do(request)
 	if err != nil {
@@ -286,7 +291,7 @@ func (client *CrunchyrollClient) get(path string, responseStruct any, queryParam
 
 	request.Header.Set("Authorization", fmt.Sprintf("Bearer %s", client.accessToken))
 	request.Header.Set("Accept", "application/json")
-	request.Header.Set("User-Agent", "Crunchyroll Anime Checker - Tidbyt App")
+	request.Header.Set("User-Agent", client.userAgent)
 
 	values := url.Values{}
 	for key, value := range queryParams {
