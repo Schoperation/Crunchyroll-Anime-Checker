@@ -35,7 +35,7 @@ def main(config):
 
     file_id, anime_name = get_file_id_and_anime_name(anime_cfg)
     if file_id == None:
-        return show_error("Couldn't figure out which files to load :(")
+        return show_error("Couldn't load master list (GH down?)")
 
     latest_episodes = get_latest_episodes(lang_cfg, anime_cfg)
     if latest_episodes == None:
@@ -77,7 +77,7 @@ def display_image(file_id, anime_cfg, image_cfg, latest_episodes):
         anime_image = get_thumbnail(file_id, anime_cfg, image_cfg, latest_episodes)
 
     if anime_image == None:
-        return show_error("Couldn't load image :(")
+        return show_error("No image")
 
     if image_cfg == "poster_top_half":
         return render.Image(
@@ -324,6 +324,10 @@ def get_schema():
                 schema.Option(
                     display = "English (US)",
                     value = "en-US",
+                ),
+                schema.Option(
+                    display = "Español (América Latina)",
+                    value = "es-419",
                 ),
             ],
         ),

@@ -4,3 +4,4 @@ crunchyroll-anime-checker
 *.db
 *.json
 *.webp
+*.sh

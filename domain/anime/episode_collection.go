@@ -157,6 +157,8 @@ func (epcol *EpisodeCollection) addEpisode(locale core.Locale, episode MinimalEp
 			LocaleId: locale.Id(),
 			Title:    episode.Title(),
 		})
+
+		epcol.episodes[episode.Key()] = ep
 		return nil
 	}
 

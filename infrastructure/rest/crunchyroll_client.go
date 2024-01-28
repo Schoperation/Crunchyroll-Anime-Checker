@@ -218,7 +218,7 @@ func (client *CrunchyrollClient) GetAllSeasonsBySeriesId(seriesId string) ([]cru
 
 func (client *CrunchyrollClient) GetAllEpisodesBySeasonId(locale, seasonId string) ([]crunchyroll.EpisodeDto, error) {
 	var episodesResponse episodesResponse
-	if cachedResponse, ok := client.cache.GetEpisodesResponse(seasonId); ok {
+	if cachedResponse, ok := client.cache.GetEpisodesResponse(locale, seasonId); ok {
 		episodesResponse = cachedResponse
 	} else {
 		err := client.get(fmt.Sprintf("content/v2/cms/seasons/%s/episodes", seasonId), &episodesResponse, map[string]string{
@@ -265,7 +265,7 @@ func (client *CrunchyrollClient) GetAllEpisodesBySeasonId(locale, seasonId strin
 		}
 	}
 
-	client.cache.SaveEpisodesResponse(seasonId, episodesResponse)
+	client.cache.SaveEpisodesResponse(locale, seasonId, episodesResponse)
 	return episodes, nil
 }
 

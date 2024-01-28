@@ -1,5 +1,7 @@
 package rest
 
+import "fmt"
+
 const episodeResponsesCacheLimit = 3
 
 // Basic in-memory cache to store responses we may need multiples of.
@@ -19,8 +21,8 @@ func newCrunchyrollCache() crunchyrollCache {
 	}
 }
 
-func (cache *crunchyrollCache) GetEpisodesResponse(seasonId string) (episodesResponse, bool) {
-	response, exists := cache.episodeResponses[seasonId]
+func (cache *crunchyrollCache) GetEpisodesResponse(locale, seasonId string) (episodesResponse, bool) {
+	response, exists := cache.episodeResponses[cache.key(locale, seasonId)]
 	if exists {
 		return response, true
 	}
@@ -28,7 +30,7 @@ func (cache *crunchyrollCache) GetEpisodesResponse(seasonId string) (episodesRes
 	return episodesResponse{}, false
 }
 
-func (cache *crunchyrollCache) SaveEpisodesResponse(seasonId string, resp episodesResponse) {
+func (cache *crunchyrollCache) SaveEpisodesResponse(locale, seasonId string, resp episodesResponse) {
 	if len(cache.episodeResponses) >= episodeResponsesCacheLimit {
 		oldestSeasonId := cache.episodeResponsesOrder[cache.oldestOrder]
 		delete(cache.episodeResponses, oldestSeasonId)
@@ -36,12 +38,16 @@ func (cache *crunchyrollCache) SaveEpisodesResponse(seasonId string, resp episod
 		cache.oldestOrder++
 	}
 
-	_, exists := cache.episodeResponses[seasonId]
+	_, exists := cache.episodeResponses[cache.key(locale, seasonId)]
 	if exists {
 		return
 	}
 
-	cache.episodeResponses[seasonId] = resp
+	cache.episodeResponses[cache.key(locale, seasonId)] = resp
 	cache.episodeResponsesOrder[cache.newestOrder+1] = seasonId
 	cache.newestOrder++
+}
+
+func (cache *crunchyrollCache) key(locale, seasonId string) string {
+	return fmt.Sprintf("%s_%s", locale, seasonId)
 }

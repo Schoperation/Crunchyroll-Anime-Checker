@@ -8,22 +8,25 @@ import (
 /*
 Locale represents a language supported by Crunchyroll and this project.
 Used in various calls to ensure we get the correct data for a particular language.
-TODO Need to support more than English.
+
+TODO Need to support more locales. Currently making sure the DB doesn't get nuked, but so far so good...
 */
 type Locale int
 
 const (
-	LocaleJaJP = 1
-	LocaleKoKR = 2
-	LocaleZhCN = 3
-	LocaleEnUS = 4
+	LocaleJaJP  = 1
+	LocaleKoKR  = 2
+	LocaleZhCN  = 3
+	LocaleEnUS  = 4
+	LocaleEs419 = 5
 )
 
 var localeNames = map[int]string{
-	LocaleJaJP: "ja-JP",
-	LocaleKoKR: "ko-KR",
-	LocaleZhCN: "zh-CN",
-	LocaleEnUS: "en-US",
+	LocaleJaJP:  "ja-JP",
+	LocaleKoKR:  "ko-KR",
+	LocaleZhCN:  "zh-CN",
+	LocaleEnUS:  "en-US",
+	LocaleEs419: "es-419",
 }
 
 func NewLocaleFromId(localeId int) (Locale, error) {
