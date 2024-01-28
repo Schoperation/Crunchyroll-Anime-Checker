@@ -53,8 +53,6 @@ func (subcmd RefreshLatestEpisodesSubCommand) Run(input RefreshLatestEpisodesSub
 	errors := map[core.SeriesId]error{}
 
 	for _, updatedCrAnime := range input.UpdatedCrAnime {
-		fmt.Printf("\tUpdating %s - %s\n", updatedCrAnime.SeriesId(), updatedCrAnime.SlugTitle())
-
 		localAnime, exists := input.LocalAnime[updatedCrAnime.SeriesId()]
 		if !exists {
 			errors[updatedCrAnime.SeriesId()] = fmt.Errorf("no local anime found")
