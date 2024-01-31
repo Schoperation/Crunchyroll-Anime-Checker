@@ -13,6 +13,7 @@ The actual app is the `cranimechecker.star` file. Everything else is for the cod
 - Tests.
 - Add more locales... keeping it at English and Spanish for now to ensure everything's still smooth.
 - More commands to help me add said locales, including force-update anime entries.
+- (?) Incorporate the [AniList API](https://anilist.gitbook.io/anilist-apiv2-docs/) to countdown next episodes (I had no idea this existed until I was finished... bruh moment)
 - Any suggestions or bugs. If you have any, feel free to open up an Issue above.
 
 ### Licensing
