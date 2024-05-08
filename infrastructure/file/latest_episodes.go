@@ -61,22 +61,17 @@ func (writer LatestEpisodesWriter) WriteAllByLocale(localeName string, dtos []an
 		return err
 	}
 
-	newFile, err := os.Create(fmt.Sprintf("%s/latest_episodes/%s_new.json", writer.path, localeName))
-	if err != nil {
-		return err
-	}
-
 	bytes, err := json.MarshalIndent(fileModel, "", "    ")
 	if err != nil {
 		return err
 	}
 
-	_, err = newFile.Write(bytes)
+	newFile, err := os.Create(fmt.Sprintf("%s/latest_episodes/%s.json", writer.path, localeName))
 	if err != nil {
 		return err
 	}
 
-	err = os.Rename(fmt.Sprintf("%s/latest_episodes/%s_new.json", writer.path, localeName), fmt.Sprintf("%s/latest_episodes/%s.json", writer.path, localeName))
+	_, err = newFile.Write(bytes)
 	if err != nil {
 		return err
 	}

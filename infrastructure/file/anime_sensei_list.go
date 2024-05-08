@@ -31,7 +31,7 @@ func (writer AnimeSenseiListWriter) WriteAll(seriesIds, slugTitles, titles []str
 		}
 	}
 
-	newAnimeSenseiList, err := os.Create(fmt.Sprintf("%s/anime_sensei_list_new.csv", writer.path))
+	newAnimeSenseiList, err := os.Create(fmt.Sprintf("%s/anime_sensei_list.csv", writer.path))
 	if err != nil {
 		return err
 	}
@@ -41,11 +41,6 @@ func (writer AnimeSenseiListWriter) WriteAll(seriesIds, slugTitles, titles []str
 	newListAsCsv.Write([]string{"file_id", "series_id", "slug_title", "title"})
 	newListAsCsv.WriteAll(data)
 	newAnimeSenseiList.Close()
-
-	err = os.Rename(fmt.Sprintf("%s/anime_sensei_list_new.csv", writer.path), fmt.Sprintf("%s/anime_sensei_list.csv", writer.path))
-	if err != nil {
-		return err
-	}
 
 	return nil
 }

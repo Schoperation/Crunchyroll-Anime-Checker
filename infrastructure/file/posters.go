@@ -68,22 +68,17 @@ func (writer PosterWriter) WriteAll(dtos []anime.PostersDto) error {
 			Posters:              posterMaps[id],
 		}
 
-		newFile, err := os.Create(fmt.Sprintf("%s/posters/%s_new.json", writer.path, id))
-		if err != nil {
-			return err
-		}
-
 		bytes, err := json.MarshalIndent(fileModel, "", "    ")
 		if err != nil {
 			return err
 		}
 
-		_, err = newFile.Write(bytes)
+		newFile, err := os.Create(fmt.Sprintf("%s/posters/%s.json", writer.path, id))
 		if err != nil {
 			return err
 		}
 
-		err = os.Rename(fmt.Sprintf("%s/posters/%s_new.json", writer.path, id), fmt.Sprintf("%s/posters/%s.json", writer.path, id))
+		_, err = newFile.Write(bytes)
 		if err != nil {
 			return err
 		}
