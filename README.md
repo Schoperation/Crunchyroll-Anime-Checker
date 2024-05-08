@@ -19,3 +19,5 @@ The actual app is the `cranimechecker.star` file. Everything else is for the cod
 ### Licensing
 
 The Tidbyt app, which consists of `cranimechecker.star` and `manifest.yaml`, is licensed under the Apache License (2.0), to sync with [Tidbyt's community repo](https://github.com/tidbyt/community). The rest is licensed under the GNU GPLv3 license.
+
+Crunchyroll® is a licensed trademark of Crunchyroll, LLC. I am in no way affiliated with them.
