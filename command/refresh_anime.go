@@ -39,7 +39,7 @@ type refreshLatestEpisodesSubCommand interface {
 }
 
 type animeSaver interface {
-	SaveAll(locales []core.Locale, newAnimes []anime.Anime, updatedAnimes []anime.Anime, originalLocalAnimes map[core.SeriesId]anime.Anime) error
+	SaveAll(newAnimes []anime.Anime, updatedAnimes []anime.Anime, originalLocalAnimes map[core.SeriesId]anime.Anime) error
 }
 
 type RefreshAnimeCommand struct {
@@ -187,7 +187,7 @@ func (cmd RefreshAnimeCommand) Run(input RefreshAnimeCommandInput) (RefreshAnime
 		j++
 	}
 
-	err = cmd.animeSaver.SaveAll(locales, newLocalAnimes, updatedLocalAnimes, originalLocalAnimes)
+	err = cmd.animeSaver.SaveAll(newLocalAnimes, updatedLocalAnimes, originalLocalAnimes)
 	if err != nil {
 		return RefreshAnimeCommandOutput{}, err
 	}

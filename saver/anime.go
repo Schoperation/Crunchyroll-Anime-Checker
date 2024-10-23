@@ -43,7 +43,6 @@ func NewAnimeSaver(
 }
 
 func (saver AnimeSaver) SaveAll(
-	locales []core.Locale,
 	newAnimes []anime.Anime,
 	updatedAnimes []anime.Anime,
 	originalLocalAnimes map[core.SeriesId]anime.Anime,
@@ -67,7 +66,7 @@ func (saver AnimeSaver) SaveAll(
 
 		newPosters = append(newPosters, newAnime.Posters()...)
 
-		for _, locale := range locales {
+		for _, locale := range newAnime.Episodes().Locales() {
 			le, err := newAnime.Episodes().GetLatestEpisodesForLocale(locale)
 			if err != nil {
 				return err

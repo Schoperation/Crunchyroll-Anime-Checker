@@ -209,9 +209,7 @@ func (subcmd RefreshLatestEpisodesSubCommand) Run(input RefreshLatestEpisodesSub
 				}
 			}
 
-			// Temp code to debug blank english anime because CR's API is an inconsistent POS
-			// TODO temp testing
-			if !subExists && !dubExists {
+			if !subExists && !dubExists && locale.Id() == core.LocaleEnUS {
 				errors[newCrAnime.SeriesId()] = fmt.Errorf("could not find sub or dub")
 			}
 

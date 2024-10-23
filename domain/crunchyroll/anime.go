@@ -95,6 +95,7 @@ func shouldAddAnime(dto AnimeDto) bool {
 	animeInQuotationMarks := []string{
 		"G6EXH7VKM", // anifile (bruh)
 		"GRG5HJN5W", // otalku (double bruh)
+		"G4PH0WJPQ", // the anime effect (triple bruh)
 		"G6WE4W0N6", // chinese (acts weird with subtitles)
 		"GRWEMGNER", // ""
 		"GRP85E0MR", // ""
